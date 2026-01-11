@@ -81,6 +81,7 @@
 	}: ButtonProps & LoadingProps = $props();
 </script>
 
+<!-- eslint-disable svelte/no-navigation-without-resolve -->
 {#if isLoading || $delayed}
 	<button
 		bind:this={ref}
