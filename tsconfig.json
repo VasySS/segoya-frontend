@@ -1,0 +1,36 @@
+{
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		// https://vite.dev/guide/performance.html#reduce-resolve-operations
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		// svelte needs at least ES2022
+		// https://svelte.dev/docs/svelte/typescript#tsconfig.json-settings
+		"target": "ES2022",
+		"verbatimModuleSyntax": true,
+		"isolatedModules": true,
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"allowUnreachableCode": false,
+		"exactOptionalPropertyTypes": true,
+		"noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		// https://github.com/sveltejs/svelte/issues/11502
+		"erasableSyntaxOnly": true,
+		"types": ["@testing-library/jest-dom"]
+	}
+	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias and https://kit.svelte.dev/docs/configuration#files
+	//
+	// If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
+	// from the referenced tsconfig.json - TypeScript does not merge them in
+}

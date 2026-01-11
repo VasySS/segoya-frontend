@@ -1,0 +1,12 @@
+{
+	"css.customData": [
+		".vscode/tailwind.json"
+	],
+	"eslint.validate": [
+		"html",
+		"css",
+		"javascript",
+		"typescript",
+		"svelte"
+	]
+}

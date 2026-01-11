@@ -1,0 +1,55 @@
+<!doctype html>
+
+<html lang="%lang%">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width"
+		/>
+		<meta
+			name="description"
+			lang="en"
+			content="A location guessing game with Google, Yandex and Seznam panoramas, developed using SvelteKit and Go."
+		/>
+		<meta
+			name="description"
+			lang="ru"
+			content="Игра по отгадыванию местоположения на основе Google, Yandex и Seznam панорам, разработано с помощью SvelteKit и Go."
+		/>
+
+		<link
+			rel="icon"
+			href="%sveltekit.assets%/favicon.ico"
+		/>
+
+		<link
+			rel="preconnect"
+			href="https://fonts.googleapis.com"
+		/>
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap"
+			as="style"
+			onload="this.onload=null;this.rel='stylesheet'"
+		/>
+		<noscript>
+			<link
+				href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap"
+				rel="stylesheet"
+				type="text/css"
+			/>
+		</noscript>
+
+		%sveltekit.head%
+	</head>
+
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>
