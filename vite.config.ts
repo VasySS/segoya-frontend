@@ -22,6 +22,13 @@ export default defineConfig(({ mode }) => {
 				clientFiles: ['./src/hooks.ts', './src/app.css', './src/lib/utils/shadcn.ts'],
 				ssrFiles: ['./src/hooks.server.ts']
 			}
+		},
+		build: {
+			rolldownOptions: {
+				experimental: {
+					lazyBarrel: true
+				}
+			}
 		}
 	};
 });
