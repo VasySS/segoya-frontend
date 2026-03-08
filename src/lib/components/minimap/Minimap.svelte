@@ -8,7 +8,7 @@
 	} from '$lib/api/openapi';
 	import { getGameContext } from '$lib/states/gameContext.svelte';
 	import { UserSettingsStore } from '$lib/states/localStorage.svelte';
-	import L from 'leaflet';
+	import { Control, Map as LMap, Marker } from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 
 	import 'leaflet/dist/leaflet.css';
@@ -30,10 +30,10 @@
 	}
 	let { user }: Props = $props();
 
-	let map: L.Map;
+	let map: LMap;
 	let mapContainer: HTMLDivElement;
 	let resizeObserver: ResizeObserver;
-	let userMarker = $state<L.Marker>();
+	let userMarker = $state<Marker>();
 
 	const userSettings = UserSettingsStore;
 	const gameContext = getGameContext();
@@ -53,16 +53,20 @@
 	onDestroy(() => {
 		map.off();
 		map.remove();
-
 		resizeObserver.disconnect();
 	});
 
 	function mapInit() {
-		// eslint-disable-next-line unicorn/no-array-callback-reference, unicorn/no-array-method-this-argument
-		map = L.map(mapContainer, { zoomControl: false, attributionControl: false });
+		map = new LMap(mapContainer, {
+			center: [0, 0],
+			zoom: 10,
+			zoomControl: false,
+			attributionControl: false
+		});
 
-		const attrControl = L.control.attribution().addTo(map);
-		attrControl.setPrefix('<a href="https://leafletjs.com/">Leaflet</a>');
+		map.addControl(
+			new Control.Attribution({ prefix: '<a href="https://leafletjs.com/">Leaflet</a>' })
+		);
 
 		setTileProvider($userSettings.minimapProvider);
 		addControlButtons(map);
@@ -80,7 +84,7 @@
 		if (userMarker) userMarker.remove();
 
 		const { lat, lng } = e.latlng;
-		userMarker = L.marker([lat, lng], {
+		userMarker = new Marker([lat, lng], {
 			icon: createUserPosIcon(user.avatarHash, user.username)
 		}).addTo(map);
 
@@ -100,7 +104,7 @@
 	}
 
 	export async function showSingleplayerRoundEndMarkers(roundInfo: SingleplayerRound) {
-		userMarker ??= L.marker([0, 0]);
+		userMarker ??= new Marker([0, 0]);
 		gameContext.userGuessed = true;
 
 		await placeSingleplayerRoundEndMarkers(map, roundInfo, userMarker);

@@ -1,6 +1,6 @@
 import { asset } from '$app/paths';
 import { m } from '$paraglide/messages.js';
-import L from 'leaflet';
+import { Control, DomEvent, DomUtil, type LeafletMap } from 'leaflet';
 
 import { mapSizeToggle } from './minimapSize';
 
@@ -10,20 +10,20 @@ function createCustomButtonControl(options: {
 	position: 'topleft' | 'topright';
 	title: string;
 }) {
-	const CustomButton = L.Control.extend({
-		onAdd: function () {
-			const container = L.DomUtil.create('div', 'leaflet-bar');
-			const button = L.DomUtil.create('a', 'leaflet-button', container);
-			const img = L.DomUtil.create('img', '', button);
-			img.src = options.iconUrl;
-			img.title = options.title;
-			L.DomEvent.on(button, 'click', options.onClick, button);
-			L.DomEvent.disableClickPropagation(button);
-			return container;
-		}
-	});
+	const customButton = new Control({ position: options.position });
 
-	return new CustomButton({ position: options.position });
+	customButton.onAdd = function () {
+		const container = DomUtil.create('div', 'leaflet-bar');
+		const button = DomUtil.create('a', 'leaflet-button', container);
+		const img = DomUtil.create('img', '', button);
+		img.src = options.iconUrl;
+		img.title = options.title;
+		DomEvent.on(button, 'click', options.onClick, button);
+		DomEvent.disableClickPropagation(button);
+		return container;
+	};
+
+	return customButton;
 }
 
 /**
@@ -31,7 +31,7 @@ function createCustomButtonControl(options: {
  * @param map The Leaflet map instance to attach to.
  * @param toggleFunction Function to call when the toggle button is clicked.
  */
-export function addMapSizeToggleButton(map: L.Map) {
+export function addMapSizeToggleButton(map: LeafletMap) {
 	const button = createCustomButtonControl({
 		iconUrl: asset('/icons/minimap-size-toggle.svg'),
 		onClick: () => {
@@ -47,7 +47,8 @@ export function addMapSizeToggleButton(map: L.Map) {
 	map.addControl(button);
 }
 
-export function addControlButtons(map: L.Map) {
-	L.control.zoom({ position: 'topright' }).addTo(map);
+export function addControlButtons(map: LeafletMap) {
+	map.addControl(new Control.Zoom({ position: 'topright' }));
+
 	addMapSizeToggleButton(map);
 }

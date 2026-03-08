@@ -1,3 +1,4 @@
+import type { LeafletMap } from 'leaflet';
 import { Tween } from 'svelte/motion';
 import { MediaQuery } from 'svelte/reactivity';
 
@@ -45,17 +46,17 @@ export async function resetSizeStores(): Promise<void> {
 	]);
 }
 
-export function enableHoverListeners(map: L.Map) {
-	map.on('mouseover', handleMouseOver);
-	map.on('mouseout', handleMouseOut);
+export function enableHoverListeners(map: LeafletMap) {
+	map.on('pointerover', handleMouseOver);
+	map.on('pointerout', handleMouseOut);
 }
 
-function disableHoverListeners(map: L.Map) {
-	map.off('mouseover', handleMouseOver);
-	map.off('mouseout', handleMouseOut);
+function disableHoverListeners(map: LeafletMap) {
+	map.off('pointerover', handleMouseOver);
+	map.off('pointerout', handleMouseOut);
 }
 
-export async function expandMap(map: L.Map): Promise<void> {
+export async function expandMap(map: LeafletMap): Promise<void> {
 	disableHoverListeners(map);
 
 	// eslint-disable-next-line unicorn/prefer-ternary
@@ -72,7 +73,7 @@ export async function expandMap(map: L.Map): Promise<void> {
 	}
 }
 
-export async function shrinkMap(map: L.Map): Promise<void> {
+export async function shrinkMap(map: LeafletMap): Promise<void> {
 	enableHoverListeners(map);
 
 	await Promise.all([
@@ -83,7 +84,7 @@ export async function shrinkMap(map: L.Map): Promise<void> {
 
 // if user made minimap bigger by click, disable hover listeners
 // until they make it smaller again
-export async function mapSizeToggle(map: L.Map): Promise<void> {
+export async function mapSizeToggle(map: LeafletMap): Promise<void> {
 	await (mapHeight.current === mapDimensions.large.height ||
 	mapHeight.current === mapDimensions.largeMobile.height
 		? shrinkMap(map)

@@ -1,6 +1,7 @@
 import type { Provider } from '$lib/api/openapi';
+import type { LeafletMap } from 'leaflet';
 
-export function positionMap(map: L.Map, provider: Provider) {
+export function positionMap(map: LeafletMap, provider: Provider) {
 	switch (provider) {
 		case 'yandex': {
 			map.setView([61.055, 93.595], 3);

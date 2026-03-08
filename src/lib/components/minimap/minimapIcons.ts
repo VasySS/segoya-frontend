@@ -1,10 +1,10 @@
 import { getAvatarSource } from '$lib/utils/helpers';
-import L from 'leaflet';
+import { DivIcon } from 'leaflet';
 
 export function createUserPosIcon(avatarHash: string, username: string) {
 	const avatarSrc = getAvatarSource(avatarHash, username);
 
-	return new L.DivIcon({
+	return new DivIcon({
 		iconAnchor: [22, 22],
 		// to avoid white square
 		className: '',
@@ -15,7 +15,7 @@ export function createUserPosIcon(avatarHash: string, username: string) {
 export function createRealPosIcon(roundNumber: number) {
 	const paddingX = roundNumber < 10 ? 'px-2' : 'px-1';
 
-	return new L.DivIcon({
+	return new DivIcon({
 		iconAnchor: [22, 22],
 		iconSize: [40, 40],
 		// to avoid white square
