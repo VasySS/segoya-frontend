@@ -1,4 +1,5 @@
 import { paraglideVitePlugin } from '@inlang/paraglide-js';
+import adapter from '@sveltejs/adapter-node';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, loadEnv } from 'vite';
@@ -15,7 +16,15 @@ export default defineConfig(({ mode }) => {
 				strategy: ['cookie', 'globalVariable', 'preferredLanguage', 'baseLocale']
 			}),
 			tailwindcss(),
-			sveltekit()
+			sveltekit({
+				adapter: adapter(),
+				alias: {
+					$paraglide: './src/lib/i18n/paraglide',
+					$components: './src/lib/components',
+					$routes: './src/routes',
+					$tests: './tests'
+				}
+			})
 		],
 		server: {
 			warmup: {
