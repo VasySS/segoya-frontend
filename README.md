@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/vasyss/segoya-frontend)](LICENSE)
 ![Svelte](https://img.shields.io/badge/Svelte-5-orange?logo=svelte)
-![SvelteKit](https://img.shields.io/badge/SvelteKit-2-orange?logo=svelte)
+![SvelteKit](https://img.shields.io/badge/SvelteKit-3-orange?logo=svelte)
 
 A frontend for [Segoya](https://segoya.vasys.su) - panorama guessing game.
 
@@ -10,7 +10,7 @@ A frontend for [Segoya](https://segoya.vasys.su) - panorama guessing game.
 
 ### Prerequisites
 
-- **Node.js** >= 20 & **pnpm** installed
+- **Node.js** >= 22 & **pnpm** installed
 
 ### Installation
 
