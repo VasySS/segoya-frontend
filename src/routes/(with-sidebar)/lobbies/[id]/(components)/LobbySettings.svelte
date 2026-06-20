@@ -44,6 +44,7 @@
 		const res = await form.validateForm();
 		if (!res.valid) return;
 
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		let settings = {
 			provider: $formData.provider,
 			movementAllowed: $formData.movementAllowed,

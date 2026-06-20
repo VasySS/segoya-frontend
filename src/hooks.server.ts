@@ -13,7 +13,7 @@ const paraglideHandle: Handle = ({ event, resolve }) =>
 
 		return resolve(event, {
 			transformPageChunk: ({ html }) => {
-				return html.replace('%lang%', locale);
+				return html.replace('%lang%', () => locale);
 			}
 		});
 	});

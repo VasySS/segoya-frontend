@@ -41,7 +41,7 @@
 			return;
 		}
 
-		// script is created like this instead of svelte:head to correctly load on redirects
+		// script is created like this instead of 'svelte:head' to correctly load on redirects
 		const script = document.createElement('script');
 		script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 		script.addEventListener('load', turnstileOnLoad);

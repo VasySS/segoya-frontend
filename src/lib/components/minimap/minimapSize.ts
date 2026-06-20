@@ -83,8 +83,9 @@ export async function shrinkMap(map: L.Map): Promise<void> {
 // if user made minimap bigger by click, disable hover listeners
 // until they make it smaller again
 export async function mapSizeToggle(map: L.Map): Promise<void> {
-	await (mapHeight.current === mapDimensions.large.height ||
-	mapHeight.current === mapDimensions.largeMobile.height
-		? shrinkMap(map)
-		: expandMap(map));
+	const isLarge =
+		mapHeight.current === mapDimensions.large.height ||
+		mapHeight.current === mapDimensions.largeMobile.height;
+
+	await (isLarge ? shrinkMap : expandMap)(map);
 }

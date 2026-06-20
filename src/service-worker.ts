@@ -5,6 +5,7 @@ import { build, files, version } from '$service-worker';
 const worker = globalThis as unknown as ServiceWorkerGlobalScope;
 const cacheName = `segoya-${version}`;
 const assets = [...build, ...files];
+// eslint-disable-next-line unicorn/no-unreadable-new-expression
 const assetPaths = new Set(assets.map((asset) => new URL(asset, worker.location.origin).pathname));
 
 worker.addEventListener('install', (event) => {

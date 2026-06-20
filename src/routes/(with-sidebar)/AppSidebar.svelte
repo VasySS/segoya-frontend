@@ -60,7 +60,7 @@
 					size="sm"
 					title={m.changeLanguage()}
 					onclick={async () => {
-						await (getLocale() == 'en' ? setLocale('ru') : setLocale('en'));
+						await setLocale(getLocale() === 'en' ? 'ru' : 'en');
 					}}
 					data-sveltekit-reload
 				>
