@@ -3,6 +3,7 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - '@sveltejs/adapter-node@6.0.0-next.0'
   - '@sveltejs/kit@3.0.0-next.1'
+  - '@dicebear/core@10.1.0'
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
