@@ -58,7 +58,6 @@
 	});
 
 	function mapInit() {
-		// eslint-disable-next-line unicorn/no-array-callback-reference, unicorn/no-array-method-this-argument
 		map = L.map(mapContainer, { zoomControl: false, attributionControl: false });
 
 		const attrControl = L.control.attribution().addTo(map);

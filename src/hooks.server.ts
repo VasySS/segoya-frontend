@@ -58,7 +58,7 @@ const authHandle: Handle = async ({ event, resolve }) => {
 	// sveltekit doesn't preload fonts by default
 	// https://kit.svelte.dev/docs/performance#optimizing-assets
 	return await resolve(event, {
-		preload: ({ type }) => type === 'font' || type === 'js' || type === 'css'
+		preload: ({ type }) => ['font', 'js', 'css'].includes(type)
 	});
 };
 
@@ -67,7 +67,7 @@ const securityHeadersHandle: Handle = async ({ event, resolve }) => {
 	const response = await resolve(event);
 
 	response.headers.set('X-Frame-Options', 'SAMEORIGIN');
-	// origin is required for api keys for yandex and seznam panoramas to work
+	// origin is required for API keys for yandex and seznam panoramas to work
 	response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 	response.headers.set(
 		'Permissions-Policy',

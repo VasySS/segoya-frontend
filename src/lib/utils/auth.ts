@@ -10,7 +10,7 @@ export const isTokenExpired = (jwt: string) => {
 };
 
 export const getTokenPayload = (jwt: string) => {
-	const jwtPayload = jwt.split('.')[1];
+	const jwtPayload = jwt.split('.', 2)[1];
 	if (!jwtPayload) return;
 
 	return JSON.parse(atob(jwtPayload)) as JwtPayload;

@@ -19,7 +19,7 @@ export const directives = {
 		"'self'",
 		BACKEND_BASE_URL,
 		BACKEND_BASE_WS_URL,
-		// oauth
+		// OAuth
 		'https://oauth.yandex.ru',
 		// for yandex panoramas
 		'https://api-maps.yandex.ru',

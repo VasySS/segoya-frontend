@@ -28,10 +28,10 @@ export const POST: RequestHandler = async ({ request, params, cookies }) => {
 		...requestParsed.options
 	});
 
-	return json({ success: true });
+	return Response.json({ success: true });
 };
 
 export const DELETE: RequestHandler = ({ cookies, params }) => {
 	cookies.delete(params.name, { path: '/' });
-	return json({ success: true });
+	return Response.json({ success: true });
 };

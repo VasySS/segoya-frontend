@@ -174,7 +174,7 @@ describe('component AccountTab', () => {
 			});
 
 			const avatarUploadButton = screen.getByTitle(m.dark_smart_sheep_seek());
-			await user.click(avatarUploadButton as Element);
+			await user.click(avatarUploadButton);
 
 			await waitFor(() => {
 				expect(screen.getByLabelText(m.funny_simple_fireant_loop())).toBeVisible();
@@ -259,7 +259,7 @@ describe('component AccountTab', () => {
 			const avatarImage = screen.getByAltText('avatar');
 
 			expect((avatarImage as HTMLImageElement).src).toBe(
-				getAvatarSource('' as string, BASE_USER_INFO.username)
+				getAvatarSource('', BASE_USER_INFO.username)
 			);
 		});
 	});

@@ -130,16 +130,13 @@ describe('tests for SecurityTab component', () => {
 			await user.click(screen.getByTitle(m.ago_grassy_warbler_lead()));
 
 			await waitFor(() => {
-				expect(globalThis.fetch).toHaveBeenCalledWith(
+				expect(fetch).toHaveBeenCalledWith(
 					expect.stringMatching(/^https:\/\/geocode-maps\.yandex\.ru\/1\.x/)
 				);
 			});
 
 			await waitFor(() => {
-				expect(globalThis.fetch).toHaveBeenCalledWith(
-					`/api/cookies/${APIKeys.YANDEX}`,
-					expect.anything()
-				);
+				expect(fetch).toHaveBeenCalledWith(`/api/cookies/${APIKeys.YANDEX}`, expect.anything());
 			});
 
 			await waitFor(() => {
@@ -170,16 +167,11 @@ describe('tests for SecurityTab component', () => {
 			await user.click(screen.getByTitle(m.house_same_bullock_lend()));
 
 			await waitFor(() => {
-				expect(globalThis.fetch).toHaveBeenCalledWith(
-					expect.stringMatching(/^https:\/\/api\.mapy\.cz\/v1/)
-				);
+				expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/^https:\/\/api\.mapy\.cz\/v1/));
 			});
 
 			await waitFor(() => {
-				expect(globalThis.fetch).toHaveBeenCalledWith(
-					`/api/cookies/${APIKeys.SEZNAM}`,
-					expect.anything()
-				);
+				expect(fetch).toHaveBeenCalledWith(`/api/cookies/${APIKeys.SEZNAM}`, expect.anything());
 			});
 
 			await waitFor(() => {
@@ -211,16 +203,13 @@ describe('tests for SecurityTab component', () => {
 			await user.click(screen.getByTitle(m.raw_funny_bee_grin()));
 
 			await waitFor(() => {
-				expect(globalThis.fetch).toHaveBeenCalledWith(
+				expect(fetch).toHaveBeenCalledWith(
 					expect.stringMatching(/^https:\/\/maps\.googleapis\.com\/maps\/api/)
 				);
 			});
 
 			await waitFor(() => {
-				expect(globalThis.fetch).toHaveBeenCalledWith(
-					`/api/cookies/${APIKeys.GOOGLE}`,
-					expect.anything()
-				);
+				expect(fetch).toHaveBeenCalledWith(`/api/cookies/${APIKeys.GOOGLE}`, expect.anything());
 			});
 
 			await waitFor(() => {

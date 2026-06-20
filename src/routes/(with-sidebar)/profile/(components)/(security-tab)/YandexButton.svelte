@@ -13,7 +13,7 @@
 	async function handleYandexRemove() {
 		await fetchBackend(jwtToken, 'delete', '/v1/auth/yandex');
 
-		globalThis.location.reload();
+		location.reload();
 	}
 </script>
 

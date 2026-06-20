@@ -204,7 +204,7 @@ export async function placeMultiplayerGameEndMarkers(map: L.Map, guesses: Multip
 
 		realMarker.on('mouseover', () => {
 			// Hide all other round layers, show this one
-			for (const [rn, lg] of roundLayers.entries()) {
+			for (const [rn, lg] of roundLayers) {
 				if (rn !== guess.roundNum && map.hasLayer(lg)) map.removeLayer(lg);
 			}
 

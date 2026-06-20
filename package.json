@@ -67,7 +67,7 @@
 		"eslint-plugin-playwright": "^2.10.4",
 		"eslint-plugin-svelte": "^3.19.0",
 		"eslint-plugin-testing-library": "^7.16.2",
-		"eslint-plugin-unicorn": "^68.0.0",
+		"eslint-plugin-unicorn": "^66.0.0",
 		"formsnap": "^2.0.1",
 		"globals": "^17.6.0",
 		"jiti": "^2.7.0",

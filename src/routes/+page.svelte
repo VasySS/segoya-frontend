@@ -6,7 +6,7 @@
 	import { STATIC_BASE_URL } from '$lib/api/base';
 	import { m } from '$paraglide/messages.js';
 
-	// vite injects this
+	// Vite injects this
 	const appVersion = `v${__VER__}`;
 	const githubLink = 'https://github.com/VasySS';
 	const telegramLink = 'https://t.me/vasyss';

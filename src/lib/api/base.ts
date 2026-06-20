@@ -85,7 +85,7 @@ export async function fetchBackend<
 
 	// make sure given params match expectations from backend
 	const validatedParams = params ? endpoint.parameters.parse(params) : undefined;
-	// replace variables and add url search params
+	// replace variables and add URL search params
 	const url = resolveUrl(path.toString(), validatedParams);
 
 	const requestPayload =
@@ -156,7 +156,7 @@ export async function fetchBackend<
 		}
 
 		if (error instanceof SyntaxError) {
-			// handle the case when backend returns something that is not json
+			// handle the case when backend returns something that is not JSON
 			return {
 				success: false,
 				error: {

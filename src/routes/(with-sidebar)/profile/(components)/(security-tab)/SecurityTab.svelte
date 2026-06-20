@@ -70,7 +70,7 @@
 						body: JSON.stringify({
 							value: yandexKey,
 							options: cookieSettings
-						} as RequestBody)
+						})
 					});
 
 					toast.success(m.sea_smug_crow_nudge());
@@ -119,7 +119,7 @@
 						body: JSON.stringify({
 							value: googleKey,
 							options: cookieSettings
-						} as RequestBody)
+						})
 					});
 
 					toast.success(m.sea_smug_crow_nudge());
@@ -175,7 +175,7 @@
 						body: JSON.stringify({
 							value: seznamKey,
 							options: cookieSettings
-						} as RequestBody)
+						})
 					});
 
 					toast.success(m.sea_smug_crow_nudge());

@@ -57,7 +57,7 @@
 				break;
 			}
 			case 'gameRedirect': {
-				globalThis.location.href = resolve('/(game)/multiplayer/[id]', { id: data.payload.gameID });
+				location.assign(resolve('/(game)/multiplayer/[id]', { id: data.payload.gameID }));
 
 				break;
 			}

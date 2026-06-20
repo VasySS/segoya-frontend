@@ -4,6 +4,6 @@
 
 	// this route exists only to hard refresh the profile page from server side
 	onMount(() => {
-		globalThis.location.href = resolve('/(with-sidebar)/profile');
+		location.assign(resolve('/(with-sidebar)/profile'));
 	});
 </script>

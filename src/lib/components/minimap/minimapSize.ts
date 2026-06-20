@@ -58,7 +58,6 @@ function disableHoverListeners(map: L.Map) {
 export async function expandMap(map: L.Map): Promise<void> {
 	disableHoverListeners(map);
 
-	// eslint-disable-next-line unicorn/prefer-ternary
 	if (large.current) {
 		await Promise.all([
 			mapWidth.set(mapDimensions.large.width),

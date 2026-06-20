@@ -82,7 +82,7 @@
 				onclick={async () => {
 					if (!browser) return;
 
-					await navigator.clipboard.writeText(globalThis.location.href);
+					await navigator.clipboard.writeText(location.href);
 
 					toast.success(m.lobbyLinkCopied());
 				}}

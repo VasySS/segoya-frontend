@@ -38,6 +38,7 @@ test.describe('Multiplayer Game', () => {
 		});
 
 		let lobbyId: string;
+
 		await test.step('Extract lobby ID', async () => {
 			lobbyId = await lobbyPage.getLobbyId();
 		});
@@ -135,6 +136,7 @@ test.describe('Multiplayer Game', () => {
 		});
 
 		let lobbyId: string;
+
 		await test.step('Extract lobby ID', async () => {
 			lobbyId = await lobbyPage.getLobbyId();
 		});
@@ -200,6 +202,7 @@ test.describe('Multiplayer Game', () => {
 
 		// Now have player 2 join
 		let lobbyId: string;
+
 		await test.step('Extract lobby ID', async () => {
 			lobbyId = await lobbyPage.getLobbyId();
 		});
@@ -236,6 +239,7 @@ test.describe('Multiplayer Game', () => {
 		});
 
 		let lobbyId: string;
+
 		await test.step('Extract lobby ID', async () => {
 			lobbyId = await lobbyPage.getLobbyId();
 		});
@@ -277,6 +281,7 @@ test.describe('Multiplayer Game', () => {
 		});
 
 		let lobbyId: string;
+
 		await test.step('Extract lobby ID', async () => {
 			lobbyId = await lobbyPage.getLobbyId();
 		});

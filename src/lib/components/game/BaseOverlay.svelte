@@ -26,10 +26,12 @@
 	const round = gameContext.round;
 
 	async function handleSpacePress(e: KeyboardEvent) {
-		if (e.code === 'Space') {
-			e.preventDefault();
-			await sendGuess();
+		if (e.code !== 'Space') {
+			return;
 		}
+
+		e.preventDefault();
+		await sendGuess();
 	}
 </script>
 

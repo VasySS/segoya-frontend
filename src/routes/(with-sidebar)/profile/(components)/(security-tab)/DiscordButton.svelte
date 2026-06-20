@@ -13,7 +13,7 @@
 	async function handleDiscordRemove() {
 		await fetchBackend(jwtToken, 'delete', '/v1/auth/discord');
 
-		globalThis.location.reload();
+		location.reload();
 	}
 </script>
 

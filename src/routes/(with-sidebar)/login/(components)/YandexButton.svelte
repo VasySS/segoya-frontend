@@ -5,7 +5,7 @@
 	import { m } from '$paraglide/messages.js';
 
 	function onclick() {
-		globalThis.location.href = YANDEX_OAUTH_LOGIN_URL;
+		location.assign(YANDEX_OAUTH_LOGIN_URL);
 	}
 </script>
 
