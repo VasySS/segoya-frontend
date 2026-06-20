@@ -29,7 +29,7 @@
 	},
 	"devDependencies": {
 		"@dicebear/collection": "^9.4.2",
-		"@dicebear/core": "^10.3.0",
+		"@dicebear/core": "^9.2.4",
 		"@eslint/js": "^9.39.2",
 		"@googlemaps/js-api-loader": "^2.1.1",
 		"@ianvs/prettier-plugin-sort-imports": "^4.7.1",
