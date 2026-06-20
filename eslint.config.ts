@@ -101,6 +101,12 @@ export default defineConfig([
 			'@typescript-eslint/no-unsafe-assignment': 'off'
 		}
 	},
+	// SvelteKit compiles the service worker in its own Web Worker context and
+	// intentionally excludes it from the application TypeScript project.
+	{
+		files: ['src/service-worker.ts'],
+		extends: [ts.configs.disableTypeChecked]
+	},
 	// rules for unit tests (testing-library + vitest)
 	{
 		files: ['src/**/?(*.)+(spec|test).[jt]s?(x)'],

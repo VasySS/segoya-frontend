@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 512 512">
+	<defs>
+		<clipPath id="scene">
+			<circle cx="256" cy="250" r="190" />
+		</clipPath>
+	</defs>
+	<rect width="512" height="512" fill="#0b3b60" />
+	<circle cx="256" cy="250" r="202" fill="#f59e0b" />
+	<circle cx="256" cy="250" r="190" fill="#22c1c3" />
+	<g clip-path="url(#scene)">
+		<circle cx="158" cy="153" r="38" fill="#fbbf24" />
+		<path d="M-8 294C76 224 137 221 224 287c73-69 147-63 297 45v145H-8Z" fill="#075985" />
+		<path d="M-10 322c89-63 158-59 246 17 85-77 165-66 286 14v124H-10Z" fill="#15803d" />
+		<path d="M-16 349c117-64 192-41 302 86l-61 42H-16Z" fill="#fbbf24" />
+		<path d="M-17 386c108-45 162-27 250 91H-17Z" fill="#f97316" />
+		<path d="M362 137l-57 90h34l-49 76h58v66h28v-66h58l-48-76h33Z" fill="#065f46" />
+	</g>
+</svg>
