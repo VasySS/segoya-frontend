@@ -3,6 +3,7 @@ import { fetchBackend } from '$lib/api/base';
 import type { AuthProvider } from '$lib/api/openapi';
 import { APIKeys } from '$lib/constants/enums';
 import type { JwtPayload } from '$lib/types/auth';
+import { formatDate } from '$lib/utils/temporal';
 import { m } from '$paraglide/messages.js';
 import { setupComponent } from '$tests/vitestSetup';
 import { toast } from 'svelte-sonner';
@@ -98,9 +99,7 @@ describe('tests for SecurityTab component', () => {
 
 		expect(screen.getByText(/^Yandex$/)).toBeInTheDocument();
 		expect(screen.getByText(/^Discord$/)).toBeInTheDocument();
-		expect(
-			screen.getByText(`(${new Date('2024-01-01').toLocaleDateString()})`)
-		).toBeInTheDocument();
+		expect(screen.getByText(`(${formatDate('2024-01-01')})`)).toBeInTheDocument();
 	});
 
 	describe('tests for API Keys Section', () => {

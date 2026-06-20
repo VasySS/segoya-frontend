@@ -2,6 +2,7 @@
 	import { asset } from '$app/paths';
 	import Button from '$components/shadcn/button/button.svelte';
 	import { fetchBackend } from '$lib/api/base';
+	import { formatDate } from '$lib/utils/temporal';
 	import { m } from '$paraglide/messages.js';
 
 	interface Props {
@@ -26,7 +27,7 @@
 	<p class="text-base font-bold">{m.flaky_merry_dog_nurture()}</p>
 
 	{#if oauthCreatedAt}
-		<p>({new Date(oauthCreatedAt).toLocaleDateString()})</p>
+		<p>({formatDate(oauthCreatedAt)})</p>
 	{/if}
 
 	{#if oauthCreatedAt}

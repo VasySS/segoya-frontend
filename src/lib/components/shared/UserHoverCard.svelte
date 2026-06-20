@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import * as HoverCard from '$components/shadcn/hover-card/index.js';
 	import type { UserPublicProfile } from '$lib/api/openapi';
+	import { formatDate } from '$lib/utils/temporal';
 	import { m } from '$paraglide/messages.js';
 
 	interface Props {
@@ -27,7 +28,7 @@
 		<div class="flex items-center space-x-2">
 			<Calendar></Calendar>
 			<p>
-				{new Date(user.registerDate).toLocaleDateString()}
+				{formatDate(user.registerDate)}
 			</p>
 		</div>
 	</HoverCard.Content>

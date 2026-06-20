@@ -19,9 +19,9 @@
 	const game = gameContext.game;
 	const round = gameContext.round;
 
-	const timeNow = new Date();
-	const timeStart = new Date(round.startedAt);
-	let showTimer = $state(timeStart.getTime() > timeNow.getTime());
+	const timeNow = Temporal.Now.instant();
+	const timeStart = Temporal.Instant.from(round.startedAt);
+	let showTimer = $state(Temporal.Instant.compare(timeStart, timeNow) > 0);
 
 	export function returnToStart() {
 		if (googleStreetView) {
@@ -63,8 +63,8 @@
 	<div class="fixed inset-0 z-50 flex flex-col items-center justify-center space-y-3 bg-black/90">
 		<p>{`${m.overlayRound()} ${round.roundNum.toString()} ${m.of()} ${game.rounds.toString()}`}</p>
 		<Timer
-			startTimestamp={timeNow.toISOString()}
-			duration={(timeStart.getTime() - timeNow.getTime()) / 1000}
+			startTimestamp={timeNow.toString()}
+			duration={timeStart.since(timeNow).total('seconds')}
 			timerEndCallback={() => (showTimer = false)}
 		/>
 	</div>

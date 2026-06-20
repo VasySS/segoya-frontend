@@ -30,10 +30,6 @@ export const columns: ColumnDef<Lobby>[] = [
 			return renderSnippet(joinSnippet);
 		}
 	},
-	// {
-	// 	accessorFn: (row) => new Date(row.createdAt).toLocaleString(),
-	// 	header: m.profileGameDate()
-	// },
 	{
 		accessorFn: (row) => `${row.currentPlayers.toString()}/${row.maxPlayers.toString()}`,
 		header: 'Игроки'

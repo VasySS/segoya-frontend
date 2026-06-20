@@ -12,8 +12,9 @@
 	import { APIKeys } from '$lib/constants/enums';
 	import type { JwtPayload } from '$lib/types/auth';
 	import type { UserAPIKeys } from '$lib/types/user';
+	import { formatDateTime } from '$lib/utils/temporal';
 	import { m } from '$paraglide/messages.js';
-	import type { CookieOptions, RequestBody } from '$routes/api/cookies/[name]/+server';
+	import type { CookieOptions } from '$routes/api/cookies/[name]/+server';
 	import Bowser from 'bowser';
 	import { toast } from 'svelte-sonner';
 
@@ -284,7 +285,7 @@
 												{bowserParser.getBrowserVersion()}, {bowserParser.getOSName()}
 												{bowserParser.getOS().version}
 											</p>
-											<p>{new Date(session.lastActive).toLocaleString()}</p>
+											<p>{formatDateTime(session.lastActive)}</p>
 										</div>
 									</div>
 								</div>

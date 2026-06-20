@@ -149,7 +149,10 @@ export default defineConfig([
 			'import/namespace': 'off',
 			'import/no-named-as-default': 'off',
 			'import/no-named-as-default-member': 'off',
-			'import/no-unresolved': 'off'
+			'import/no-unresolved': 'off',
+
+			'unicorn/no-incorrect-template-string-interpolation': 'off',
+			'unicorn/prefer-await': 'off'
 		}
 	}
 ]);

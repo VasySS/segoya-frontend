@@ -33,6 +33,14 @@
 	const gameContext = getGameContext();
 	const game = gameContext.game as MultiplayerGame;
 	const round = gameContext.round as MultiplayerRound;
+	const unixEpoch = Temporal.Instant.fromEpochMilliseconds(0);
+
+	function getRoundEndTimestamp(): string {
+		const endedAt = Temporal.Instant.from(round.endedAt);
+		return Temporal.Instant.compare(endedAt, unixEpoch) > 0
+			? round.endedAt
+			: Temporal.Now.instant().toString();
+	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	async function sendGuess() {
@@ -120,9 +128,7 @@
 		/>
 	{:else if round.finished && !game.finished && round.roundNum < game.rounds}
 		<Timer
-			startTimestamp={new Date(round.endedAt).getTime() > 0
-				? round.endedAt
-				: new Date().toISOString()}
+			startTimestamp={getRoundEndTimestamp()}
 			duration={10}
 			timerText={m.sound_large_panther_hurl()}
 			timerEndCallback={() => nextRound()}

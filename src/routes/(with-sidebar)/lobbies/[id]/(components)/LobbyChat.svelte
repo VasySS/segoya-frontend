@@ -2,6 +2,7 @@
 	import { SendHorizontal } from '@lucide/svelte';
 	import { Button } from '$components/shadcn/button/index';
 	import { Input } from '$components/shadcn/input/index';
+	import { formatTime } from '$lib/utils/temporal';
 	import { m } from '$paraglide/messages.js';
 	import { tick, untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -82,7 +83,7 @@
 			in:fade
 			class="mt-2 wrap-break-word whitespace-normal"
 		>
-			[{new Date(msg.time).toLocaleTimeString()}] {msg.username}: {msg.text}
+			[{formatTime(msg.time)}] {msg.username}: {msg.text}
 		</p>
 	{/each}
 </div>

@@ -3,12 +3,13 @@ import { resolve } from '$app/paths';
 import { renderSnippet } from '$components/shadcn/data-table/index';
 import type { SingleplayerGame } from '$lib/api/openapi';
 import { getProviderLabel } from '$lib/constants/panoramaProviders';
+import { formatDateTime } from '$lib/utils/temporal';
 import { m } from '$paraglide/messages.js';
 import { createRawSnippet } from 'svelte';
 
 export const columns: ColumnDef<SingleplayerGame>[] = [
 	{
-		accessorFn: (row) => new Date(row.createdAt).toLocaleString(),
+		accessorFn: (row) => formatDateTime(row.createdAt),
 		header: m.profileGameDate()
 	},
 	{

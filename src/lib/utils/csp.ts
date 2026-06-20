@@ -32,7 +32,7 @@ export const directives = {
 		'https://api.mapy.cz',
 		// for google panoramas
 		'https://maps.googleapis.com',
-		// for api checking from profile page
+		// for API checking from profile page
 		'https://geocode-maps.yandex.ru'
 	],
 	'img-src': [

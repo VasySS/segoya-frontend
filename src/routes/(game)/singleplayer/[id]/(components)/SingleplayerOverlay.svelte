@@ -10,7 +10,6 @@
 	import type {
 		EndSingleplayerRoundResponse,
 		SingleplayerGame,
-		SingleplayerRound,
 		UserPublicProfile
 	} from '$lib/api/openapi';
 	import { GameType } from '$lib/constants/enums';
@@ -26,7 +25,7 @@
 
 	const gameContext = getGameContext();
 	const game = gameContext.game as SingleplayerGame;
-	const round = gameContext.round as SingleplayerRound;
+	const round = gameContext.round;
 
 	async function sendGuess() {
 		if (gameContext.userGuessed || round.finished || game.finished) {

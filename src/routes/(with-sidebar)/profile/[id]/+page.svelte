@@ -3,6 +3,7 @@
 	import * as Card from '$components/shadcn/card/index';
 	import type { UserPublicProfile } from '$lib/api/openapi.js';
 	import { getAvatarSource } from '$lib/utils/helpers';
+	import { formatDate } from '$lib/utils/temporal';
 	import { m } from '$paraglide/messages.js';
 
 	let { data } = $props();
@@ -33,7 +34,7 @@
 
 		<div>
 			<p>{m.extra_odd_dolphin_talk()}: {user.name}</p>
-			<p>{m.lost_pink_yak_gasp()}: {new Date(user.registerDate).toLocaleDateString()}</p>
+			<p>{m.lost_pink_yak_gasp()}: {formatDate(user.registerDate)}</p>
 		</div>
 	</Card.Content>
 </Card.Root>

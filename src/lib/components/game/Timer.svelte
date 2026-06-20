@@ -42,8 +42,8 @@
 	}: Props = $props();
 
 	const getTimerDuration = (): number => {
-		const now = Date.now();
-		const timeNum = new Date(startTimestamp).getTime();
+		const now = Temporal.Now.instant().epochMilliseconds;
+		const timeNum = Temporal.Instant.from(startTimestamp).epochMilliseconds;
 
 		const endTime = timeNum + duration * 1000;
 		return Math.max(0, Math.floor((endTime - now) / 1000));
