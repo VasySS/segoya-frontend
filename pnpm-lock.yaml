@@ -204,8 +204,6 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3
 
-  src/lib/i18n/paraglide/messages: {}
-
 packages:
 
   '@adobe/css-tools@4.4.4':
