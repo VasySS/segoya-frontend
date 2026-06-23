@@ -36,14 +36,20 @@ const authHandle: Handle = async ({ event, resolve }) => {
 			event.cookies.delete(accessCookieName, { path: '/' });
 			event.cookies.delete(refreshCookieName, { path: '/' });
 
-			redirect(302, `/login?redirect-to=${event.url.pathname}`);
+			redirect(
+				302,
+				`/login?redirect-to=${event.url.pathname === '/login' ? '/home' : event.url.pathname}`
+			);
 		}
 
 		setAllCookiesFromHeader(event, response.headers['Set-Cookie']);
 
 		const accessTokenCookie = event.cookies.get(accessCookieName);
 		if (!accessTokenCookie) {
-			redirect(302, `/login?redirect-to=${event.url.pathname}`);
+			redirect(
+				302,
+				`/login?redirect-to=${event.url.pathname === '/login' ? '/home' : event.url.pathname}`
+			);
 		}
 
 		event.locals.jwtPayload = getTokenPayload(accessTokenCookie);
@@ -52,7 +58,10 @@ const authHandle: Handle = async ({ event, resolve }) => {
 
 	const isPathProtected = !unprotectedRoutes.includes(event.url.pathname);
 	if (isPathProtected && !event.locals.jwtToken) {
-		redirect(302, `/login?redirect-to=${event.url.pathname}`);
+		redirect(
+			302,
+			`/login?redirect-to${event.url.pathname === '/login' ? '/home' : event.url.pathname}`
+		);
 	}
 
 	// sveltekit doesn't preload fonts by default
