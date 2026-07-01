@@ -60,7 +60,7 @@
 		"bits-ui": "^2.18.1",
 		"bowser": "^2.14.1",
 		"clsx": "^2.1.1",
-		"cropperjs": "1.6.2",
+		"cropperjs": "2.1.1",
 		"eslint": "^9.39.2",
 		"eslint-import-resolver-vite": "^2.2.0",
 		"eslint-plugin-import": "^2.32.0",
