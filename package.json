@@ -69,7 +69,7 @@
 		"eslint-plugin-testing-library": "^7.16.2",
 		"eslint-plugin-unicorn": "^66.0.0",
 		"formsnap": "^2.0.1",
-		"globals": "^17.6.0",
+		"globals": "^17.8.0",
 		"jiti": "^2.7.0",
 		"jsdom": "^29.1.1",
 		"leaflet": "^1.9.4",
