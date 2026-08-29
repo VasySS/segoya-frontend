@@ -1,4 +1,4 @@
-import type { MultiplayerGame } from '$lib/api/openapi';
+import type { MultiplayerGame } from '#lib/api/openapi.js';
 
 import type { MultiplayerUser } from './user';
 

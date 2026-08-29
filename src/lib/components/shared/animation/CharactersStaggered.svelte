@@ -3,7 +3,7 @@
 A component for animating the appearance of text by characters or words.
 -->
 <script lang="ts">
-	import { cn } from '$lib/utils/shadcn';
+	import { cn } from '#lib/utils/shadcn.js';
 	import { animate, stagger } from 'motion';
 
 	interface Props {

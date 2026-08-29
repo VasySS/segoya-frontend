@@ -1,5 +1,5 @@
 import { screen, waitFor } from '@testing-library/svelte'; // eslint-disable-line import/named
-import { getAvatarSource } from '$lib/utils/helpers';
+import { getAvatarSource } from '#lib/utils/helpers.js';
 import { m } from '$paraglide/messages.js';
 import { setupComponent } from '$tests/vitestSetup';
 import { superValidate } from 'sveltekit-superforms';

@@ -2,8 +2,8 @@
 	import { Calendar } from '@lucide/svelte';
 	import { resolve } from '$app/paths';
 	import * as HoverCard from '$components/shadcn/hover-card/index.js';
-	import type { UserPublicProfile } from '$lib/api/openapi';
-	import { formatDate } from '$lib/utils/temporal';
+	import type { UserPublicProfile } from '#lib/api/openapi.js';
+	import { formatDate } from '#lib/utils/temporal.js';
 	import { m } from '$paraglide/messages.js';
 
 	interface Props {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
-	import { cn, type WithoutChild } from '$lib/utils/shadcn.js';
+	import { cn, type WithoutChild } from '#lib/utils/shadcn.js';
 	import { Menubar as MenubarPrimitive } from 'bits-ui';
 
 	let {

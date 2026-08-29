@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn, type WithoutChild } from '$lib/utils/shadcn.js';
+	import { cn, type WithoutChild } from '#lib/utils/shadcn.js';
 	import { Select as SelectPrimitive } from 'bits-ui';
 
 	import SelectScrollDownButton from './select-scroll-down-button.svelte';

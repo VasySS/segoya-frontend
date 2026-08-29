@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn, type WithoutChild } from '$lib/utils/shadcn.js';
+	import { cn, type WithoutChild } from '#lib/utils/shadcn.js';
 	import * as FormPrimitive from 'formsnap';
 
 	let {

@@ -2,8 +2,8 @@
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import * as Card from '$components/shadcn/card/index';
 	import DataTable from '$components/shadcn/data-table/data-table.svelte';
-	import { fetchBackend } from '$lib/api/base';
-	import type { SingleplayerGames } from '$lib/api/openapi';
+	import { fetchBackend } from '#lib/api/base.js';
+	import type { SingleplayerGames } from '#lib/api/openapi.js';
 	import { m } from '$paraglide/messages.js';
 	import { toast } from 'svelte-sonner';
 

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { YANDEX_API_KEY } from '$lib/api/base';
-	import { APIKeys } from '$lib/constants/enums';
-	import { getGameContext } from '$lib/states/gameContext.svelte';
-	import { getCookiesFromString } from '$lib/utils/auth';
+	import { YANDEX_API_KEY } from '#lib/api/base.js';
+	import { APIKeys } from '#lib/constants/enums.js';
+	import { getGameContext } from '#lib/states/gameContext.svelte.js';
+	import { getCookiesFromString } from '#lib/utils/auth.js';
 	import { onDestroy } from 'svelte';
 	import type { panorama } from 'yandex-maps';
 

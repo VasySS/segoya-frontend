@@ -2,6 +2,8 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
 import { defineConfig } from 'vitest/config';
 
+import { aliases } from './vite.config';
+
 const excludes = [
 	'.svelte-kit/**',
 	'build/**',
@@ -13,7 +15,7 @@ const excludes = [
 ];
 
 export default defineConfig({
-	plugins: [sveltekit(), svelteTesting()],
+	plugins: [sveltekit({ alias: aliases }), svelteTesting()],
 	test: {
 		globals: true,
 		environment: 'jsdom',

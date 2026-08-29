@@ -1,5 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import type { JwtPayload } from '$lib/types/auth';
+import type { JwtPayload } from '#lib/types/auth.js';
 import setCookie from 'set-cookie-parser';
 
 export const isTokenExpired = (jwt: string) => {
@@ -34,14 +34,16 @@ export function setAllCookiesFromHeader(event: RequestEvent, cookieString: strin
 	for (const [c] of cookies) {
 		if (!c?.path) continue;
 
-		event.cookies.set(c.name.trim(), c.value.trim(), {
-			domain: c.domain,
-			expires: c.expires,
-			httpOnly: c.httpOnly,
-			maxAge: c.maxAge,
+		const options = {
 			path: c.path,
-			sameSite: c.sameSite as 'strict' | 'lax' | 'none',
-			secure: c.secure
-		});
+			...(c.domain && { domain: c.domain }),
+			...(c.expires && { expires: c.expires }),
+			...(typeof c.httpOnly === 'boolean' && { httpOnly: c.httpOnly }),
+			...(typeof c.maxAge === 'number' && { maxAge: c.maxAge }),
+			...(c.sameSite && { sameSite: c.sameSite as 'strict' | 'lax' | 'none' }),
+			...(typeof c.secure === 'boolean' && { secure: c.secure })
+		} satisfies Parameters<RequestEvent['cookies']['set']>[2];
+
+		event.cookies.set(c.name.trim(), c.value.trim(), options);
 	}
 }

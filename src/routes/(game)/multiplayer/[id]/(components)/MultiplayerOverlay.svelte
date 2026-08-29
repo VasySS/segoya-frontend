@@ -4,15 +4,15 @@
 	import Timer from '$components/game/Timer.svelte';
 	import Minimap from '$components/minimap/Minimap.svelte';
 	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
-	import { fetchBackend } from '$lib/api/base';
+	import { fetchBackend } from '#lib/api/base.js';
 	import type {
 		MultiplayerGame,
 		MultiplayerGuess,
 		MultiplayerRound,
 		UserPublicProfile
-	} from '$lib/api/openapi';
-	import { GameType, type GameTypeValues } from '$lib/constants/enums';
-	import { getGameContext } from '$lib/states/gameContext.svelte';
+	} from '#lib/api/openapi.js';
+	import { GameType, type GameTypeValues } from '#lib/constants/enums.js';
+	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { m } from '$paraglide/messages.js';
 	import { toast } from 'svelte-sonner';
 

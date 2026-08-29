@@ -6,14 +6,14 @@
 	import Minimap from '$components/minimap/Minimap.svelte';
 	import Button from '$components/shadcn/button/button.svelte';
 	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
-	import { fetchBackend } from '$lib/api/base';
+	import { fetchBackend } from '#lib/api/base.js';
 	import type {
 		EndSingleplayerRoundResponse,
 		SingleplayerGame,
 		UserPublicProfile
-	} from '$lib/api/openapi';
-	import { GameType } from '$lib/constants/enums';
-	import { getGameContext } from '$lib/states/gameContext.svelte';
+	} from '#lib/api/openapi.js';
+	import { GameType } from '#lib/constants/enums.js';
+	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { m } from '$paraglide/messages.js';
 	import { toast } from 'svelte-sonner';
 

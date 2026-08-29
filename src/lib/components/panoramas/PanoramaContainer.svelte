@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Compass from '$components/game/Compass.svelte';
 	import Timer from '$components/game/Timer.svelte';
-	import { getGameContext } from '$lib/states/gameContext.svelte';
-	import { UserSettingsStore } from '$lib/states/localStorage.svelte';
+	import { getGameContext } from '#lib/states/gameContext.svelte.js';
+	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
 	import { m } from '$paraglide/messages.js';
 
 	import GoogleStreet from './GoogleStreet.svelte';

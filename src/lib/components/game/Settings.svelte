@@ -1,7 +1,3 @@
-<!-- 
-@component
-A component, that allows user to change settings (stored in local storage)
--->
 <script lang="ts">
 	import { CircleQuestionMark, Play } from '@lucide/svelte';
 	import { asset } from '$app/paths';
@@ -12,9 +8,9 @@ A component, that allows user to change settings (stored in local storage)
 	import Slider from '$components/shadcn/slider/slider.svelte';
 	import Switch from '$components/shadcn/switch/switch.svelte';
 	import * as Tooltip from '$components/shadcn/tooltip/index';
-	import { STATIC_BASE_URL } from '$lib/api/base';
-	import { minimapProviders } from '$lib/constants/minimapProviders';
-	import { UserSettingsStore } from '$lib/states/localStorage.svelte';
+	import { STATIC_BASE_URL } from '#lib/api/base.js';
+	import { minimapProviders } from '#lib/constants/minimapProviders.js';
+	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
 	import { m } from '$paraglide/messages.js';
 	import { onMount } from 'svelte';
 
@@ -31,7 +27,7 @@ A component, that allows user to change settings (stored in local storage)
 	let alertSound: HTMLAudioElement;
 
 	onMount(() => {
-		alertSound = new Audio(asset('/sounds/alert1.mp3'));
+		alertSound = new Audio(asset('sounds/alert1.mp3'));
 	});
 
 	$effect(() => {
@@ -39,11 +35,16 @@ A component, that allows user to change settings (stored in local storage)
 	});
 </script>
 
+<!-- 
+@component
+A component, that allows user to change settings (stored in local storage)
+-->
+
 <Dialog.Root bind:open={settingsOpen}>
 	<Dialog.Content class="space-y-1">
 		<Dialog.Header>
 			<Dialog.Title>{m.profileTabSettings()}</Dialog.Title>
-			<Dialog.Description></Dialog.Description>
+			<Dialog.Description />
 		</Dialog.Header>
 
 		<div class="space-y-2">
@@ -127,7 +128,7 @@ A component, that allows user to change settings (stored in local storage)
 						}));
 					}}
 					id="compass"
-				></Switch>
+				/>
 
 				<Tooltip.Provider>
 					<Tooltip.Root>
@@ -160,7 +161,7 @@ A component, that allows user to change settings (stored in local storage)
 						}));
 					}}
 					id="gameSounds"
-				></Switch>
+				/>
 
 				{#if $userSettings.sounds.enabled}
 					<p>{`(${Math.round($userSettings.sounds.volume * 100).toString()} %)`}</p>
@@ -171,9 +172,7 @@ A component, that allows user to change settings (stored in local storage)
 							alertSound.currentTime = 0;
 							void alertSound.play();
 						}}
-					>
-						<Play></Play>
-					</Button>
+					><Play /></Button>
 				{/if}
 			</div>
 
@@ -196,6 +195,6 @@ A component, that allows user to change settings (stored in local storage)
 				/>
 			{/if}
 		</div>
-		<Dialog.Footer></Dialog.Footer>
+		<Dialog.Footer />
 	</Dialog.Content>
 </Dialog.Root>

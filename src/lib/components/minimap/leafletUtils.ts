@@ -1,4 +1,4 @@
-import type { Provider } from '$lib/api/openapi';
+import type { Provider } from '#lib/api/openapi.js';
 
 export function positionMap(map: L.Map, provider: Provider) {
 	switch (provider) {

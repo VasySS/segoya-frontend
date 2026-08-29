@@ -29,8 +29,8 @@
 </script>
 
 <script lang="ts">
-	import * as Tooltip from '$lib/components/shadcn/tooltip/index.js';
-	import { cn, type WithElementRef, type WithoutChildrenOrChild } from '$lib/utils/shadcn.js';
+	import * as Tooltip from '#lib/components/shadcn/tooltip/index.js';
+	import { cn, type WithElementRef, type WithoutChildrenOrChild } from '#lib/utils/shadcn.js';
 	import { mergeProps } from 'bits-ui';
 	import type { ComponentProps, Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';

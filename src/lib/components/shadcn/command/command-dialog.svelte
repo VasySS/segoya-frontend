@@ -1,6 +1,6 @@
 <script lang="ts">
-	import * as Dialog from '$lib/components/shadcn/dialog/index.js';
-	import type { WithoutChildrenOrChild } from '$lib/utils/shadcn.js';
+	import * as Dialog from '#lib/components/shadcn/dialog/index.js';
+	import type { WithoutChildrenOrChild } from '#lib/utils/shadcn.js';
 	import type { Command as CommandPrimitive, Dialog as DialogPrimitive } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 

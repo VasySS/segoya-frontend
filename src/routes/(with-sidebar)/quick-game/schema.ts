@@ -1,1 +1,1 @@
-export { formSchema, type FormSchema } from '$lib/schemas/gameSettings';
+export { formSchema, type FormSchema } from '#lib/schemas/gameSettings.js';

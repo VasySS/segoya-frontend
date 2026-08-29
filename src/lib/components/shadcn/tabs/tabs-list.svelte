@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from '$lib/utils/shadcn';
+	import { cn } from '#lib/utils/shadcn.js';
 	import { Tabs as TabsPrimitive } from 'bits-ui';
 
 	let { ref = $bindable(null), class: className, ...restProps }: TabsPrimitive.ListProps = $props();

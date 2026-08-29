@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Tabs from '$components/shadcn/tabs/index';
-	import { fetchBackend } from '$lib/api/base';
-	import type { SingleplayerGames } from '$lib/api/openapi';
+	import { fetchBackend } from '#lib/api/base.js';
+	import type { SingleplayerGames } from '#lib/api/openapi.js';
 	import { m } from '$paraglide/messages.js';
 	import { toast } from 'svelte-sonner';
 

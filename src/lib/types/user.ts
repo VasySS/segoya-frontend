@@ -1,4 +1,4 @@
-import type { UserPublicProfile } from '$lib/api/openapi';
+import type { UserPublicProfile } from '#lib/api/openapi.js';
 
 export interface MultiplayerUser extends UserPublicProfile {
 	guessed: boolean;

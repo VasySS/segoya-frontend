@@ -1,13 +1,13 @@
 <script lang="ts">
 	import Upload from '@lucide/svelte/icons/upload';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import * as Avatar from '$components/shadcn/avatar/index';
 	import { Button } from '$components/shadcn/button/index';
 	import * as Card from '$components/shadcn/card/index';
 	import * as Form from '$components/shadcn/form/index';
 	import { Input } from '$components/shadcn/input/index';
-	import type { UserPublicProfile } from '$lib/api/openapi';
-	import { getAvatarSource } from '$lib/utils/helpers';
+	import type { UserPublicProfile } from '#lib/api/openapi.js';
+	import { getAvatarSource } from '#lib/utils/helpers.js';
 	import { m } from '$paraglide/messages.js';
 	import { superForm, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
@@ -52,7 +52,7 @@
 			<Button
 				class="absolute top-44 left-28 rounded-full border"
 				variant="outline"
-				onclick={() => (avatarUploadOpen = !avatarUploadOpen)}
+				onclick={() => avatarUploadOpen = !avatarUploadOpen}
 				title={m.dark_smart_sheep_seek()}
 			>
 				<Upload size={24} />
@@ -60,10 +60,7 @@
 		</Avatar.Root>
 
 		<div class="">
-			<Form.Field
-				{form}
-				name="name"
-			>
+			<Form.Field form={form} name="name">
 				<Form.Control>
 					{#snippet children({ props })}
 						<Form.Label>{m.registerName()}</Form.Label>
@@ -104,8 +101,5 @@
 </Card.Root>
 
 {#if browser}
-	<AvatarUpload
-		bind:avatarUploadOpen
-		{avatarForm}
-	/>
+	<AvatarUpload bind:avatarUploadOpen avatarForm={avatarForm} />
 {/if}

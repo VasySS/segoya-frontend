@@ -1,4 +1,4 @@
-import { getAvatarSource } from '$lib/utils/helpers';
+import { getAvatarSource } from '#lib/utils/helpers.js';
 import L from 'leaflet';
 
 export function createUserPosIcon(avatarHash: string, username: string) {

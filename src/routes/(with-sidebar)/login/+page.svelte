@@ -5,7 +5,7 @@
 	import { Input } from '$components/shadcn/input/index';
 	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
 	import PasswordInput from '$components/shared/HiddenInput.svelte';
-	import { TURNSTILE_SITE_KEY } from '$lib/api/base';
+	import { TURNSTILE_SITE_KEY } from '#lib/api/base.js';
 	import { m } from '$paraglide/messages.js';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';

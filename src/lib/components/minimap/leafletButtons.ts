@@ -33,7 +33,7 @@ function createCustomButtonControl(options: {
  */
 export function addMapSizeToggleButton(map: L.Map) {
 	const button = createCustomButtonControl({
-		iconUrl: asset('/icons/minimap-size-toggle.svg'),
+		iconUrl: asset('icons/minimap-size-toggle.svg'),
 		onClick: () => {
 			mapSizeToggle(map).catch(() => {
 				// eslint-disable-next-line no-console

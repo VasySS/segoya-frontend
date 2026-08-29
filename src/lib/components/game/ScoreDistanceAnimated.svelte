@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatDistance } from '$lib/utils/formatters';
+	import { formatDistance } from '#lib/utils/formatters.js';
 	import { onMount } from 'svelte';
 	import { quintOut } from 'svelte/easing';
 	import { Tween } from 'svelte/motion';

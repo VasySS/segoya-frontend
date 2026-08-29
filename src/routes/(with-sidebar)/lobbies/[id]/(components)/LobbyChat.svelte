@@ -2,7 +2,7 @@
 	import { SendHorizontal } from '@lucide/svelte';
 	import { Button } from '$components/shadcn/button/index';
 	import { Input } from '$components/shadcn/input/index';
-	import { formatTime } from '$lib/utils/temporal';
+	import { formatTime } from '#lib/utils/temporal.js';
 	import { m } from '$paraglide/messages.js';
 	import { tick, untrack } from 'svelte';
 	import { fade } from 'svelte/transition';

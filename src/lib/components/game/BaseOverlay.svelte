@@ -6,9 +6,9 @@
 	import * as ButtonGroup from '$components/shadcn/button-group/index.js';
 	import { Button } from '$components/shadcn/button/index';
 	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
-	import { GameType, type GameTypeValues } from '$lib/constants/enums';
-	import { getGameContext } from '$lib/states/gameContext.svelte';
-	import { panoURL } from '$lib/utils/panoURL';
+	import { GameType, type GameTypeValues } from '#lib/constants/enums.js';
+	import { getGameContext } from '#lib/states/gameContext.svelte.js';
+	import { panoURL } from '#lib/utils/panoURL.js';
 	import { m } from '$paraglide/messages.js';
 
 	interface Props {

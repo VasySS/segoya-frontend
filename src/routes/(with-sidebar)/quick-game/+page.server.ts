@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
-import { fetchBackend } from '$lib/api/base';
+import { fetchBackend } from '#lib/api/base.js';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 

@@ -3,7 +3,7 @@
 	import * as Form from '$components/shadcn/form/index';
 	import * as Select from '$components/shadcn/select/index';
 	import * as Tooltip from '$components/shadcn/tooltip/index';
-	import { getProviderLabel, providers } from '$lib/constants/panoramaProviders';
+	import { getProviderLabel, providers } from '#lib/constants/panoramaProviders.js';
 	import { m } from '$paraglide/messages.js';
 	import type { FormSchema as MultiplayerSchema } from '$routes/(with-sidebar)/lobbies/new/schema';
 	import type { FormSchema as SingleplayerSchema } from '$routes/(with-sidebar)/quick-game/schema';

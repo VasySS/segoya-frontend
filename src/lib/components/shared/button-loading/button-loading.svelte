@@ -4,7 +4,7 @@
 	lang="ts"
 	module
 >
-	import type { WithElementRef } from '$lib/utils/shadcn';
+	import type { WithElementRef } from '#lib/utils/shadcn.js';
 	import type { HTMLAnchorAttributes, HTMLButtonAttributes } from 'svelte/elements';
 	import { tv, type VariantProps } from 'tailwind-variants';
 
@@ -44,7 +44,7 @@
 
 <script lang="ts">
 	import { LoaderCircle } from '@lucide/svelte';
-	import { cn } from '$lib/utils/shadcn';
+	import { cn } from '#lib/utils/shadcn.js';
 	import { readable, type Readable } from 'svelte/store';
 
 	///// only part that differs from regular button from shadcn:

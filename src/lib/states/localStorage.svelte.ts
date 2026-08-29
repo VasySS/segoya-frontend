@@ -1,6 +1,6 @@
-import { browser } from '$app/environment';
-import { defaultProvider } from '$lib/constants/minimapProviders';
-import type { UserSettings } from '$lib/types/user';
+import { browser } from '$app/env';
+import { defaultProvider } from '#lib/constants/minimapProviders.js';
+import type { UserSettings } from '#lib/types/user.js';
 import { writable, type Writable } from 'svelte/store';
 
 class LocalStore<T> {

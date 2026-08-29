@@ -1,27 +1,25 @@
 <script lang="ts">
 	import { asset } from '$app/paths';
 	import * as Avatar from '$components/shadcn/avatar/index';
-	import type { MultiplayerGuess, MultiplayerRound, UserPublicProfile } from '$lib/api/openapi';
-	import { getGameContext } from '$lib/states/gameContext.svelte';
-	import { UserSettingsStore } from '$lib/states/localStorage.svelte';
-	import type { MultiplayerGameInfo } from '$lib/types/game';
-	import type { MultiplayerUser } from '$lib/types/user';
-	import { getAvatarSource } from '$lib/utils/helpers';
+	import type { MultiplayerGuess, MultiplayerRound, UserPublicProfile } from '#lib/api/openapi.js';
+	import { getGameContext } from '#lib/states/gameContext.svelte.js';
+	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
+	import type { MultiplayerGameInfo } from '#lib/types/game.js';
+	import type { MultiplayerUser } from '#lib/types/user.js';
+	import { getAvatarSource } from '#lib/utils/helpers.js';
 	import { m } from '$paraglide/messages.js';
 
 	import MultiplayerWebSocket from './MultiplayerWebSocket.svelte';
 
-	interface Props {
-		gameWS: MultiplayerWebSocket | undefined;
-	}
-	let { gameWS }: Props = $props();
+	interface Props { gameWS: MultiplayerWebSocket | undefined }
 
+	let { gameWS }: Props = $props();
 	const userSettings = UserSettingsStore;
 	const gameContext = getGameContext();
 	const game = gameContext.game as MultiplayerGameInfo;
 	const round = gameContext.round as MultiplayerRound;
 
-	const guessSound = new Audio(asset('/sounds/alert1.mp3'));
+	const guessSound = new Audio(asset('sounds/alert1.mp3'));
 	guessSound.volume = $userSettings.sounds.volume;
 
 	export const handleUsersConnected = (users: MultiplayerUser[]) => {

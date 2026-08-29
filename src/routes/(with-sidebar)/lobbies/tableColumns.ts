@@ -1,9 +1,9 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { resolve } from '$app/paths';
 import { renderSnippet } from '$components/shadcn/data-table/index';
-import type { Lobby } from '$lib/api/openapi';
-import { getProviderLabel } from '$lib/constants/panoramaProviders';
-import { formatTimerTime } from '$lib/utils/formatters';
+import type { Lobby } from '#lib/api/openapi.js';
+import { getProviderLabel } from '#lib/constants/panoramaProviders.js';
+import { formatTimerTime } from '#lib/utils/formatters.js';
 import { m } from '$paraglide/messages.js';
 import { createRawSnippet } from 'svelte';
 

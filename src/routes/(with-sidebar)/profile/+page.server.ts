@@ -5,13 +5,13 @@ import {
 	newDiscordOAuth,
 	newYandexOAuth,
 	refreshCookieName
-} from '$lib/api/auth';
-import { fetchBackend, FRONTEND_DOMAIN } from '$lib/api/base';
-import { getErrorFromResponse } from '$lib/api/errorHandling';
-import { updateUserAvatar } from '$lib/api/users';
-import { APIKeys } from '$lib/constants/enums';
-import type { UserAPIKeys } from '$lib/types/user';
-import { setAllCookiesFromHeader } from '$lib/utils/auth';
+} from '#lib/api/auth.js';
+import { fetchBackend, FRONTEND_DOMAIN } from '#lib/api/base.js';
+import { getErrorFromResponse } from '#lib/api/errorHandling.js';
+import { updateUserAvatar } from '#lib/api/users.js';
+import { APIKeys } from '#lib/constants/enums.js';
+import type { UserAPIKeys } from '#lib/types/user.js';
+import { setAllCookiesFromHeader } from '#lib/utils/auth.js';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 

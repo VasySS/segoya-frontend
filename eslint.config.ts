@@ -98,7 +98,7 @@ export default defineConfig([
 	// SvelteKit compiles the service worker in its own Web Worker context and
 	// intentionally excludes it from the application TypeScript project.
 	{
-		files: ['src/service-worker.ts'],
+		files: ['src/service-worker/**/*.ts'],
 		extends: [ts.configs.disableTypeChecked]
 	},
 	// rules for unit tests (testing-library + vitest)

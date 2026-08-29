@@ -2,8 +2,8 @@ import type {
 	WebSocketInputMessage,
 	WebSocketOutputMessage
 } from '$components/shared/websocket/types';
-import type { LatLng, MultiplayerGuess } from '$lib/api/openapi';
-import type { MultiplayerUser } from '$lib/types/user';
+import type { LatLng, MultiplayerGuess } from '#lib/api/openapi.js';
+import type { MultiplayerUser } from '#lib/types/user.js';
 
 export interface ConnectedUsersMessage extends WebSocketInputMessage {
 	type: 'usersConnected';

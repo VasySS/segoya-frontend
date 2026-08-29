@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from '$lib/utils/shadcn.js';
+	import { cn } from '#lib/utils/shadcn.js';
 	import { Label as LabelPrimitive } from 'bits-ui';
 
 	let {

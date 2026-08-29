@@ -3,7 +3,7 @@ import type {
 	WebSocketOutputMessage,
 	WSError
 } from '$components/shared/websocket/types';
-import type { Provider, UserPublicProfile } from '$lib/api/openapi';
+import type { Provider, UserPublicProfile } from '#lib/api/openapi.js';
 
 export interface ConnectedUsersMessage extends WebSocketInputMessage {
 	type: 'connectedUsers';

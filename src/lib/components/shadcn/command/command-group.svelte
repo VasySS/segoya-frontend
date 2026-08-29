@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from '$lib/utils/shadcn.js';
+	import { cn } from '#lib/utils/shadcn.js';
 	import { Command as CommandPrimitive, useId } from 'bits-ui';
 	import type { Snippet } from 'svelte';
 

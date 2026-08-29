@@ -7,12 +7,12 @@
 	import * as Tooltip from '$components/shadcn/tooltip/index';
 	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
 	import HiddenInput from '$components/shared/HiddenInput.svelte';
-	import { fetchBackend } from '$lib/api/base';
-	import type { AuthProvider, UserSession } from '$lib/api/openapi';
-	import { APIKeys } from '$lib/constants/enums';
-	import type { JwtPayload } from '$lib/types/auth';
-	import type { UserAPIKeys } from '$lib/types/user';
-	import { formatDateTime } from '$lib/utils/temporal';
+	import { fetchBackend } from '#lib/api/base.js';
+	import type { AuthProvider, UserSession } from '#lib/api/openapi.js';
+	import { APIKeys } from '#lib/constants/enums.js';
+	import type { JwtPayload } from '#lib/types/auth.js';
+	import type { UserAPIKeys } from '#lib/types/user.js';
+	import { formatDateTime } from '#lib/utils/temporal.js';
 	import { m } from '$paraglide/messages.js';
 	import type { CookieOptions } from '$routes/api/cookies/[name]/+server';
 	import Bowser from 'bowser';

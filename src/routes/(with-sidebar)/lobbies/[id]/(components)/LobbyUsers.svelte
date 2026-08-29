@@ -5,8 +5,8 @@
 	import { Separator } from '$components/shadcn/separator/index';
 	import * as Tooltip from '$components/shadcn/tooltip/index';
 	import UserHoverCard from '$components/shared/UserHoverCard.svelte';
-	import type { Lobby, UserPublicProfile } from '$lib/api/openapi';
-	import { getAvatarSource } from '$lib/utils/helpers';
+	import type { Lobby, UserPublicProfile } from '#lib/api/openapi.js';
+	import { getAvatarSource } from '#lib/utils/helpers.js';
 	import { m } from '$paraglide/messages.js';
 	import { fly } from 'svelte/transition';
 

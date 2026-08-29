@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn, type WithoutChildrenOrChild } from '$lib/utils/shadcn';
+	import { cn, type WithoutChildrenOrChild } from '#lib/utils/shadcn.js';
 	import { Slider as SliderPrimitive } from 'bits-ui';
 
 	let {

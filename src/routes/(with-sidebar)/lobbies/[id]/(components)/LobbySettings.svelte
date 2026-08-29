@@ -4,9 +4,9 @@
 	import ProviderSelect from '$components/game/creation-settings/ProviderSelect.svelte';
 	import { Button } from '$components/shadcn/button/index';
 	import * as Dialog from '$components/shadcn/dialog/index';
-	import type { Lobby } from '$lib/api/openapi';
-	import { getProviderLabel } from '$lib/constants/panoramaProviders';
-	import { formatTimerTime } from '$lib/utils/formatters';
+	import type { Lobby } from '#lib/api/openapi.js';
+	import { getProviderLabel } from '#lib/constants/panoramaProviders.js';
+	import { formatTimerTime } from '#lib/utils/formatters.js';
 	import { m } from '$paraglide/messages.js';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';

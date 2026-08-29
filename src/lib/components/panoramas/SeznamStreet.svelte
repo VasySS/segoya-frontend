@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { SEZNAM_API_KEY } from '$lib/api/base';
-	import { APIKeys } from '$lib/constants/enums';
-	import { getGameContext } from '$lib/states/gameContext.svelte';
-	import type { ICreatePanoFromPositionOutput } from '$lib/types/seznam';
-	import { getCookiesFromString } from '$lib/utils/auth';
+	import { SEZNAM_API_KEY } from '#lib/api/base.js';
+	import { APIKeys } from '#lib/constants/enums.js';
+	import { getGameContext } from '#lib/states/gameContext.svelte.js';
+	import type { ICreatePanoFromPositionOutput } from '#lib/types/seznam.js';
+	import { getCookiesFromString } from '#lib/utils/auth.js';
 	import { getLocale } from '$paraglide/runtime.js';
 
 	interface Props {

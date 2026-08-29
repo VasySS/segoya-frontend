@@ -5,9 +5,9 @@
 		SingleplayerGuess,
 		SingleplayerRound,
 		UserPublicProfile
-	} from '$lib/api/openapi';
-	import { getGameContext } from '$lib/states/gameContext.svelte';
-	import { UserSettingsStore } from '$lib/states/localStorage.svelte';
+	} from '#lib/api/openapi.js';
+	import { getGameContext } from '#lib/states/gameContext.svelte.js';
+	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
 	import L from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 

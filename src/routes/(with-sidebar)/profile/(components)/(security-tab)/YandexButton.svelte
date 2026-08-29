@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { asset } from '$app/paths';
 	import Button from '$components/shadcn/button/button.svelte';
-	import { fetchBackend } from '$lib/api/base';
-	import { formatDate } from '$lib/utils/temporal';
+	import { fetchBackend } from '#lib/api/base.js';
+	import { formatDate } from '#lib/utils/temporal.js';
 	import { m } from '$paraglide/messages.js';
 
 	interface Props {
@@ -20,7 +20,7 @@
 
 <div class="flex w-full flex-row items-center justify-center space-x-3">
 	<img
-		src={asset('/logos/ya-logo.svg')}
+		src={asset('logos/ya-logo.svg')}
 		class="size-7"
 		alt="yandex logo"
 	/>

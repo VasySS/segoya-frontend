@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { asset } from '$app/paths';
 	import Button from '$components/shadcn/button/button.svelte';
-	import { DISCORD_OAUTH_LOGIN_URL } from '$lib/api/auth';
+	import { DISCORD_OAUTH_LOGIN_URL } from '#lib/api/auth.js';
 	import { m } from '$paraglide/messages.js';
 
 	function onclick() {
@@ -9,12 +9,9 @@
 	}
 </script>
 
-<Button
-	class="w-full space-x-1"
-	{onclick}
->
+<Button class="w-full space-x-1" onclick={onclick}>
 	<img
-		src={asset('/logos/discord-logo.svg')}
+		src={asset('logos/discord-logo.svg')}
 		class="size-7"
 		alt="discord logo"
 	/>

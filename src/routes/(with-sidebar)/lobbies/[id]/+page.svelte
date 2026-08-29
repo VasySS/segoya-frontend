@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Lock, SettingsIcon } from '@lucide/svelte';
 	import Share2 from '@lucide/svelte/icons/share-2';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { Badge } from '$components/shadcn/badge/index';
 	import Button from '$components/shadcn/button/button.svelte';
 	import * as Card from '$components/shadcn/card/index';
 	import * as Tooltip from '$components/shadcn/tooltip/index';
-	import type { Lobby } from '$lib/api/openapi';
+	import type { Lobby } from '#lib/api/openapi.js';
 	import { m } from '$paraglide/messages.js';
 	import { toast } from 'svelte-sonner';
 
@@ -34,10 +34,7 @@
 	let lobbySettings = $state<LobbySettings>();
 </script>
 
-<svelte:head>
-	<title>Segoya &mdash; {m.lobby()} {lobbyInfo.id}</title>
-</svelte:head>
-
+<svelte:head><title>Segoya — {m.lobby()} {lobbyInfo.id}</title></svelte:head>
 <h1 class="text-center">{m.lobby()}</h1>
 <div class="flex flex-row items-center justify-center space-x-4 pb-12">
 	<p class="text-base sm:text-2xl">{lobbyInfo.id}</p>
@@ -46,10 +43,7 @@
 		<div class="flex">
 			<Tooltip.Provider>
 				<Tooltip.Root>
-					<Tooltip.Trigger>
-						<Lock class="text-red-700"></Lock>
-					</Tooltip.Trigger>
-
+					<Tooltip.Trigger><Lock class="text-red-700" /></Tooltip.Trigger>
 					<Tooltip.Content>{m.giant_fresh_kestrel_cut()}</Tooltip.Content>
 				</Tooltip.Root>
 			</Tooltip.Provider>
@@ -60,10 +54,10 @@
 {#if browser}
 	<LobbyWebSocket
 		bind:this={lobbyWS}
-		{lobbyChat}
-		{lobbyUsers}
-		{lobbySettings}
-	></LobbyWebSocket>
+		lobbyChat={lobbyChat}
+		lobbyUsers={lobbyUsers}
+		lobbySettings={lobbySettings}
+	/>
 {/if}
 
 <Card.Root>
@@ -92,9 +86,7 @@
 			</Button>
 
 			{#if lobbyInfo.creatorID === jwtPayload.userID}
-				<Button onclick={() => (settingsOpen = !settingsOpen)}>
-					<SettingsIcon></SettingsIcon>
-				</Button>
+				<Button onclick={() => settingsOpen = !settingsOpen}><SettingsIcon /></Button>
 			{/if}
 		</Card.Description>
 	</Card.Header>
@@ -102,19 +94,15 @@
 	<Card.Content>
 		<div class="flex flex-col gap-6 md:flex-row">
 			<!-- left column -->
-			<LobbyUsers
-				bind:this={lobbyUsers}
-				{lobbyInfo}
-			></LobbyUsers>
-
+			<LobbyUsers bind:this={lobbyUsers} lobbyInfo={lobbyInfo} />
 			<!-- right column -->
 			<div class="flex-1 space-y-4 md:pl-6">
 				<LobbySettings
 					bind:this={lobbySettings}
 					bind:settingsOpen
-					{lobbyWS}
-					{lobbyInfo}
-				></LobbySettings>
+					lobbyWS={lobbyWS}
+					lobbyInfo={lobbyInfo}
+				/>
 			</div>
 		</div>
 	</Card.Content>
@@ -141,6 +129,6 @@
 
 <LobbyChat
 	bind:this={lobbyChat}
-	{lobbyWS}
+	lobbyWS={lobbyWS}
 	username={jwtPayload.username}
-></LobbyChat>
+/>

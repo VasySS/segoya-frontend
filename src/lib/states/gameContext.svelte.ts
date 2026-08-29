@@ -5,7 +5,7 @@ import type {
 	MultiplayerRound,
 	SingleplayerGame,
 	SingleplayerRound
-} from '$lib/api/openapi';
+} from '#lib/api/openapi.js';
 import { getContext, setContext } from 'svelte';
 
 // https://www.youtube.com/watch?v=EyDV5XLfagg

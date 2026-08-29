@@ -1,22 +1,20 @@
-import { redirect, type Handle, type HandleFetch } from '@sveltejs/kit';
-import { sequence } from '@sveltejs/kit/hooks';
-import { accessCookieName, refreshCookieName } from '$lib/api/auth.ts';
-import { fetchBackend } from '$lib/api/base.ts';
-import { unprotectedRoutes } from '$lib/constants/unprotectedRoutes.ts';
-import { getTokenPayload, isTokenExpired, setAllCookiesFromHeader } from '$lib/utils/auth.ts';
-import { csp } from '$lib/utils/csp.ts';
+import { redirect } from '@sveltejs/kit';
+import { sequence, type Handle, type HandleFetch } from '@sveltejs/kit/hooks';
+import { accessCookieName, refreshCookieName } from '#lib/api/auth.ts';
+import { fetchBackend } from '#lib/api/base.ts';
+import { unprotectedRoutes } from '#lib/constants/unprotectedRoutes.ts';
+import { getTokenPayload, isTokenExpired, setAllCookiesFromHeader } from '#lib/utils/auth.ts';
+import { csp } from '#lib/utils/csp.ts';
 import { paraglideMiddleware } from '$paraglide/server.js';
 
 const paraglideHandle: Handle = ({ event, resolve }) =>
-	paraglideMiddleware(event.request, ({ request: localizedRequest, locale }) => {
-		event.request = localizedRequest;
-
+	paraglideMiddleware(event.request, ({ locale }) => {
 		return resolve(event, {
-			transformPageChunk: ({ html }) => {
-				return html.replace('%lang%', () => locale);
-			}
-		});
+		transformPageChunk: ({ html }) => {
+			return html.replace('%lang%', () => locale);
+		}
 	});
+});
 
 const authHandle: Handle = async ({ event, resolve }) => {
 	const accessToken = event.cookies.get(accessCookieName);
@@ -26,11 +24,7 @@ const authHandle: Handle = async ({ event, resolve }) => {
 		event.locals.jwtPayload = getTokenPayload(accessToken);
 		event.locals.jwtToken = accessToken;
 	} else if (refreshToken && !isTokenExpired(refreshToken)) {
-		const response = await fetchBackend('', 'post', '/v1/auth/tokens/refresh', {
-			body: {
-				refreshToken: refreshToken
-			}
-		});
+		const response = await fetchBackend('', 'post', '/v1/auth/tokens/refresh', { body: { refreshToken } });
 
 		if (!response.success) {
 			event.cookies.delete(accessCookieName, { path: '/' });

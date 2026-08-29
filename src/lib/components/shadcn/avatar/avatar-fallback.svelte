@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from '$lib/utils/shadcn.js';
+	import { cn } from '#lib/utils/shadcn.js';
 	import { Avatar as AvatarPrimitive } from 'bits-ui';
 
 	let {

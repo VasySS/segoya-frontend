@@ -1,9 +1,9 @@
 import type { ColumnDef } from '@tanstack/table-core';
 import { resolve } from '$app/paths';
 import { renderSnippet } from '$components/shadcn/data-table/index';
-import type { SingleplayerGame } from '$lib/api/openapi';
-import { getProviderLabel } from '$lib/constants/panoramaProviders';
-import { formatDateTime } from '$lib/utils/temporal';
+import type { SingleplayerGame } from '#lib/api/openapi.js';
+import { getProviderLabel } from '#lib/constants/panoramaProviders.js';
+import { formatDateTime } from '#lib/utils/temporal.js';
 import { m } from '$paraglide/messages.js';
 import { createRawSnippet } from 'svelte';
 

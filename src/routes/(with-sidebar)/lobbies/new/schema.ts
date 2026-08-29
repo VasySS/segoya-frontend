@@ -1,4 +1,4 @@
-import { formSchema as baseFormSchema } from '$lib/schemas/gameSettings';
+import { formSchema as baseFormSchema } from '#lib/schemas/gameSettings.js';
 import { m } from '$paraglide/messages.js';
 import { z } from 'zod';
 

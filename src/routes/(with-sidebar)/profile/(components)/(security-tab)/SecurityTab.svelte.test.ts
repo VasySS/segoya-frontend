@@ -1,9 +1,9 @@
 import { screen, waitFor } from '@testing-library/svelte'; // eslint-disable-line import/named
-import { fetchBackend } from '$lib/api/base';
-import type { AuthProvider } from '$lib/api/openapi';
-import { APIKeys } from '$lib/constants/enums';
-import type { JwtPayload } from '$lib/types/auth';
-import { formatDate } from '$lib/utils/temporal';
+import { fetchBackend } from '#lib/api/base.js';
+import type { AuthProvider } from '#lib/api/openapi.js';
+import { APIKeys } from '#lib/constants/enums.js';
+import type { JwtPayload } from '#lib/types/auth.js';
+import { formatDate } from '#lib/utils/temporal.js';
 import { m } from '$paraglide/messages.js';
 import { setupComponent } from '$tests/vitestSetup';
 import { toast } from 'svelte-sonner';
@@ -11,7 +11,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import SecurityTab from './SecurityTab.svelte';
 
-vi.mock(import('$lib/api/base'));
+vi.mock(import('#lib/api/base.js'));
 
 const mockSessions = [
 	{

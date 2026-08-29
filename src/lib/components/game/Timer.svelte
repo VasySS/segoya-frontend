@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { asset } from '$app/paths';
-	import { UserSettingsStore } from '$lib/states/localStorage.svelte';
+	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
 	import { onDestroy, onMount } from 'svelte';
 
 	interface Props {
@@ -51,7 +51,7 @@
 
 	const userSettings = UserSettingsStore;
 
-	const tickingSound = new Audio(asset('/sounds/ticking.mp3'));
+	const tickingSound = new Audio(asset('sounds/ticking.mp3'));
 	tickingSound.volume = $userSettings.sounds.volume;
 
 	let timerDurationSeconds: number = $state(getTimerDuration());

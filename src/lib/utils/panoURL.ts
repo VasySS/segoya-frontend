@@ -1,4 +1,4 @@
-import type { Provider } from '$lib/api/openapi';
+import type { Provider } from '#lib/api/openapi.js';
 
 export function panoURL(provider: Provider, streetviewID: string, lat: number, lng: number) {
 	switch (provider) {

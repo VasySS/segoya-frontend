@@ -2,7 +2,7 @@
 	lang="ts"
 	generics="T extends Record<string, unknown>, U extends FormPath<T>"
 >
-	import { cn, type WithoutChild } from '$lib/utils/shadcn.js';
+	import { cn, type WithoutChild } from '#lib/utils/shadcn.js';
 	import * as FormPrimitive from 'formsnap';
 	import type { FormPath } from 'sveltekit-superforms';
 

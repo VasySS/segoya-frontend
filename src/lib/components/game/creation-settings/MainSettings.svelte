@@ -3,7 +3,7 @@
 	import { Input } from '$components/shadcn/input/index';
 	import Slider from '$components/shadcn/slider/slider.svelte';
 	import { Switch } from '$components/shadcn/switch/index';
-	import { formatTimerTime } from '$lib/utils/formatters';
+	import { formatTimerTime } from '#lib/utils/formatters.js';
 	import { m } from '$paraglide/messages.js';
 	import type { FormSchema as LobbySettingsSchema } from '$routes/(with-sidebar)/lobbies/[id]/settingsSchema';
 	import type { FormSchema as MultiplayerSchema } from '$routes/(with-sidebar)/lobbies/new/schema';

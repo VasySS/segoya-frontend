@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Label } from '$lib/components/shadcn/label/index.js';
-	import { cn, type WithoutChild } from '$lib/utils/shadcn.js';
+	import { Label } from '#lib/components/shadcn/label/index.js';
+	import { cn, type WithoutChild } from '#lib/utils/shadcn.js';
 	import * as FormPrimitive from 'formsnap';
 
 	let {

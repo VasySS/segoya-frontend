@@ -14,7 +14,7 @@
 	import * as DropdownMenu from '$components/shadcn/dropdown-menu/index';
 	import * as Sidebar from '$components/shadcn/sidebar/index.js';
 	import { useSidebar } from '$components/shadcn/sidebar/index.js';
-	import type { JwtPayload } from '$lib/types/auth';
+	import type { JwtPayload } from '#lib/types/auth.js';
 	import { m } from '$paraglide/messages';
 	import { getLocale, setLocale } from '$paraglide/runtime';
 	import { toggleMode } from 'mode-watcher';
@@ -66,13 +66,13 @@
 				>
 					{#if getLocale() == 'en'}
 						<img
-							src={asset('/icons/en-flag.svg')}
+							src={asset('icons/en-flag.svg')}
 							alt="ru"
 							class="size-6"
 						/>
 					{:else if getLocale() == 'ru'}
 						<img
-							src={asset('/icons/ru-flag.svg')}
+							src={asset('icons/ru-flag.svg')}
 							alt="en"
 							class="size-5"
 						/>
@@ -165,7 +165,7 @@
 						</a>
 
 						<DropdownMenu.Item
-							onclick={() => (settingsOpen = !settingsOpen)}
+							onclick={() => settingsOpen = !settingsOpen}
 							class="flex cursor-pointer flex-row items-center space-x-3"
 						>
 							<SettingsIcon />

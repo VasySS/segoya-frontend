@@ -1,12 +1,12 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 
-import type { JwtPayload } from '$lib/types/auth';
+import type { JwtPayload } from '#lib/types/auth.js';
 import type {
 	ICreatePanoFromPositionOpts,
 	ICreatePanoFromPositionOutput,
 	PanoramaMeta
-} from '$lib/types/seznam';
+} from '#lib/types/seznam.js';
 
 declare global {
 	// Google maps

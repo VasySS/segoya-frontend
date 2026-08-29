@@ -2,8 +2,8 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import WebSocketClient from '$components/shared/websocket/WebSocketClient.svelte';
-	import type { Lobby } from '$lib/api/openapi';
-	import { getLobbyWebSocketURL } from '$lib/api/websocket';
+	import type { Lobby } from '#lib/api/openapi.js';
+	import { getLobbyWebSocketURL } from '#lib/api/websocket.js';
 	import { m } from '$paraglide/messages.js';
 	import { toast } from 'svelte-sonner';
 

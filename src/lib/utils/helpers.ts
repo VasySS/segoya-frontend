@@ -1,6 +1,6 @@
 import { shapes } from '@dicebear/collection';
 import { createAvatar } from '@dicebear/core';
-import { AVATARS_BASE_URL } from '$lib/api/base';
+import { AVATARS_BASE_URL } from '#lib/api/base.js';
 
 export function getAvatarSource(avatarHash: string, username: string): string {
 	if (avatarHash) {

@@ -3,7 +3,7 @@
 	import * as Accordion from '$components/shadcn/accordion/index';
 	import Button from '$components/shadcn/button/button.svelte';
 	import CharactersStaggered from '$components/shared/animation/CharactersStaggered.svelte';
-	import { STATIC_BASE_URL } from '$lib/api/base';
+	import { STATIC_BASE_URL } from '#lib/api/base.js';
 	import { m } from '$paraglide/messages.js';
 
 	// Vite injects this
@@ -49,7 +49,7 @@
 						delay={0.05}
 						duration={0.5}
 						direction="UP"
-					></CharactersStaggered>
+					/>
 				</div>
 
 				<CharactersStaggered
@@ -59,7 +59,7 @@
 					delay={0.07}
 					duration={1}
 					direction="RIGHT"
-				></CharactersStaggered>
+				/>
 			</div>
 
 			<div
@@ -72,7 +72,7 @@
 				>
 					<img
 						loading="lazy"
-						src={asset('/logos/github-logo.svg')}
+						src={asset('logos/github-logo.svg')}
 						width={32}
 						height={32}
 						alt="github"
@@ -87,7 +87,7 @@
 				>
 					<img
 						loading="lazy"
-						src={asset('/logos/telegram-logo.svg')}
+						src={asset('logos/telegram-logo.svg')}
 						width={32}
 						height={32}
 						alt="telegram"
@@ -136,21 +136,21 @@
 			<div class="flex flex-col items-center justify-center px-10 lg:flex-row lg:space-x-20">
 				<img
 					loading="lazy"
-					src={asset('/logos/svelte-logo.svg')}
+					src={asset('logos/svelte-logo.svg')}
 					height={100}
 					width={200}
 					alt="Svelte"
 				/>
 				<img
 					loading="lazy"
-					src={asset('/logos/golang-logo.svg')}
+					src={asset('logos/golang-logo.svg')}
 					height={100}
 					width={130}
 					alt="Golang"
 				/>
 				<img
 					loading="lazy"
-					src={asset('/logos/postgresql-logo.svg')}
+					src={asset('logos/postgresql-logo.svg')}
 					class="mt-16 lg:mt-0"
 					height={100}
 					width={300}

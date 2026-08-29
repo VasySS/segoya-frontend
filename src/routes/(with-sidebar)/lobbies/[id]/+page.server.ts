@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
-import { fetchBackend } from '$lib/api/base';
+import { fetchBackend } from '#lib/api/base.js';
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
