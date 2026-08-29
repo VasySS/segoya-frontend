@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { Lock, SettingsIcon } from '@lucide/svelte';
 	import Share2 from '@lucide/svelte/icons/share-2';
-	import { browser } from '$app/env';
-	import { Badge } from '$components/shadcn/badge/index';
-	import Button from '$components/shadcn/button/button.svelte';
-	import * as Card from '$components/shadcn/card/index';
-	import * as Tooltip from '$components/shadcn/tooltip/index';
 	import type { Lobby } from '#lib/api/openapi.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { browser } from '$app/env';
 	import { toast } from 'svelte-sonner';
+	import { Badge } from '#components/shadcn/badge/index.js';
+	import Button from '#components/shadcn/button/button.svelte';
+	import * as Card from '#components/shadcn/card/index.js';
+	import * as Tooltip from '#components/shadcn/tooltip/index.js';
 
 	import LobbyChat from './(components)/LobbyChat.svelte';
 	import LobbySettings from './(components)/LobbySettings.svelte';
@@ -54,9 +54,9 @@
 {#if browser}
 	<LobbyWebSocket
 		bind:this={lobbyWS}
-		lobbyChat={lobbyChat}
-		lobbyUsers={lobbyUsers}
-		lobbySettings={lobbySettings}
+		{lobbyChat}
+		{lobbyUsers}
+		{lobbySettings}
 	/>
 {/if}
 
@@ -86,7 +86,7 @@
 			</Button>
 
 			{#if lobbyInfo.creatorID === jwtPayload.userID}
-				<Button onclick={() => settingsOpen = !settingsOpen}><SettingsIcon /></Button>
+				<Button onclick={() => (settingsOpen = !settingsOpen)}><SettingsIcon /></Button>
 			{/if}
 		</Card.Description>
 	</Card.Header>
@@ -94,14 +94,17 @@
 	<Card.Content>
 		<div class="flex flex-col gap-6 md:flex-row">
 			<!-- left column -->
-			<LobbyUsers bind:this={lobbyUsers} lobbyInfo={lobbyInfo} />
+			<LobbyUsers
+				bind:this={lobbyUsers}
+				{lobbyInfo}
+			/>
 			<!-- right column -->
 			<div class="flex-1 space-y-4 md:pl-6">
 				<LobbySettings
 					bind:this={lobbySettings}
 					bind:settingsOpen
-					lobbyWS={lobbyWS}
-					lobbyInfo={lobbyInfo}
+					{lobbyWS}
+					{lobbyInfo}
 				/>
 			</div>
 		</div>
@@ -129,6 +132,6 @@
 
 <LobbyChat
 	bind:this={lobbyChat}
-	lobbyWS={lobbyWS}
+	{lobbyWS}
 	username={jwtPayload.username}
 />

@@ -1,15 +1,15 @@
 <script lang="ts">
-	import * as Form from '$components/shadcn/form/index';
-	import { Input } from '$components/shadcn/input/index';
-	import Slider from '$components/shadcn/slider/slider.svelte';
-	import { Switch } from '$components/shadcn/switch/index';
 	import { formatTimerTime } from '#lib/utils/formatters.js';
-	import { m } from '$paraglide/messages.js';
-	import type { FormSchema as LobbySettingsSchema } from '$routes/(with-sidebar)/lobbies/[id]/settingsSchema';
-	import type { FormSchema as MultiplayerSchema } from '$routes/(with-sidebar)/lobbies/new/schema';
-	import type { FormSchema as SingleplayerSchema } from '$routes/(with-sidebar)/quick-game/schema';
+	import { m } from '#paraglide/messages.js';
+	import type { FormSchema as LobbySettingsSchema } from '#routes/(with-sidebar)/lobbies/[id]/settingsSchema.js';
+	import type { FormSchema as MultiplayerSchema } from '#routes/(with-sidebar)/lobbies/new/schema.js';
+	import type { FormSchema as SingleplayerSchema } from '#routes/(with-sidebar)/quick-game/schema.js';
 	import { slide } from 'svelte/transition';
 	import { type Infer, type SuperForm } from 'sveltekit-superforms';
+	import * as Form from '#components/shadcn/form/index.js';
+	import { Input } from '#components/shadcn/input/index.js';
+	import Slider from '#components/shadcn/slider/slider.svelte';
+	import { Switch } from '#components/shadcn/switch/index.js';
 
 	interface Props {
 		form: SuperForm<

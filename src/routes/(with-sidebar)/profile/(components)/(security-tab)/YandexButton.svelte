@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { asset } from '$app/paths';
-	import Button from '$components/shadcn/button/button.svelte';
 	import { fetchBackend } from '#lib/api/base.js';
 	import { formatDate } from '#lib/utils/temporal.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { asset } from '$app/paths';
+	import Button from '#components/shadcn/button/button.svelte';
 
 	interface Props {
 		oauthCreatedAt?: string | undefined;

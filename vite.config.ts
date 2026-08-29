@@ -4,13 +4,6 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, loadEnv } from 'vite';
 
-export const aliases = {
-	$paraglide: './src/lib/i18n/paraglide',
-	$components: './src/lib/components',
-	$routes: './src/routes',
-	$tests: './tests'
-};
-
 export default defineConfig(({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 
@@ -29,8 +22,7 @@ export default defineConfig(({ mode }) => {
 					paths: {
 						origin: env.ORIGIN
 					}
-				}),
-				alias: aliases
+				})
 			})
 		],
 		server: {

@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { m } from '#paraglide/messages.js';
 	import { page } from '$app/state';
-	import Button from '$components/shadcn/button/button.svelte';
-	import { m } from '$paraglide/messages.js';
+	import Button from '#components/shadcn/button/button.svelte';
 </script>
 
 <div class="flex min-h-screen flex-col items-center justify-center">

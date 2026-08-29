@@ -1,6 +1,6 @@
 /* eslint-disable playwright/no-wait-for-timeout */
 import { expect, type Page } from '@playwright/test';
-import { m } from '$paraglide/messages.js';
+import { m } from '#paraglide/messages.js';
 
 export class LoginPage {
 	private page: Page;

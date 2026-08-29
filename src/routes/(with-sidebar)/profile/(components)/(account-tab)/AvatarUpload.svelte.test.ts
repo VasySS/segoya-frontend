@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor } from '@testing-library/svelte'; // eslint-disable-line import/named
 
-import { m } from '$paraglide/messages.js';
-import { setupComponent } from '$tests/vitestSetup';
+import { m } from '#paraglide/messages.js';
+import { setupComponent } from '#tests/vitestSetup';
 import Cropper from 'cropperjs';
 import { tick } from 'svelte';
 import { toast } from 'svelte-sonner';

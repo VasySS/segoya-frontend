@@ -116,11 +116,7 @@
 		],
 		"svelteSortOrder": "scripts-markup-styles-options",
 		"importOrder": [
-			"^@core/(.*)$",
-			"",
-			"^@server/(.*)$",
-			"",
-			"^$components/(.*)$",
+			"^#components/(.*)$",
 			"",
 			"^[./]"
 		],
@@ -134,6 +130,10 @@
 	},
 	"imports": {
 		"#lib": "./src/lib/index.js",
-		"#lib/*": "./src/lib/*"
+		"#lib/*": "./src/lib/*",
+		"#paraglide/*": "./src/lib/i18n/paraglide/*",
+		"#components/*": "./src/lib/components/*",
+		"#routes": "./src/routes/*",
+		"#tests": "./tests/*"
 	}
 }

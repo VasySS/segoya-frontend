@@ -4,8 +4,8 @@
 >
 	import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from '@lucide/svelte';
 	import type { PaginationState, Table } from '@tanstack/table-core';
-	import Button from '$components/shadcn/button/button.svelte';
-	import { m } from '$paraglide/messages';
+	import { m } from '#paraglide/messages.js';
+	import Button from '#components/shadcn/button/button.svelte';
 
 	interface Props {
 		table: Table<TData>;

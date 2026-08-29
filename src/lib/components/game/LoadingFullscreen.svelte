@@ -1,7 +1,7 @@
 <!-- https://github.com/Schum123/svelte-loading-spinners/blob/master/src/lib/Circle.svelte -->
 <script lang="ts">
 	import { LoaderCircle } from '@lucide/svelte';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
 </script>
 
 <div

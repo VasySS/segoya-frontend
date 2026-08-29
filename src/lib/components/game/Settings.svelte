@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { CircleQuestionMark, Play } from '@lucide/svelte';
-	import { asset } from '$app/paths';
-	import { Button } from '$components/shadcn/button/index';
-	import * as Dialog from '$components/shadcn/dialog/index';
-	import Label from '$components/shadcn/label/label.svelte';
-	import * as Select from '$components/shadcn/select/index';
-	import Slider from '$components/shadcn/slider/slider.svelte';
-	import Switch from '$components/shadcn/switch/switch.svelte';
-	import * as Tooltip from '$components/shadcn/tooltip/index';
 	import { STATIC_BASE_URL } from '#lib/api/base.js';
 	import { minimapProviders } from '#lib/constants/minimapProviders.js';
 	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { asset } from '$app/paths';
 	import { onMount } from 'svelte';
+	import { Button } from '#components/shadcn/button/index.js';
+	import * as Dialog from '#components/shadcn/dialog/index.js';
+	import Label from '#components/shadcn/label/label.svelte';
+	import * as Select from '#components/shadcn/select/index.js';
+	import Slider from '#components/shadcn/slider/slider.svelte';
+	import Switch from '#components/shadcn/switch/switch.svelte';
+	import * as Tooltip from '#components/shadcn/tooltip/index.js';
 
 	interface Props {
 		settingsOpen?: boolean;
@@ -171,8 +171,8 @@ A component, that allows user to change settings (stored in local storage)
 							alertSound.pause();
 							alertSound.currentTime = 0;
 							void alertSound.play();
-						}}
-					><Play /></Button>
+						}}><Play /></Button
+					>
 				{/if}
 			</div>
 

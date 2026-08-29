@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Toaster } from '$components/shadcn/sonner/index';
 	import { ModeWatcher } from 'mode-watcher';
+	import { Toaster } from '#components/shadcn/sonner/index.js';
 
 	import '../app.css';
 

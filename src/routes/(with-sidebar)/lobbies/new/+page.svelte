@@ -1,14 +1,14 @@
 <script lang="ts">
-	import MainSettings from '$components/game/creation-settings/MainSettings.svelte';
-	import ProviderSelect from '$components/game/creation-settings/ProviderSelect.svelte';
-	import * as Card from '$components/shadcn/card/index';
-	import * as Form from '$components/shadcn/form/index';
-	import { Input } from '$components/shadcn/input/index';
-	import { Switch } from '$components/shadcn/switch/index';
-	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
 	import { superForm } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
+	import MainSettings from '#components/game/creation-settings/MainSettings.svelte';
+	import ProviderSelect from '#components/game/creation-settings/ProviderSelect.svelte';
+	import * as Card from '#components/shadcn/card/index.js';
+	import * as Form from '#components/shadcn/form/index.js';
+	import { Input } from '#components/shadcn/input/index.js';
+	import { Switch } from '#components/shadcn/switch/index.js';
+	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
 
 	import { formSchema } from './schema';
 

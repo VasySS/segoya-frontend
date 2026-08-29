@@ -1,7 +1,7 @@
 <script lang="ts">
-	import LoadingFullscreen from '$components/game/LoadingFullscreen.svelte';
 	import { setGameContext } from '#lib/states/gameContext.svelte.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import LoadingFullscreen from '#components/game/LoadingFullscreen.svelte';
 
 	import SingleplayerOverlay from './(components)/SingleplayerOverlay.svelte';
 	import type { PageData } from './$types';

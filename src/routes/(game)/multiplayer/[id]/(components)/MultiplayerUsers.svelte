@@ -1,17 +1,19 @@
 <script lang="ts">
-	import { asset } from '$app/paths';
-	import * as Avatar from '$components/shadcn/avatar/index';
 	import type { MultiplayerGuess, MultiplayerRound, UserPublicProfile } from '#lib/api/openapi.js';
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
 	import type { MultiplayerGameInfo } from '#lib/types/game.js';
 	import type { MultiplayerUser } from '#lib/types/user.js';
 	import { getAvatarSource } from '#lib/utils/helpers.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { asset } from '$app/paths';
+	import * as Avatar from '#components/shadcn/avatar/index.js';
 
 	import MultiplayerWebSocket from './MultiplayerWebSocket.svelte';
 
-	interface Props { gameWS: MultiplayerWebSocket | undefined }
+	interface Props {
+		gameWS: MultiplayerWebSocket | undefined;
+	}
 
 	let { gameWS }: Props = $props();
 	const userSettings = UserSettingsStore;

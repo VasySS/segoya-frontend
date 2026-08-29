@@ -5,7 +5,7 @@ import type {
 	SingleplayerRound
 } from '#lib/api/openapi.js';
 import { formatDistance } from '#lib/utils/formatters.js';
-import { m } from '$paraglide/messages.js';
+import { m } from '#paraglide/messages.js';
 import L from 'leaflet';
 
 import { getHSLColor } from './leafletUtils';

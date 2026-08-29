@@ -1,6 +1,6 @@
 import { test as base, expect, type Page } from '@playwright/test';
-import { m } from '$paraglide/messages.js';
-import { setLocale } from '$paraglide/runtime.js';
+import { m } from '#paraglide/messages.js';
+import { setLocale } from '#paraglide/runtime.js';
 
 import { LoginPage } from './pages';
 import { TEST_USERS } from './testData';

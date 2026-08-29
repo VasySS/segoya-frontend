@@ -1,11 +1,11 @@
 import type { ColumnDef } from '@tanstack/table-core';
-import { resolve } from '$app/paths';
-import { renderSnippet } from '$components/shadcn/data-table/index';
 import type { Lobby } from '#lib/api/openapi.js';
 import { getProviderLabel } from '#lib/constants/panoramaProviders.js';
 import { formatTimerTime } from '#lib/utils/formatters.js';
-import { m } from '$paraglide/messages.js';
+import { m } from '#paraglide/messages.js';
+import { resolve } from '$app/paths';
 import { createRawSnippet } from 'svelte';
+import { renderSnippet } from '#components/shadcn/data-table/index.js';
 
 export const columns: ColumnDef<Lobby>[] = [
 	{

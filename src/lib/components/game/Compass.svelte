@@ -4,7 +4,7 @@ A horizontal compass component,
 heavily modified version of this compass from codepen: https://codepen.io/Chester/pen/MWPdJZp
 -->
 <script lang="ts">
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
 	import { onMount } from 'svelte';
 	import { MediaQuery } from 'svelte/reactivity';
 

@@ -10,9 +10,9 @@
 		type PaginationState,
 		type SortingState
 	} from '@tanstack/table-core';
-	import { createSvelteTable, FlexRender } from '$components/shadcn/data-table/index.js';
-	import * as Table from '$components/shadcn/table/index.js';
-	import { m } from '$paraglide/messages';
+	import { m } from '#paraglide/messages.js';
+	import { createSvelteTable, FlexRender } from '#components/shadcn/data-table/index.js';
+	import * as Table from '#components/shadcn/table/index.js';
 
 	import Pagination from './data-table-pagination.svelte';
 	import Toolbar from './data-table-toolbar.svelte';

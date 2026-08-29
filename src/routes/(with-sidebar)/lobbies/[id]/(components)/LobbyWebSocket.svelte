@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import { page } from '$app/state';
-	import WebSocketClient from '$components/shared/websocket/WebSocketClient.svelte';
 	import type { Lobby } from '#lib/api/openapi.js';
 	import { getLobbyWebSocketURL } from '#lib/api/websocket.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import { toast } from 'svelte-sonner';
+	import WebSocketClient from '#components/shared/websocket/WebSocketClient.svelte';
 
 	import LobbyChat from './LobbyChat.svelte';
 	import LobbySettings from './LobbySettings.svelte';

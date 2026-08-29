@@ -1,5 +1,5 @@
 import { asset } from '$app/paths';
-import { m } from '$paraglide/messages.js';
+import { m } from '#paraglide/messages.js';
 import L from 'leaflet';
 
 import { mapSizeToggle } from './minimapSize';

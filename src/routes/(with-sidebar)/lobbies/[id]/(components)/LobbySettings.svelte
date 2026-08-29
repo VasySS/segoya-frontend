@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import MainSettings from '$components/game/creation-settings/MainSettings.svelte';
-	import ProviderSelect from '$components/game/creation-settings/ProviderSelect.svelte';
-	import { Button } from '$components/shadcn/button/index';
-	import * as Dialog from '$components/shadcn/dialog/index';
 	import type { Lobby } from '#lib/api/openapi.js';
 	import { getProviderLabel } from '#lib/constants/panoramaProviders.js';
 	import { formatTimerTime } from '#lib/utils/formatters.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
+	import MainSettings from '#components/game/creation-settings/MainSettings.svelte';
+	import ProviderSelect from '#components/game/creation-settings/ProviderSelect.svelte';
+	import { Button } from '#components/shadcn/button/index.js';
+	import * as Dialog from '#components/shadcn/dialog/index.js';
 
 	import { formSchema } from '../settingsSchema';
 	import LobbyWebSocket from './LobbyWebSocket.svelte';

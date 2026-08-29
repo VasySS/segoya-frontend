@@ -4,7 +4,7 @@
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import type { ICreatePanoFromPositionOutput } from '#lib/types/seznam.js';
 	import { getCookiesFromString } from '#lib/utils/auth.js';
-	import { getLocale } from '$paraglide/runtime.js';
+	import { getLocale } from '#paraglide/runtime.js';
 
 	interface Props {
 		/**

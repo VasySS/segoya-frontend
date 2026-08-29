@@ -1,15 +1,15 @@
 <script lang="ts">
-	import * as Dialog from '$components/shadcn/dialog/index';
-	import * as Form from '$components/shadcn/form/index';
-	import { Input } from '$components/shadcn/input/index';
-	import { Label } from '$components/shadcn/label/index';
-	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
 	import Cropper from 'cropperjs';
 	import { onDestroy } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import { superForm, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
+	import * as Dialog from '#components/shadcn/dialog/index.js';
+	import * as Form from '#components/shadcn/form/index.js';
+	import { Input } from '#components/shadcn/input/index.js';
+	import { Label } from '#components/shadcn/label/index.js';
+	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
 
 	import { avatarSchema } from './schema';
 

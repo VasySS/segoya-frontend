@@ -1,13 +1,13 @@
 <script lang="ts">
 	import CircleHelp from '@lucide/svelte/icons/circle-help';
-	import * as Form from '$components/shadcn/form/index';
-	import * as Select from '$components/shadcn/select/index';
-	import * as Tooltip from '$components/shadcn/tooltip/index';
 	import { getProviderLabel, providers } from '#lib/constants/panoramaProviders.js';
-	import { m } from '$paraglide/messages.js';
-	import type { FormSchema as MultiplayerSchema } from '$routes/(with-sidebar)/lobbies/new/schema';
-	import type { FormSchema as SingleplayerSchema } from '$routes/(with-sidebar)/quick-game/schema';
+	import { m } from '#paraglide/messages.js';
+	import type { FormSchema as MultiplayerSchema } from '#routes/(with-sidebar)/lobbies/new/schema.js';
+	import type { FormSchema as SingleplayerSchema } from '#routes/(with-sidebar)/quick-game/schema.js';
 	import type { Infer, SuperForm } from 'sveltekit-superforms';
+	import * as Form from '#components/shadcn/form/index.js';
+	import * as Select from '#components/shadcn/select/index.js';
+	import * as Tooltip from '#components/shadcn/tooltip/index.js';
 
 	interface Props {
 		form: SuperForm<Infer<SingleplayerSchema> | Infer<MultiplayerSchema>>;

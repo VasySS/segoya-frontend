@@ -1,15 +1,18 @@
 <script lang="ts">
-	import { asset } from '$app/paths';
-	import Button from '$components/shadcn/button/button.svelte';
 	import { YANDEX_OAUTH_LOGIN_URL } from '#lib/api/auth.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { asset } from '$app/paths';
+	import Button from '#components/shadcn/button/button.svelte';
 
 	function onclick() {
 		location.assign(YANDEX_OAUTH_LOGIN_URL);
 	}
 </script>
 
-<Button class="w-full space-x-1" onclick={onclick}>
+<Button
+	class="w-full space-x-1"
+	{onclick}
+>
 	<img
 		src={asset('logos/ya-logo.svg')}
 		class="size-7"

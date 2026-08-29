@@ -1,22 +1,22 @@
 <script lang="ts">
 	import { CircleSmallIcon, Save, Trash, Trash2 } from '@lucide/svelte';
-	import * as Accordion from '$components/shadcn/accordion/index';
-	import { Button } from '$components/shadcn/button/index';
-	import * as Card from '$components/shadcn/card/index';
-	import { Label } from '$components/shadcn/label/index';
-	import * as Tooltip from '$components/shadcn/tooltip/index';
-	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
-	import HiddenInput from '$components/shared/HiddenInput.svelte';
 	import { fetchBackend } from '#lib/api/base.js';
 	import type { AuthProvider, UserSession } from '#lib/api/openapi.js';
 	import { APIKeys } from '#lib/constants/enums.js';
 	import type { JwtPayload } from '#lib/types/auth.js';
 	import type { UserAPIKeys } from '#lib/types/user.js';
 	import { formatDateTime } from '#lib/utils/temporal.js';
-	import { m } from '$paraglide/messages.js';
-	import type { CookieOptions } from '$routes/api/cookies/[name]/+server';
+	import { m } from '#paraglide/messages.js';
+	import type { CookieOptions } from '#routes/api/cookies/[name]/+server.js';
 	import Bowser from 'bowser';
 	import { toast } from 'svelte-sonner';
+	import * as Accordion from '#components/shadcn/accordion/index.js';
+	import { Button } from '#components/shadcn/button/index.js';
+	import * as Card from '#components/shadcn/card/index.js';
+	import { Label } from '#components/shadcn/label/index.js';
+	import * as Tooltip from '#components/shadcn/tooltip/index.js';
+	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
+	import HiddenInput from '#components/shared/HiddenInput.svelte';
 
 	import DiscordProfileButton from './DiscordButton.svelte';
 	import YandexProfileButton from './YandexButton.svelte';

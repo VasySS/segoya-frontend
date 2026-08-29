@@ -1,9 +1,9 @@
 <script lang="ts">
-	import * as Tabs from '$components/shadcn/tabs/index';
 	import { fetchBackend } from '#lib/api/base.js';
 	import type { SingleplayerGames } from '#lib/api/openapi.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
 	import { toast } from 'svelte-sonner';
+	import * as Tabs from '#components/shadcn/tabs/index.js';
 
 	import AccountTab from './(components)/(account-tab)/AccountTab.svelte';
 	import SecurityTab from './(components)/(security-tab)/SecurityTab.svelte';

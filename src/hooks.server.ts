@@ -5,7 +5,7 @@ import { fetchBackend } from '#lib/api/base.ts';
 import { unprotectedRoutes } from '#lib/constants/unprotectedRoutes.ts';
 import { getTokenPayload, isTokenExpired, setAllCookiesFromHeader } from '#lib/utils/auth.ts';
 import { csp } from '#lib/utils/csp.ts';
-import { paraglideMiddleware } from '$paraglide/server.js';
+import { paraglideMiddleware } from '#paraglide/server.js';
 
 const paraglideHandle: Handle = ({ event, resolve }) =>
 	paraglideMiddleware(event.request, ({ locale }) => {

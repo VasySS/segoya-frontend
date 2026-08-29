@@ -1,11 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import BaseOverlay from '$components/game/BaseOverlay.svelte';
-	import RoundAnimation from '$components/game/ScoreDistanceAnimated.svelte';
-	import Timer from '$components/game/Timer.svelte';
-	import Minimap from '$components/minimap/Minimap.svelte';
-	import Button from '$components/shadcn/button/button.svelte';
-	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
 	import { fetchBackend } from '#lib/api/base.js';
 	import type {
 		EndSingleplayerRoundResponse,
@@ -14,7 +7,14 @@
 	} from '#lib/api/openapi.js';
 	import { GameType } from '#lib/constants/enums.js';
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { page } from '$app/state';
+	import BaseOverlay from '#components/game/BaseOverlay.svelte';
+	import RoundAnimation from '#components/game/ScoreDistanceAnimated.svelte';
+	import Timer from '#components/game/Timer.svelte';
+	import Minimap from '#components/minimap/Minimap.svelte';
+	import Button from '#components/shadcn/button/button.svelte';
+	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
 	import { toast } from 'svelte-sonner';
 
 	let minimap = $state<Minimap>();

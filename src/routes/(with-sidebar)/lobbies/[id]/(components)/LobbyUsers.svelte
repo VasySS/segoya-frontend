@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { Crown } from '@lucide/svelte';
-	import * as Avatar from '$components/shadcn/avatar/index';
-	import { ScrollArea } from '$components/shadcn/scroll-area/index';
-	import { Separator } from '$components/shadcn/separator/index';
-	import * as Tooltip from '$components/shadcn/tooltip/index';
-	import UserHoverCard from '$components/shared/UserHoverCard.svelte';
 	import type { Lobby, UserPublicProfile } from '#lib/api/openapi.js';
 	import { getAvatarSource } from '#lib/utils/helpers.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
 	import { fly } from 'svelte/transition';
+	import * as Avatar from '#components/shadcn/avatar/index.js';
+	import { ScrollArea } from '#components/shadcn/scroll-area/index.js';
+	import { Separator } from '#components/shadcn/separator/index.js';
+	import * as Tooltip from '#components/shadcn/tooltip/index.js';
+	import UserHoverCard from '#components/shared/UserHoverCard.svelte';
 
 	interface Props {
 		lobbyInfo: Lobby;

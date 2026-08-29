@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { m } from '#paraglide/messages.js';
 	import { page } from '$app/state';
-	import Button from '$components/shadcn/button/button.svelte';
-	import { m } from '$paraglide/messages.js';
+	import Button from '#components/shadcn/button/button.svelte';
 </script>
 
 <h1 class="mb-12 text-center">{m.error()} {page.status}</h1>

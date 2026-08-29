@@ -1,4 +1,4 @@
-import { m } from '$paraglide/messages.js';
+import { m } from '#paraglide/messages.js';
 import { z } from 'zod';
 
 export const formSchema = z.object({

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { RotateCw } from '@lucide/svelte';
-	import { Input } from '$components/shadcn/input';
-	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
-	import { m } from '$paraglide/messages';
+	import { m } from '#paraglide/messages.js';
+	import { Input } from '#components/shadcn/input/index.js';
+	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
 
 	interface Props {
 		globalFilter: string;

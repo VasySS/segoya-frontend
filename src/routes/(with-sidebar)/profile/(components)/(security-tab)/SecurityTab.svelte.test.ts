@@ -4,8 +4,8 @@ import type { AuthProvider } from '#lib/api/openapi.js';
 import { APIKeys } from '#lib/constants/enums.js';
 import type { JwtPayload } from '#lib/types/auth.js';
 import { formatDate } from '#lib/utils/temporal.js';
-import { m } from '$paraglide/messages.js';
-import { setupComponent } from '$tests/vitestSetup';
+import { m } from '#paraglide/messages.js';
+import { setupComponent } from '#tests/vitestSetup';
 import { toast } from 'svelte-sonner';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 

@@ -1,15 +1,15 @@
 <script lang="ts">
 	// import { browser } from '$app/environment';
-	import { resolve } from '$app/paths';
-	import * as Form from '$components/shadcn/form/index';
-	import Input from '$components/shadcn/input/input.svelte';
-	import ButtonLoading from '$components/shared/button-loading/button-loading.svelte';
-	import PasswordInput from '$components/shared/HiddenInput.svelte';
 	import { TURNSTILE_SITE_KEY } from '#lib/api/base.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
+	import * as Form from '#components/shadcn/form/index.js';
+	import Input from '#components/shadcn/input/input.svelte';
+	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
+	import PasswordInput from '#components/shared/HiddenInput.svelte';
 
 	import { formSchema } from './schema.js';
 

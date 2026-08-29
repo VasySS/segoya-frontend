@@ -8,16 +8,16 @@
 		SunIcon,
 		UsersIcon
 	} from '@lucide/svelte';
+	import type { JwtPayload } from '#lib/types/auth.js';
+	import { m } from '#paraglide/messages.js';
+	import { getLocale, setLocale } from '#paraglide/runtime.js';
 	import { asset, resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import Settings from '$components/game/Settings.svelte';
-	import * as DropdownMenu from '$components/shadcn/dropdown-menu/index';
-	import * as Sidebar from '$components/shadcn/sidebar/index.js';
-	import { useSidebar } from '$components/shadcn/sidebar/index.js';
-	import type { JwtPayload } from '#lib/types/auth.js';
-	import { m } from '$paraglide/messages';
-	import { getLocale, setLocale } from '$paraglide/runtime';
 	import { toggleMode } from 'mode-watcher';
+	import Settings from '#components/game/Settings.svelte';
+	import * as DropdownMenu from '#components/shadcn/dropdown-menu/index.js';
+	import * as Sidebar from '#components/shadcn/sidebar/index.js';
+	import { useSidebar } from '#components/shadcn/sidebar/index.js';
 
 	let settingsOpen = $state(false);
 
@@ -165,7 +165,7 @@
 						</a>
 
 						<DropdownMenu.Item
-							onclick={() => settingsOpen = !settingsOpen}
+							onclick={() => (settingsOpen = !settingsOpen)}
 							class="flex cursor-pointer flex-row items-center space-x-3"
 						>
 							<SettingsIcon />

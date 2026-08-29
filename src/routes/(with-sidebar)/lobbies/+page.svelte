@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import Button from '$components/shadcn/button/button.svelte';
-	import DataTable from '$components/shadcn/data-table/data-table.svelte';
 	import { fetchBackend } from '#lib/api/base.js';
 	import type { Lobby } from '#lib/api/openapi.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { resolve } from '$app/paths';
 	import { toast } from 'svelte-sonner';
+	import Button from '#components/shadcn/button/button.svelte';
+	import DataTable from '#components/shadcn/data-table/data-table.svelte';
 
 	import type { PageData } from './$types';
 	import { columns } from './tableColumns';

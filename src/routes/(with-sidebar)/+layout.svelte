@@ -1,6 +1,6 @@
 <script lang="ts">
-	import * as Sidebar from '$components/shadcn/sidebar/index.js';
 	import type { Snippet } from 'svelte';
+	import * as Sidebar from '#components/shadcn/sidebar/index.js';
 
 	import SidebarApp from './AppSidebar.svelte';
 

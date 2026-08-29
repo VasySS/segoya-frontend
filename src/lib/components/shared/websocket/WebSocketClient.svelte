@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
 	import { onDestroy, onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 

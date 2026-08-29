@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import WebSocketClient from '$components/shared/websocket/WebSocketClient.svelte';
 	import type { LatLng, MultiplayerGame } from '#lib/api/openapi.js';
 	import { getMultiplayerWebSocketURL } from '#lib/api/websocket.js';
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import { page } from '$app/state';
+	import WebSocketClient from '#components/shared/websocket/WebSocketClient.svelte';
 	import { toast } from 'svelte-sonner';
 
 	import MultiplayerOverlay from './MultiplayerOverlay.svelte';

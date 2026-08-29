@@ -1,7 +1,7 @@
 <script lang="ts">
-	import LoadingFullscreen from '$components/game/LoadingFullscreen.svelte';
 	import { setGameContext } from '#lib/states/gameContext.svelte.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import LoadingFullscreen from '#components/game/LoadingFullscreen.svelte';
 
 	import MultiplayerOverlay from './(components)/MultiplayerOverlay.svelte';
 	import MultiplayerUsers from './(components)/MultiplayerUsers.svelte';

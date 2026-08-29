@@ -1,7 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
 import { resolve } from '$app/paths';
 import { fetchBackend } from '#lib/api/base.js';
-import { m } from '$paraglide/messages.js';
+import { m } from '#paraglide/messages.js';
 import { uuidv7 } from 'zod';
 
 import type { PageServerLoad } from './$types';

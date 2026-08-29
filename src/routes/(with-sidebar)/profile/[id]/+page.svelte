@@ -1,10 +1,10 @@
 <script lang="ts">
-	import * as Avatar from '$components/shadcn/avatar/index';
-	import * as Card from '$components/shadcn/card/index';
 	import type { UserPublicProfile } from '#lib/api/openapi.js';
 	import { getAvatarSource } from '#lib/utils/helpers.js';
 	import { formatDate } from '#lib/utils/temporal.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
+	import * as Avatar from '#components/shadcn/avatar/index.js';
+	import * as Card from '#components/shadcn/card/index.js';
 
 	let { data } = $props();
 

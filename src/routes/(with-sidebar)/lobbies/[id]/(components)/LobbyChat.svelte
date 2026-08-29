@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { SendHorizontal } from '@lucide/svelte';
-	import { Button } from '$components/shadcn/button/index';
-	import { Input } from '$components/shadcn/input/index';
 	import { formatTime } from '#lib/utils/temporal.js';
-	import { m } from '$paraglide/messages.js';
+	import { m } from '#paraglide/messages.js';
 	import { tick, untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { Button } from '#components/shadcn/button/index.js';
+	import { Input } from '#components/shadcn/input/index.js';
 
 	import LobbyWebSocket from './LobbyWebSocket.svelte';
 	import type { ChatMessageContent } from './websocket';

@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { m } from '$paraglide/messages.js';
+import { m } from '#paraglide/messages.js';
 
 import { test } from './fixtures.js';
 import { LobbyPage } from './pages.js';
