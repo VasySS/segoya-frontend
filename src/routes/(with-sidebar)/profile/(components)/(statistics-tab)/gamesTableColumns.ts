@@ -1,5 +1,7 @@
-import type { ColumnDef } from '@tanstack/table-core';
+// eslint-disable-next-line import/named
+import { createColumnHelper } from '@tanstack/svelte-table';
 import type { SingleplayerGame } from '#lib/api/openapi.js';
+import type { DataTableFeatures } from '#lib/components/shadcn/data-table/data-table-features.ts';
 import { getProviderLabel } from '#lib/constants/panoramaProviders.js';
 import { formatDateTime } from '#lib/utils/temporal.js';
 import { m } from '#paraglide/messages.js';
@@ -7,7 +9,9 @@ import { resolve } from '$app/paths';
 import { createRawSnippet } from 'svelte';
 import { renderSnippet } from '#components/shadcn/data-table/index.js';
 
-export const columns: ColumnDef<SingleplayerGame>[] = [
+const columnHelper = createColumnHelper<DataTableFeatures, SingleplayerGame>();
+
+export const columns = columnHelper.columns([
 	{
 		accessorFn: (row) => formatDateTime(row.createdAt),
 		header: m.profileGameDate()
@@ -62,4 +66,4 @@ export const columns: ColumnDef<SingleplayerGame>[] = [
 			return '';
 		}
 	}
-];
+]);

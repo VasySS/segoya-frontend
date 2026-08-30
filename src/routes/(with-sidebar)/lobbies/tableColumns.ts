@@ -1,5 +1,7 @@
-import type { ColumnDef } from '@tanstack/table-core';
+// eslint-disable-next-line import/named
+import { createColumnHelper } from '@tanstack/svelte-table';
 import type { Lobby } from '#lib/api/openapi.js';
+import type { DataTableFeatures } from '#lib/components/shadcn/data-table/data-table-features.ts';
 import { getProviderLabel } from '#lib/constants/panoramaProviders.js';
 import { formatTimerTime } from '#lib/utils/formatters.js';
 import { m } from '#paraglide/messages.js';
@@ -7,14 +9,16 @@ import { resolve } from '$app/paths';
 import { createRawSnippet } from 'svelte';
 import { renderSnippet } from '#components/shadcn/data-table/index.js';
 
-export const columns: ColumnDef<Lobby>[] = [
+const columnHelper = createColumnHelper<DataTableFeatures, Lobby>();
+
+export const columns = columnHelper.columns([
 	{
 		accessorKey: 'id',
 		header: 'ID',
 		cell: ({ row }) => {
 			const id = row.original.id;
 
-			const joinSnippet = createRawSnippet<[string]>(() => {
+			const joinSnippet = createRawSnippet(() => {
 				return {
 					render: () => `
 						<a
@@ -22,7 +26,7 @@ export const columns: ColumnDef<Lobby>[] = [
 							href="${resolve('/(with-sidebar)/lobbies/[id]', { id })}"
 						>
 							${id}
-						</button>
+						</a>
 					`
 				};
 			});
@@ -53,4 +57,4 @@ export const columns: ColumnDef<Lobby>[] = [
 			return formatTimerTime(row.original.timerSeconds);
 		}
 	}
-];
+]);

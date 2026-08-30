@@ -9,6 +9,7 @@ const cachedAssets = [
 	...assets.map(({ path }) => asset(path))
 ];
 const assetPaths = new Set(
+	// eslint-disable-next-line unicorn/no-unreadable-new-expression
 	cachedAssets.map((cachedAsset) => new URL(cachedAsset, self.location.origin).pathname)
 );
 

@@ -1,36 +1,31 @@
 <script
 	lang="ts"
-	generics="TData, TValue"
+	generics="TData extends RowData"
 >
 	import { LoaderCircle } from '@lucide/svelte';
 	import {
-		getCoreRowModel,
-		getFilteredRowModel,
+		createTable,
 		type ColumnDef,
 		type PaginationState,
+		type RowData,
 		type SortingState
-	} from '@tanstack/table-core';
+	} from '@tanstack/svelte-table';
 	import { m } from '#paraglide/messages.js';
-	import { createSvelteTable, FlexRender } from '#components/shadcn/data-table/index.js';
+	import { FlexRender } from '#components/shadcn/data-table/index.js';
 	import * as Table from '#components/shadcn/table/index.js';
 
+	import { features, type DataTableFeatures } from './data-table-features';
 	import Pagination from './data-table-pagination.svelte';
 	import Toolbar from './data-table-toolbar.svelte';
 
-	type DataTableProps<TData, TValue> = {
+	type DataTableProps<TData extends RowData> = {
 		data: TData[];
 		dataTotal: number;
-		columns: ColumnDef<TData, TValue>[];
+		columns: ColumnDef<DataTableFeatures, TData>[];
 		pageSize?: number;
 		getPageData: (page: number, pageSize: number) => Promise<{ data: TData[]; total: number }>;
 	};
-	let {
-		data,
-		dataTotal,
-		columns,
-		pageSize = 10,
-		getPageData
-	}: DataTableProps<TData, TValue> = $props();
+	let { data, dataTotal, columns, pageSize = 10, getPageData }: DataTableProps<TData> = $props();
 
 	let sortingState = $state<SortingState>([]);
 	let globalFilter = $state<string>('');
@@ -48,7 +43,8 @@
 		paginationLoading = false;
 	};
 
-	const table = createSvelteTable({
+	const table = createTable({
+		features,
 		get data() {
 			return data;
 		},
@@ -59,7 +55,6 @@
 		columns,
 		// pagination
 		manualPagination: true,
-		getCoreRowModel: getCoreRowModel(),
 		onPaginationChange: (updater) => {
 			const next = typeof updater === 'function' ? updater(paginationState) : updater;
 			paginationState = next;
@@ -72,7 +67,6 @@
 			});
 		},
 		// filtering
-		getFilteredRowModel: getFilteredRowModel(),
 		onGlobalFilterChange: (updater) => {
 			if (typeof updater === 'function') {
 				globalFilter = updater(globalFilter);
@@ -101,7 +95,7 @@
 	></Toolbar>
 
 	<div class="mt-2 rounded-sm border">
-		<Table.Root class="h-[47rem]">
+		<Table.Root class="h-188">
 			<Table.Header>
 				{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
 					<Table.Row>

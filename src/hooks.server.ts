@@ -6,15 +6,19 @@ import { unprotectedRoutes } from '#lib/constants/unprotectedRoutes.ts';
 import { getTokenPayload, isTokenExpired, setAllCookiesFromHeader } from '#lib/utils/auth.ts';
 import { csp } from '#lib/utils/csp.ts';
 import { paraglideMiddleware } from '#paraglide/server.js';
+import z from 'zod';
+
+// eslint-disable-next-line unicorn/no-top-level-side-effects
+z.config({ jitless: true }); // does not work with CSP
 
 const paraglideHandle: Handle = ({ event, resolve }) =>
 	paraglideMiddleware(event.request, ({ locale }) => {
 		return resolve(event, {
-		transformPageChunk: ({ html }) => {
-			return html.replace('%lang%', () => locale);
-		}
+			transformPageChunk: ({ html }) => {
+				return html.replace('%lang%', () => locale);
+			}
+		});
 	});
-});
 
 const authHandle: Handle = async ({ event, resolve }) => {
 	const accessToken = event.cookies.get(accessCookieName);
@@ -24,7 +28,9 @@ const authHandle: Handle = async ({ event, resolve }) => {
 		event.locals.jwtPayload = getTokenPayload(accessToken);
 		event.locals.jwtToken = accessToken;
 	} else if (refreshToken && !isTokenExpired(refreshToken)) {
-		const response = await fetchBackend('', 'post', '/v1/auth/tokens/refresh', { body: { refreshToken } });
+		const response = await fetchBackend('', 'post', '/v1/auth/tokens/refresh', {
+			body: { refreshToken }
+		});
 
 		if (!response.success) {
 			event.cookies.delete(accessCookieName, { path: '/' });

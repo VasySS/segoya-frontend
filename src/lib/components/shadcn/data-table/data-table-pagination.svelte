@@ -1,14 +1,16 @@
 <script
 	lang="ts"
-	generics="TData"
+	generics="TData extends RowData"
 >
 	import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from '@lucide/svelte';
-	import type { PaginationState, Table } from '@tanstack/table-core';
+	import type { PaginationState, RowData, SvelteTable } from '@tanstack/svelte-table';
 	import { m } from '#paraglide/messages.js';
 	import Button from '#components/shadcn/button/button.svelte';
 
+	import type { DataTableFeatures } from './data-table-features';
+
 	interface Props {
-		table: Table<TData>;
+		table: SvelteTable<DataTableFeatures, TData>;
 		paginationState: PaginationState;
 	}
 	let { table, paginationState }: Props = $props();

@@ -30,6 +30,7 @@ export default defineConfig([
 		'./eslint.config.ts',
 		'./svelte.config.js',
 		'./playwright.config.ts',
+		'./vite.config.ts',
 		'./vitest.config.ts',
 		'playwright-report/*'
 	]),
