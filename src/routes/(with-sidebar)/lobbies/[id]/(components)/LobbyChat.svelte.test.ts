@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/svelte'; // eslint-disable-line import/named
 import { m } from '#paraglide/messages.js';
-import { setupComponent } from '#tests/vitestSetup';
+import { setupComponent } from '#tests/vitestSetup.js';
 import { describe, expect, it, vi } from 'vitest';
 
 import LobbyChat from './LobbyChat.svelte';

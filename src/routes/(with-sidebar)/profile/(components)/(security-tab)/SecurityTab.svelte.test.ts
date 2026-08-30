@@ -5,7 +5,7 @@ import { APIKeys } from '#lib/constants/enums.js';
 import type { JwtPayload } from '#lib/types/auth.js';
 import { formatDate } from '#lib/utils/temporal.js';
 import { m } from '#paraglide/messages.js';
-import { setupComponent } from '#tests/vitestSetup';
+import { setupComponent } from '#tests/vitestSetup.js';
 import { toast } from 'svelte-sonner';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
