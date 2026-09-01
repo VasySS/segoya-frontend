@@ -28,8 +28,8 @@
 		"test:e2e:report": "playwright show-report"
 	},
 	"devDependencies": {
-		"@dicebear/collection": "^9.4.2",
-		"@dicebear/core": "^9.2.4",
+		"@dicebear/core": "^10.7.0",
+		"@dicebear/styles": "^10.6.0",
 		"@eslint/js": "^9.39.2",
 		"@googlemaps/js-api-loader": "^2.1.1",
 		"@ianvs/prettier-plugin-sort-imports": "^4.7.1",
