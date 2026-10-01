@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CircleSmallIcon, Save, Trash, Trash2 } from '@lucide/svelte';
+	import { CircleSmallIcon, Save, Trash } from '@lucide/svelte';
 	import { fetchBackend } from '#lib/api/base.js';
 	import type { AuthProvider, UserSession } from '#lib/api/openapi.js';
 	import { APIKeys } from '#lib/constants/enums.js';
@@ -274,7 +274,7 @@
 														toast.success(m.tame_grassy_millipede_express());
 													}}
 												>
-													<Trash2 size={20}></Trash2>
+													<Trash size={20}></Trash>
 												</ButtonLoading>
 											{/if}
 										</div>

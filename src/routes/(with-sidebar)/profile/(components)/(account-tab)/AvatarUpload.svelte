@@ -83,7 +83,13 @@
 				if (!blob) return;
 
 				$formData.userAvatar = new File([blob], 'avatar', { type: blob.type });
-				form.submit();
+				try {
+					form.submit();
+				} catch {
+					toast.error(m.heroic_plain_reindeer_tickle(), {
+						description: 'Failed to submit avatar'
+					});
+				}
 			},
 			'image/webp',
 			0.7

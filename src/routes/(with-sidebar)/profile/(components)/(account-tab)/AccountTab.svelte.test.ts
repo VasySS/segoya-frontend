@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/svelte'; // eslint-disable-line import/named
+import { screen, waitFor } from '@testing-library/svelte';
 import { getAvatarSource } from '#lib/utils/helpers.js';
 import { m } from '#paraglide/messages.js';
 import { setupComponent } from '#tests/vitestSetup.js';

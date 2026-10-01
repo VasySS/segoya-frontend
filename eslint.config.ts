@@ -17,6 +17,7 @@ const extraFileExtensions = ['.svelte'];
 export default defineConfig([
 	globalIgnores([
 		'node_modules/*',
+		'.pnpm-store/**',
 		'build/*',
 		'coverage/*',
 		'.svelte-kit/*',
@@ -44,11 +45,16 @@ export default defineConfig([
 	...svelte.configs.recommended,
 
 	importPlugin.flatConfigs.recommended,
+	importPlugin.flatConfigs.typescript,
 	unicorn.configs.recommended,
 
 	// global language options
 	{
 		settings: {
+			'import/parsers': {
+				'@typescript-eslint/parser': ['.js', '.mjs', '.cjs', '.ts', '.tsx'],
+				'svelte-eslint-parser': ['.svelte']
+			},
 			'import/resolver': {
 				node: {
 					extensions: ['.js', '.ts', '.json']

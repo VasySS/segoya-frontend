@@ -1,5 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/svelte'; // eslint-disable-line import/named
-
+import { fireEvent, screen, waitFor } from '@testing-library/svelte';
 import { m } from '#paraglide/messages.js';
 import { setupComponent } from '#tests/vitestSetup.js';
 import Cropper from 'cropperjs';
@@ -7,7 +6,7 @@ import { tick } from 'svelte';
 import { toast } from 'svelte-sonner';
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import AvatarUpload from './AvatarUpload.svelte';
 import { avatarSchema } from './schema';
@@ -45,27 +44,31 @@ async function createValidatedForm() {
 	return await superValidate(zod4(avatarSchema));
 }
 
-vi.mock('cropperjs', () => {
+vi.mock(import('cropperjs'), () => {
 	return {
-		default: vi.fn().mockImplementation(() => ({
-			destroy: vi.fn(),
-			getCroppedCanvas: vi.fn(() => ({
-				toBlob: (cb: (blob: Blob) => void) => {
-					cb(new Blob(['fake image data'], { type: 'image/webp' }));
-				}
-			}))
-		}))
+		default: vi.fn<typeof Cropper>().mockImplementation(function () {
+			return {
+				destroy: vi.fn<Cropper['destroy']>(),
+				getCroppedCanvas: vi.fn<Cropper['getCroppedCanvas']>(
+					() =>
+						({
+							toBlob: (cb: BlobCallback) => {
+								cb(new Blob(['fake image data'], { type: 'image/webp' }));
+							}
+						}) as HTMLCanvasElement
+				)
+			} as unknown as Cropper;
+		}) as unknown as typeof Cropper
 	};
 });
 
-vi.mock('svelte-sonner', () => ({
-	toast: {
-		error: vi.fn(),
-		success: vi.fn()
-	}
-}));
-
 describe('avatar upload component', () => {
+	// eslint-disable-next-line vitest/no-hooks
+	afterEach(() => {
+		vi.clearAllMocks();
+		vi.restoreAllMocks();
+	});
+
 	describe('rendering', () => {
 		it('should not render dialog by default', async () => {
 			expect.hasAssertions();
@@ -131,7 +134,7 @@ describe('avatar upload component', () => {
 			await user.upload(input, INVALID_FILE_TYPE);
 
 			await waitFor(() => {
-				expect(toast.error).toHaveBeenCalled();
+				expect(toast.error).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -150,7 +153,7 @@ describe('avatar upload component', () => {
 			await user.upload(input, EMPTY_FILE);
 
 			await waitFor(() => {
-				expect(toast.error).toHaveBeenCalled();
+				expect(toast.error).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -173,7 +176,12 @@ describe('avatar upload component', () => {
 			await fireEvent.change(input);
 
 			await waitFor(() => {
-				expect(Cropper).toHaveBeenCalled();
+				expect(Cropper).toHaveBeenCalledWith(expect.any(HTMLImageElement), {
+					aspectRatio: 1,
+					viewMode: 3,
+					dragMode: 'move',
+					center: true
+				});
 			});
 		});
 	});
@@ -181,6 +189,10 @@ describe('avatar upload component', () => {
 	describe('user interactions', () => {
 		it('submits cropped avatar when save button is clicked', async () => {
 			expect.hasAssertions();
+
+			const submit = vi
+				.spyOn(HTMLFormElement.prototype, 'requestSubmit')
+				.mockImplementation(vi.fn<HTMLFormElement['requestSubmit']>());
 
 			const avatarForm = await createValidatedForm();
 			setupComponent(AvatarUpload, {
@@ -199,7 +211,12 @@ describe('avatar upload component', () => {
 			await tick();
 
 			await waitFor(() => {
-				expect(Cropper).toHaveBeenCalled();
+				expect(Cropper).toHaveBeenCalledWith(expect.any(HTMLImageElement), {
+					aspectRatio: 1,
+					viewMode: 3,
+					dragMode: 'move',
+					center: true
+				});
 			});
 
 			await tick();
@@ -211,7 +228,7 @@ describe('avatar upload component', () => {
 			const button = screen.getByRole('button', { name: m.save() });
 			await fireEvent.click(button);
 
-			// Button is clickable and the function is called
+			expect(submit).toHaveBeenCalledTimes(1);
 		});
 	});
 
@@ -221,7 +238,7 @@ describe('avatar upload component', () => {
 
 			// Mock cropper to throw error
 			const originalCropper = vi.mocked(Cropper);
-			originalCropper.mockImplementationOnce(() => {
+			originalCropper.mockImplementationOnce(function () {
 				throw new Error('Cropper init failed');
 			});
 
@@ -241,7 +258,9 @@ describe('avatar upload component', () => {
 			await fireEvent.change(input);
 
 			await waitFor(() => {
-				expect(toast.error).toHaveBeenCalled();
+				expect(toast.error).toHaveBeenCalledWith(m.heroic_plain_reindeer_tickle(), {
+					description: 'Failed to initialize image cropper'
+				});
 			});
 		});
 
@@ -265,7 +284,12 @@ describe('avatar upload component', () => {
 			await tick();
 
 			await waitFor(() => {
-				expect(Cropper).toHaveBeenCalled();
+				expect(Cropper).toHaveBeenCalledWith(expect.any(HTMLImageElement), {
+					aspectRatio: 1,
+					viewMode: 3,
+					dragMode: 'move',
+					center: true
+				});
 			});
 
 			await tick();
@@ -274,7 +298,7 @@ describe('avatar upload component', () => {
 				expect(screen.getByRole('button', { name: m.save() })).toBeInTheDocument();
 			});
 
-			const mockSubmit = vi.fn(() => {
+			const mockSubmit = vi.fn<HTMLFormElement['requestSubmit']>(() => {
 				throw new Error('Submit failed');
 			});
 			vi.spyOn(HTMLFormElement.prototype, 'requestSubmit').mockImplementation(mockSubmit);
@@ -283,7 +307,12 @@ describe('avatar upload component', () => {
 			await fireEvent.click(button);
 
 			await waitFor(() => {
-				expect(toast.error).toHaveBeenCalled();
+				expect(mockSubmit).toHaveBeenCalledTimes(1);
+			});
+			await waitFor(() => {
+				expect(toast.error).toHaveBeenCalledWith(m.heroic_plain_reindeer_tickle(), {
+					description: 'Failed to submit avatar'
+				});
 			});
 		});
 	});
@@ -325,7 +354,7 @@ describe('avatar upload component', () => {
 			await user.upload(input, corruptedFile);
 
 			await waitFor(() => {
-				expect(toast.error).toHaveBeenCalled();
+				expect(toast.error).toHaveBeenCalledTimes(1);
 			});
 		});
 	});

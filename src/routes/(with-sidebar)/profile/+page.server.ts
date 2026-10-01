@@ -1,5 +1,4 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { resolve } from '$app/paths';
 import {
 	accessCookieName,
 	newDiscordOAuth,
@@ -12,6 +11,7 @@ import { updateUserAvatar } from '#lib/api/users.js';
 import { APIKeys } from '#lib/constants/enums.js';
 import type { UserAPIKeys } from '#lib/types/user.js';
 import { setAllCookiesFromHeader } from '#lib/utils/auth.js';
+import { resolve } from '$app/paths';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
@@ -131,7 +131,7 @@ export const actions: Actions = {
 			return;
 		}
 
-		redirect(303, redirectURL);
+		redirect(303, redirectURL, { external: true });
 	},
 
 	add_discord: async (event) => {
@@ -153,6 +153,6 @@ export const actions: Actions = {
 			return;
 		}
 
-		redirect(303, redirectURL);
+		redirect(303, redirectURL, { external: true });
 	}
 };

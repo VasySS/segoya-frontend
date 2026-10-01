@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { createColumnHelper } from '@tanstack/svelte-table';
 import type { SingleplayerGame } from '#lib/api/openapi.js';
 import type { DataTableFeatures } from '#lib/components/shadcn/data-table/data-table-features.ts';

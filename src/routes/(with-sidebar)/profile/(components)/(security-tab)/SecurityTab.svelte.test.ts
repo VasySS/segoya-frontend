@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/svelte'; // eslint-disable-line import/named
+import { screen, waitFor } from '@testing-library/svelte';
 import { fetchBackend } from '#lib/api/base.js';
 import type { AuthProvider } from '#lib/api/openapi.js';
 import { APIKeys } from '#lib/constants/enums.js';
@@ -121,7 +121,7 @@ describe('tests for SecurityTab component', () => {
 			await user.click(screen.getByTitle(m.ago_grassy_warbler_lead()));
 
 			await waitFor(() => {
-				expect(toast.error).toHaveBeenCalled();
+				expect(toast.error).toHaveBeenCalledTimes(1);
 			});
 
 			vi.spyOn(toast, 'success').mockImplementationOnce(vi.fn());
@@ -159,7 +159,7 @@ describe('tests for SecurityTab component', () => {
 			await user.click(screen.getByTitle(m.house_same_bullock_lend()));
 
 			await waitFor(() => {
-				expect(toast.error).toHaveBeenCalled();
+				expect(toast.error).toHaveBeenCalledTimes(1);
 			});
 
 			vi.spyOn(toast, 'success').mockImplementation(vi.fn());
@@ -195,7 +195,7 @@ describe('tests for SecurityTab component', () => {
 			await user.click(screen.getByTitle(m.raw_funny_bee_grin()));
 
 			await waitFor(() => {
-				expect(toast.error).toHaveBeenCalled();
+				expect(toast.error).toHaveBeenCalledTimes(1);
 			});
 
 			vi.spyOn(toast, 'success').mockImplementation(vi.fn());

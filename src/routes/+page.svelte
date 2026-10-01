@@ -127,7 +127,8 @@
 			</div>
 
 			<div
-				class="h-96 w-full border-t border-b bg-[url('{STATIC_BASE_URL}/irkutsk.webp')] bg-cover bg-fixed bg-center lg:h-auto lg:w-1/2 lg:border-0"
+				class="h-96 w-full border-t border-b bg-cover bg-fixed bg-center lg:h-auto lg:w-1/2 lg:border-0"
+				style:background-image={`url("${STATIC_BASE_URL}/irkutsk.webp")`}
 			></div>
 		</div>
 
