@@ -1,16 +1,11 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import {
-	accessCookieName,
-	newDiscordOAuth,
-	newYandexOAuth,
-	refreshCookieName
-} from '#lib/api/auth.js';
-import { fetchBackend, FRONTEND_DOMAIN } from '#lib/api/base.js';
+import { accessCookieName, newDiscordOAuth, newYandexOAuth } from '#lib/api/auth.js';
+import { fetchBackend } from '#lib/api/base.js';
 import { getErrorFromResponse } from '#lib/api/errorHandling.js';
 import { updateUserAvatar } from '#lib/api/users.js';
 import { APIKeys } from '#lib/constants/enums.js';
 import type { UserAPIKeys } from '#lib/types/user.js';
-import { setAllCookiesFromHeader } from '#lib/utils/auth.js';
+import { clearAuthCookies, setAllCookiesFromHeader } from '#lib/utils/auth.js';
 import { resolve } from '$app/paths';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
@@ -62,16 +57,7 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
 	logout: ({ cookies }) => {
-		// to delete the cookie path AND domain must be set
-		// https://svelte.dev/docs/kit/@sveltejs-kit#Cookies
-
-		if (import.meta.env.DEV) {
-			cookies.set(accessCookieName, '', { path: '/', domain: 'localhost', maxAge: 0 });
-			cookies.set(refreshCookieName, '', { path: '/', domain: 'localhost', maxAge: 0 });
-		} else {
-			cookies.set(accessCookieName, '', { path: '/', domain: FRONTEND_DOMAIN, maxAge: 0 });
-			cookies.set(refreshCookieName, '', { path: '/', domain: FRONTEND_DOMAIN, maxAge: 0 });
-		}
+		clearAuthCookies(cookies);
 
 		redirect(303, resolve('/(with-sidebar)/login'));
 	},

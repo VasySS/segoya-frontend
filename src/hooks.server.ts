@@ -3,7 +3,12 @@ import { sequence, type Handle, type HandleFetch } from '@sveltejs/kit/hooks';
 import { accessCookieName, refreshCookieName } from '#lib/api/auth.ts';
 import { fetchBackend } from '#lib/api/base.ts';
 import { unprotectedRoutes } from '#lib/constants/unprotectedRoutes.ts';
-import { getTokenPayload, isTokenExpired, setAllCookiesFromHeader } from '#lib/utils/auth.ts';
+import {
+	clearAuthCookies,
+	getTokenPayload,
+	isTokenExpired,
+	setAllCookiesFromHeader
+} from '#lib/utils/auth.ts';
 import { csp } from '#lib/utils/csp.ts';
 import { paraglideMiddleware } from '#paraglide/server.js';
 import z from 'zod';
@@ -20,7 +25,12 @@ const paraglideHandle: Handle = ({ event, resolve }) =>
 		});
 	});
 
-const authHandle: Handle = async ({ event, resolve }) => {
+function getLoginRedirect(pathname: string) {
+	const searchParams = new URLSearchParams({ 'redirect-to': pathname });
+	return `/login?${searchParams.toString()}`;
+}
+
+export const authHandle: Handle = async ({ event, resolve }) => {
 	const accessToken = event.cookies.get(accessCookieName);
 	const refreshToken = event.cookies.get(refreshCookieName);
 
@@ -32,36 +42,26 @@ const authHandle: Handle = async ({ event, resolve }) => {
 			body: { refreshToken }
 		});
 
-		if (!response.success) {
-			event.cookies.delete(accessCookieName, { path: '/' });
-			event.cookies.delete(refreshCookieName, { path: '/' });
+		if (response.success) {
+			const refreshedCookies = setAllCookiesFromHeader(event, response.headers['Set-Cookie']);
 
-			redirect(
-				302,
-				`/login?redirect-to=${event.url.pathname === '/login' ? '/home' : event.url.pathname}`
-			);
+			const refreshedAccessToken = refreshedCookies[accessCookieName];
+			if (refreshedAccessToken) {
+				event.locals.jwtPayload = getTokenPayload(refreshedAccessToken);
+				event.locals.jwtToken = refreshedAccessToken;
+			} else {
+				clearAuthCookies(event.cookies);
+			}
+		} else {
+			clearAuthCookies(event.cookies);
 		}
-
-		setAllCookiesFromHeader(event, response.headers['Set-Cookie']);
-
-		const accessTokenCookie = event.cookies.get(accessCookieName);
-		if (!accessTokenCookie) {
-			redirect(
-				302,
-				`/login?redirect-to=${event.url.pathname === '/login' ? '/home' : event.url.pathname}`
-			);
-		}
-
-		event.locals.jwtPayload = getTokenPayload(accessTokenCookie);
-		event.locals.jwtToken = accessTokenCookie;
+	} else if (accessToken || refreshToken) {
+		clearAuthCookies(event.cookies);
 	}
 
 	const isPathProtected = !unprotectedRoutes.includes(event.url.pathname);
 	if (isPathProtected && !event.locals.jwtToken) {
-		redirect(
-			302,
-			`/login?redirect-to${event.url.pathname === '/login' ? '/home' : event.url.pathname}`
-		);
+		redirect(302, getLoginRedirect(event.url.pathname));
 	}
 
 	// sveltekit doesn't preload fonts by default

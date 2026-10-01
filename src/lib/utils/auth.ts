@@ -1,4 +1,6 @@
-import type { RequestEvent } from '@sveltejs/kit';
+import type { Cookies, RequestEvent } from '@sveltejs/kit';
+import { accessCookieName, refreshCookieName } from '#lib/api/auth.js';
+import { FRONTEND_DOMAIN } from '#lib/api/base.js';
 import type { JwtPayload } from '#lib/types/auth.js';
 import setCookie from 'set-cookie-parser';
 
@@ -26,13 +28,27 @@ export function getCookiesFromString(cookieString: string): Record<string, strin
 	return cookies;
 }
 
+export function clearAuthCookies(cookies: Cookies) {
+	const options = {
+		path: '/',
+		domain: import.meta.env.DEV ? 'localhost' : FRONTEND_DOMAIN
+	};
+
+	cookies.delete(accessCookieName, options);
+	cookies.delete(refreshCookieName, options);
+}
+
 // sveltekit does not set cookies sent from another domain automatically
 // https://github.com/sveltejs/kit/discussions/8564
 export function setAllCookiesFromHeader(event: RequestEvent, cookieString: string) {
 	const cookies = cookieString.split(',').map((cookie) => setCookie.parse(cookie));
+	const values: Record<string, string> = {};
 
 	for (const [c] of cookies) {
 		if (!c?.path) continue;
+
+		const name = c.name.trim();
+		const value = c.value.trim();
 
 		const options = {
 			path: c.path,
@@ -44,6 +60,9 @@ export function setAllCookiesFromHeader(event: RequestEvent, cookieString: strin
 			...(typeof c.secure === 'boolean' && { secure: c.secure })
 		} satisfies Parameters<RequestEvent['cookies']['set']>[2];
 
-		event.cookies.set(c.name.trim(), c.value.trim(), options);
+		event.cookies.set(name, value, options);
+		values[name] = value;
 	}
+
+	return values;
 }

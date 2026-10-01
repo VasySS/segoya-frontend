@@ -5,6 +5,21 @@ import { test } from './fixtures.js';
 import { LoginPage } from './pages.js';
 import { TEST_USERS } from './testData.js';
 
+function encodeTokenPart(value: object) {
+	// eslint-disable-next-line unicorn/prefer-uint8array-base64
+	return Buffer.from(JSON.stringify(value)).toString('base64url');
+}
+
+function createUnsignedToken(expiresAt: number) {
+	return `${encodeTokenPart({ alg: 'HS256', typ: 'JWT' })}.${encodeTokenPart({
+		userID: '00000000-0000-0000-0000-000000000000',
+		username: 'expired-session',
+		name: 'Expired session',
+		sessionID: '00000000-0000-0000-0000-000000000000',
+		exp: expiresAt
+	})}.invalid-signature`;
+}
+
 test.describe('Authentication', () => {
 	// eslint-disable-next-line playwright/expect-expect
 	test('login form elements', { tag: '@smoke' }, async ({ page }) => {
@@ -44,6 +59,43 @@ test.describe('Authentication', () => {
 
 		// Page should still have login form (not redirected)
 		await expect(page.getByRole('textbox', { name: m.loginUsername() })).toBeVisible();
+	});
+
+	test('rejected refresh token redirects once and clears auth cookies', async ({ page }) => {
+		const now = Math.floor(Date.now() / 1000);
+
+		await page.context().addCookies([
+			{
+				name: 'accessToken',
+				value: createUnsignedToken(now - 60),
+				domain: 'localhost',
+				path: '/',
+				httpOnly: true,
+				secure: true,
+				sameSite: 'Lax'
+			},
+			{
+				name: 'refreshToken',
+				value: createUnsignedToken(now + 3600),
+				domain: 'localhost',
+				path: '/',
+				httpOnly: true,
+				secure: true,
+				sameSite: 'Lax'
+			}
+		]);
+
+		await page.goto('/profile');
+
+		await expect(page).toHaveURL((url) => {
+			return url.pathname === '/login' && url.searchParams.get('redirect-to') === '/profile';
+		});
+		await expect(page.getByRole('heading', { name: m.loginHeader() })).toBeVisible();
+
+		const cookies = await page.context().cookies();
+		const cookieNames = cookies.map((cookie) => cookie.name);
+		expect(cookieNames).not.toContain('accessToken');
+		expect(cookieNames).not.toContain('refreshToken');
 	});
 
 	test('register form elements', async ({ page }) => {
