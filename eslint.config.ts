@@ -29,7 +29,6 @@ export default defineConfig([
 		'src/paraglide',
 		'src/lib/api/openapi.ts',
 		'./eslint.config.ts',
-		'./svelte.config.js',
 		'./playwright.config.ts',
 		'./vite.config.ts',
 		'./vitest.config.ts',
@@ -101,6 +100,10 @@ export default defineConfig([
 			'@typescript-eslint/no-unsafe-member-access': 'off',
 			'@typescript-eslint/no-unsafe-assignment': 'off'
 		}
+	},
+	{
+		files: ['src/**/*.{ts,svelte}'],
+		rules: { '@typescript-eslint/no-deprecated': 'error' }
 	},
 	// SvelteKit compiles the service worker in its own Web Worker context and
 	// intentionally excludes it from the application TypeScript project.

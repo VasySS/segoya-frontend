@@ -11,9 +11,5 @@ export async function updateUserAvatar(jwt: string, formData: FormData): Promise
 		body: formData
 	});
 
-	if (!response.ok) {
-		throw new Error(await response.text());
-	}
-
 	return response;
 }

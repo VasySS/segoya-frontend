@@ -28,7 +28,16 @@
 	const form = superForm(avatarForm, {
 		dataType: 'json',
 		validators: zod4Client(avatarSchema),
-		multipleSubmits: 'prevent'
+		multipleSubmits: 'prevent',
+		onResult: ({ result }) => {
+			if (!(result.type === 'redirect' || result.type === 'success')) {
+				return;
+			}
+
+			avatarUploadOpen = false;
+			cropper?.destroy();
+			cropper = undefined;
+		}
 	});
 	const { enhance: avatarEnhance, delayed, form: formData } = form;
 
@@ -98,6 +107,7 @@
 </script>
 
 <form
+	aria-label="avatar-upload"
 	method="POST"
 	action="?/update_avatar"
 	enctype="multipart/form-data"

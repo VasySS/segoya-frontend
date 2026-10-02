@@ -2,7 +2,9 @@
 	import { fetchBackend } from '#lib/api/base.js';
 	import { formatDate } from '#lib/utils/temporal.js';
 	import { m } from '#paraglide/messages.js';
+	import { refreshAll } from '$app/navigation';
 	import { asset } from '$app/paths';
+	import { toast } from 'svelte-sonner';
 	import Button from '#components/shadcn/button/button.svelte';
 
 	interface Props {
@@ -12,9 +14,12 @@
 	let { oauthCreatedAt, jwtToken }: Props = $props();
 
 	async function handleDiscordRemove() {
-		await fetchBackend(jwtToken, 'delete', '/v1/auth/discord');
-
-		location.reload();
+		const response = await fetchBackend(jwtToken, 'delete', '/v1/auth/discord');
+		if (!response.success) {
+			toast.error(response.error.detail);
+			return;
+		}
+		await refreshAll();
 	}
 </script>
 

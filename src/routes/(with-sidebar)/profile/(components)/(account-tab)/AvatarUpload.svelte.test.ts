@@ -5,6 +5,7 @@ import Cropper from 'cropperjs';
 import { tick } from 'svelte';
 import { toast } from 'svelte-sonner';
 import { superValidate } from 'sveltekit-superforms';
+import * as superforms from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -187,6 +188,35 @@ describe('avatar upload component', () => {
 	});
 
 	describe('user interactions', () => {
+		it('closes the dialog after a successful result and keeps it open after failure', async () => {
+			expect.hasAssertions();
+
+			const spy = vi.spyOn(superforms, 'superForm');
+			const avatarForm = await createValidatedForm();
+			setupComponent(AvatarUpload, {
+				props: { avatarForm, avatarUploadOpen: true }
+			});
+			const onResult = spy.mock.calls[0]?.[1]?.onResult;
+			// eslint-disable-next-line vitest/no-conditional-in-test
+			if (!onResult) throw new Error('Missing enhanced avatar form callback');
+			const formElement = screen.getByRole<HTMLFormElement>('form', {
+				name: 'avatar-upload',
+				hidden: true
+			});
+			const event = { formElement, formEl: formElement, cancel: vi.fn<() => void>() };
+			await onResult({
+				...event,
+				result: { type: 'failure', status: 400, location: '/profile', data: { form: avatarForm } }
+			});
+
+			expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+			await onResult({ ...event, result: { type: 'redirect', status: 303, location: '/profile' } });
+			await waitFor(() => {
+				expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+			});
+		});
+
 		it('submits cropped avatar when save button is clicked', async () => {
 			expect.hasAssertions();
 

@@ -1,19 +1,7 @@
+import { VITE_BACKEND_BASE_URL as BACKEND_BASE_URL } from '$app/env/public';
 import { z, type ZodLiteral, type ZodNever, type ZodObject } from 'zod';
 
 import { BackendError, EndpointByMethod } from './openapi';
-
-export const FRONTEND_DOMAIN = import.meta.env.VITE_FRONTEND_DOMAIN;
-
-export const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
-export const BACKEND_BASE_WS_URL = import.meta.env.VITE_BACKEND_BASE_WS_URL;
-
-export const YANDEX_API_KEY = import.meta.env.VITE_YANDEX_PANO_API_KEY;
-export const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_PANO_API_KEY;
-export const SEZNAM_API_KEY = import.meta.env.VITE_SEZNAM_PANO_API_KEY;
-
-export const AVATARS_BASE_URL = import.meta.env.VITE_AVATARS_BASE_URL;
-export const STATIC_BASE_URL = import.meta.env.VITE_STATIC_BASE_URL;
-export const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 interface EndpointParameters {
 	body?: unknown;
@@ -54,8 +42,7 @@ function capitalizeHeaderName(name: string): string {
 }
 
 type BackendResult<T, H> =
-	| { success: true; data: T; headers: H }
-	| { success: false; error: BackendError };
+	{ success: true; data: T; headers: H } | { success: false; error: BackendError };
 
 // based of this file
 // https://github.com/nilshartmann/end-to-end-typesafety-spring-boot-typescript/blob/main/frontend/src/fetch-from-api.ts
@@ -100,7 +87,7 @@ export async function fetchBackend<
 
 	try {
 		const response = await fetch(url, {
-			method: method,
+			method: method.toUpperCase(),
 			headers: {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${jwt}`,
@@ -128,11 +115,16 @@ export async function fetchBackend<
 
 		const headersSchema = endpoint.responseHeaders?.shape[statusStr];
 		const headers = headersSchema
-			? headersSchema.parse(
-					Object.fromEntries(
+			? headersSchema.parse({
+					...Object.fromEntries(
 						response.headers.entries().map(([key, value]) => [capitalizeHeaderName(key), value])
-					)
-				)
+					),
+					// Headers.entries() yields separate Set-Cookie entries; Object.fromEntries
+					// would otherwise discard all but the last authentication cookie.
+					...(response.headers.has('set-cookie') && {
+						'Set-Cookie': response.headers.get('set-cookie')
+					})
+				})
 			: undefined;
 
 		// make sure response returned from server is valid according to schema
@@ -183,3 +175,15 @@ export async function fetchBackend<
 		throw error;
 	}
 }
+
+export {
+	VITE_FRONTEND_DOMAIN as FRONTEND_DOMAIN,
+	VITE_BACKEND_BASE_WS_URL as BACKEND_BASE_WS_URL,
+	VITE_YANDEX_PANO_API_KEY as YANDEX_API_KEY,
+	VITE_GOOGLE_PANO_API_KEY as GOOGLE_API_KEY,
+	VITE_SEZNAM_PANO_API_KEY as SEZNAM_API_KEY,
+	VITE_AVATARS_BASE_URL as AVATARS_BASE_URL,
+	VITE_STATIC_BASE_URL as STATIC_BASE_URL,
+	VITE_TURNSTILE_SITE_KEY as TURNSTILE_SITE_KEY,
+	VITE_BACKEND_BASE_URL as BACKEND_BASE_URL
+} from '$app/env/public';

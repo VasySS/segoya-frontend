@@ -16,14 +16,6 @@
 	let { data }: Props = $props();
 
 	let singleplayerGames = $state<SingleplayerGames>();
-	// svelte-ignore state_referenced_locally
-	const sessions = data.sessions;
-	// svelte-ignore state_referenced_locally
-	const connectedOAuth = data.connectedOAuth;
-	// svelte-ignore state_referenced_locally
-	const jwtPayload = data.jwtPayload;
-	// svelte-ignore state_referenced_locally
-	const jwtToken = data.jwtToken;
 </script>
 
 <svelte:head>
@@ -48,7 +40,7 @@
 		<Tabs.Trigger
 			value="statistics"
 			onclick={async () => {
-				const gamesResponse = await fetchBackend(jwtToken, 'get', '/v1/singleplayer', {
+				const gamesResponse = await fetchBackend(data.jwtToken, 'get', '/v1/singleplayer', {
 					query: {
 						page: 1,
 						'page-size': 10
@@ -79,10 +71,10 @@
 
 	<Tabs.Content value="security">
 		<SecurityTab
-			{connectedOAuth}
-			{jwtPayload}
+			connectedOAuth={data.connectedOAuth}
+			jwtPayload={data.jwtPayload}
 			jwtToken={data.jwtToken}
-			{sessions}
+			sessions={data.sessions}
 			apiKeys={data.apiKeys}
 		></SecurityTab>
 	</Tabs.Content>

@@ -1,5 +1,4 @@
 <script lang="ts">
-	// import { browser } from '$app/environment';
 	import { TURNSTILE_SITE_KEY } from '#lib/api/base.js';
 	import { m } from '#paraglide/messages.js';
 	import { resolve } from '$app/paths';

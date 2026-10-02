@@ -1,4 +1,4 @@
-import { error, redirect, type Actions } from '@sveltejs/kit';
+import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { accessCookieName, newDiscordOAuth, newYandexOAuth } from '#lib/api/auth.js';
 import { fetchBackend } from '#lib/api/base.js';
 import { getErrorFromResponse } from '#lib/api/errorHandling.js';
@@ -66,6 +66,7 @@ export const actions: Actions = {
 		if (!event.locals.jwtToken) return;
 
 		const form = await superValidate(event, zod4(formSchema));
+		if (!form.valid) return fail(400, { form });
 
 		const response = await fetchBackend(event.locals.jwtToken, 'patch', '/v1/users/me', {
 			body: {
@@ -77,13 +78,14 @@ export const actions: Actions = {
 			return setError(form, 'name', response.error.detail);
 		}
 
-		redirect(303, resolve('/(with-sidebar)/profile/refresh'));
+		redirect(303, resolve('/(with-sidebar)/profile'));
 	},
 
 	update_avatar: async (event) => {
 		if (!event.locals.jwtToken) return;
 
 		const form = await superValidate(event, zod4(avatarSchema));
+		if (!form.valid) return fail(400, { form });
 
 		const avatarBuffer = await form.data.userAvatar.arrayBuffer();
 		const fd = new FormData();
@@ -95,14 +97,14 @@ export const actions: Actions = {
 			return setError(form, 'userAvatar', err.detail);
 		}
 
-		redirect(303, resolve('/(with-sidebar)/profile/refresh'));
+		redirect(303, resolve('/(with-sidebar)/profile'));
 	},
 
 	add_yandex: async (event) => {
 		const cookieToken = event.cookies.get(accessCookieName);
 		if (!cookieToken) return;
 
-		let redirectURL = resolve('/(with-sidebar)/profile/refresh') as string;
+		let redirectURL = resolve('/(with-sidebar)/profile') as string;
 
 		try {
 			const response = await newYandexOAuth(cookieToken);
@@ -124,7 +126,7 @@ export const actions: Actions = {
 		const cookieToken = event.cookies.get(accessCookieName);
 		if (!cookieToken) return;
 
-		let redirectURL = resolve('/(with-sidebar)/profile/refresh') as string;
+		let redirectURL = resolve('/(with-sidebar)/profile') as string;
 
 		try {
 			const response = await newDiscordOAuth(cookieToken);

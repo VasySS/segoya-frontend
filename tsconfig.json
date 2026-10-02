@@ -13,16 +13,8 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
 		"erasableSyntaxOnly": true,
-		"types": [
-			"@testing-library/jest-dom",
-			"$app/types"
-		]
+		"types": ["@testing-library/jest-dom", "$app/types"]
 	},
-	"include": [
-		"src",
-		"tests"
-	],
-	"exclude": [
-		"src/service-worker"
-	]
+	"include": ["*.ts", "src", "tests"],
+	"exclude": ["src/service-worker"]
 }

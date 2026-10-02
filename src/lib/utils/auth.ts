@@ -2,6 +2,7 @@ import type { Cookies, RequestEvent } from '@sveltejs/kit';
 import { accessCookieName, refreshCookieName } from '#lib/api/auth.js';
 import { FRONTEND_DOMAIN } from '#lib/api/base.js';
 import type { JwtPayload } from '#lib/types/auth.js';
+import { dev } from '$app/env';
 import setCookie from 'set-cookie-parser';
 
 export const isTokenExpired = (jwt: string) => {
@@ -31,7 +32,7 @@ export function getCookiesFromString(cookieString: string): Record<string, strin
 export function clearAuthCookies(cookies: Cookies) {
 	const options = {
 		path: '/',
-		domain: import.meta.env.DEV ? 'localhost' : FRONTEND_DOMAIN
+		domain: dev ? 'localhost' : FRONTEND_DOMAIN
 	};
 
 	cookies.delete(accessCookieName, options);

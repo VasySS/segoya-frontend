@@ -8,6 +8,18 @@ import userEvent from '@testing-library/user-event';
 import type { Component } from 'svelte';
 import { vi } from 'vitest';
 
+vi.mock('$app/env/public', () => ({
+	VITE_FRONTEND_DOMAIN: 'localhost',
+	VITE_BACKEND_BASE_URL: 'http://localhost:4174',
+	VITE_BACKEND_BASE_WS_URL: 'ws://localhost:4174',
+	VITE_YANDEX_PANO_API_KEY: '',
+	VITE_GOOGLE_PANO_API_KEY: '',
+	VITE_SEZNAM_PANO_API_KEY: '',
+	VITE_AVATARS_BASE_URL: '',
+	VITE_STATIC_BASE_URL: '',
+	VITE_TURNSTILE_SITE_KEY: ''
+}));
+
 vi.mock('svelte-sonner', () => ({
 	toast: {
 		success: vi.fn(),
