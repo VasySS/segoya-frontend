@@ -56,7 +56,7 @@ export const directives = {
 		STATIC_BASE_URL,
 		// for minimap tiles
 		'https://*.tile.openstreetmap.org',
-		'https://*.basemaps.cartocdn.com',
+		'https://server.arcgisonline.com',
 		// for yandex panoramas
 		'data: https://*.maps.yandex.net',
 		'data: api-maps.yandex.ru',

@@ -11,7 +11,7 @@ export const defaultProvider: MinimapProvider = {
 export const minimapProviders: readonly MinimapProvider[] = [
 	defaultProvider,
 	{
-		label: 'CARTO',
-		value: 'carto'
+		label: 'ESRI',
+		value: 'esri'
 	}
 ];
