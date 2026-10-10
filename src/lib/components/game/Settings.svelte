@@ -15,12 +15,12 @@
 	import * as Tooltip from '#components/shadcn/tooltip/index.js';
 
 	interface Props {
-		settingsOpen?: boolean;
+		isSettingsOpen?: boolean;
 		// for refreshing map in-game without reloading
 		setTileProvider?: ((provider: string) => void) | undefined;
 	}
 
-	let { settingsOpen = $bindable(false), setTileProvider }: Props = $props();
+	let { isSettingsOpen = $bindable(false), setTileProvider }: Props = $props();
 
 	const userSettings = UserSettingsStore;
 
@@ -40,7 +40,7 @@
 A component, that allows user to change settings (stored in local storage)
 -->
 
-<Dialog.Root bind:open={settingsOpen}>
+<Dialog.Root bind:open={isSettingsOpen}>
 	<Dialog.Content class="space-y-1">
 		<Dialog.Header>
 			<Dialog.Title>{m.profileTabSettings()}</Dialog.Title>

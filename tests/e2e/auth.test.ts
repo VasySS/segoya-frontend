@@ -6,7 +6,6 @@ import { LoginPage } from './pages.js';
 import { TEST_USERS } from './testData.js';
 
 function encodeTokenPart(value: object) {
-	// eslint-disable-next-line unicorn/prefer-uint8array-base64
 	return Buffer.from(JSON.stringify(value)).toString('base64url');
 }
 
@@ -112,8 +111,8 @@ test.describe('Authentication', () => {
 		const loginPage = new LoginPage(page);
 		await loginPage.gotoRegister();
 
-		const createButton = page.getByRole('button', { name: m.registerCreate() });
-		await expect(createButton).toBeVisible({ timeout: 5000 });
+		const registrationButton = page.getByRole('button', { name: m.registerCreate() });
+		await expect(registrationButton).toBeVisible({ timeout: 5000 });
 
 		// Button should be disabled when fields are empty or validation fails
 		const usernameField = page.getByRole('textbox', { name: m.loginUsername() });

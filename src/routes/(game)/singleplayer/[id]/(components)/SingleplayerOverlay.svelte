@@ -9,13 +9,13 @@
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { m } from '#paraglide/messages.js';
 	import { page } from '$app/state';
+	import { toast } from 'svelte-sonner';
 	import BaseOverlay from '#components/game/BaseOverlay.svelte';
 	import RoundAnimation from '#components/game/ScoreDistanceAnimated.svelte';
 	import Timer from '#components/game/Timer.svelte';
 	import Minimap from '#components/minimap/Minimap.svelte';
 	import Button from '#components/shadcn/button/button.svelte';
 	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
-	import { toast } from 'svelte-sonner';
 
 	let minimap = $state<Minimap>();
 	let roundResult = $state<EndSingleplayerRoundResponse>();
@@ -82,10 +82,12 @@
 			path: { id: game.id }
 		});
 
-		if (!endGameResponse.success) {
-			toast.error(endGameResponse.error.detail);
+		if (endGameResponse.success) {
 			return;
 		}
+
+		toast.error(endGameResponse.error.detail);
+		return;
 	}
 
 	async function showResults() {

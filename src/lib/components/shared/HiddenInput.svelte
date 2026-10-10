@@ -19,14 +19,14 @@ An input field component, with ability to show or hide the sensitive data.
 	// eslint-disable-next-line @typescript-eslint/no-useless-default-assignment
 	let { id, inputValue = $bindable(), placeholder, className, formProps }: Props = $props();
 
-	let showInputValue = $state(false);
+	let isInputValueVisible = $state(false);
 </script>
 
 <div class={cn('relative', className)}>
 	<Input
 		{id}
 		bind:value={inputValue}
-		type={showInputValue ? 'text' : 'password'}
+		type={isInputValueVisible ? 'text' : 'password'}
 		autocapitalize="none"
 		autocorrect="off"
 		autocomplete="new-password"
@@ -38,9 +38,9 @@ An input field component, with ability to show or hide the sensitive data.
 	<Button
 		variant="ghost"
 		class="text-foreground bg-accent/30 absolute top-0 right-0 mr-1 h-full rounded-4xl px-3 py-2"
-		onclick={() => (showInputValue = !showInputValue)}
+		onclick={() => (isInputValueVisible = !isInputValueVisible)}
 	>
-		{#if showInputValue}
+		{#if isInputValueVisible}
 			<EyeIcon />
 		{:else}
 			<EyeOffIcon />

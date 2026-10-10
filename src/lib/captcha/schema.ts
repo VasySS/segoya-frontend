@@ -1,10 +1,10 @@
 import { m } from '#paraglide/messages.js';
 import { z } from 'zod';
 
-import { captchaEnabled } from './config.js';
+import { isCaptchaEnabled } from './config.js';
 
 export const captchaTokenSchema = z
 	.string()
-	.refine((token) => !captchaEnabled || token.trim().length > 0, {
+	.refine((token) => !isCaptchaEnabled || token.trim().length > 0, {
 		error: () => m.captchaRequired()
 	});

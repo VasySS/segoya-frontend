@@ -18,4 +18,4 @@ export const captchaConfig = {
 	siteKey: siteKeys[provider]
 };
 
-export const captchaEnabled = captchaConfig.siteKey.length > 0;
+export const isCaptchaEnabled = captchaConfig.siteKey.length > 0;

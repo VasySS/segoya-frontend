@@ -25,10 +25,10 @@ export const leafletLayers: Layers = {
 };
 
 /**
- * Sets the tile layer for the map based on the provided or stored tile provider.
- * @param map The Leaflet map instance.
- * @param tileProvider Optional specific tile provider to use, OSM by default.
- */
+Sets the tile layer for the map based on the provided or stored tile provider.
+@param map The Leaflet map instance.
+@param tileProvider Optional specific tile provider to use, OSM by default.
+*/
 export function setTileLayer(map: L.Map, tileProvider: string) {
 	map.eachLayer(function (layer) {
 		map.removeLayer(layer);

@@ -21,7 +21,7 @@
 
 	const timeNow = Temporal.Now.instant();
 	const timeStart = Temporal.Instant.from(round.startedAt);
-	let showTimer = $state(Temporal.Instant.compare(timeStart, timeNow) > 0);
+	let shouldShowTimer = $state(Temporal.Instant.compare(timeStart, timeNow) > 0);
 
 	export function returnToStart() {
 		if (googleStreetView) {
@@ -59,13 +59,13 @@
 {/if}
 
 <!-- a transparent black overlay with timer -->
-{#if showTimer}
+{#if shouldShowTimer}
 	<div class="fixed inset-0 z-50 flex flex-col items-center justify-center space-y-3 bg-black/90">
 		<p>{`${m.overlayRound()} ${round.roundNum.toString()} ${m.of()} ${game.rounds.toString()}`}</p>
 		<Timer
 			startTimestamp={timeNow.toString()}
 			duration={timeStart.since(timeNow).total('seconds')}
-			timerEndCallback={() => (showTimer = false)}
+			timerEndCallback={() => (shouldShowTimer = false)}
 		/>
 	</div>
 {/if}
@@ -86,7 +86,7 @@
 		bind:this={yandexStreetView}
 		updateCompass={compass?.updateCompass}
 	/>
-{:else if game.provider === 'seznam'}
+{:else}
 	<SeznamStreet
 		bind:this={seznamStreetView}
 		updateCompass={compass?.updateCompass}

@@ -17,7 +17,6 @@ export const getTokenPayload = (jwt: string) => {
 	const jwtPayload = jwt.split('.', 2)[1];
 	if (!jwtPayload) return;
 
-	// eslint-disable-next-line unicorn/prefer-uint8array-base64
 	return JSON.parse(atob(jwtPayload)) as JwtPayload;
 };
 

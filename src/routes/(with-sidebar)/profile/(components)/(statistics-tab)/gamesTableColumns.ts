@@ -24,11 +24,7 @@ export const columns = columnHelper.columns([
 		header: m.strong_wild_iguana_sway(),
 		cell: ({ row }) => {
 			const seconds = row.original.timerSeconds;
-			if (seconds === 0) {
-				return '-';
-			}
-
-			return seconds;
+			return seconds === 0 ? '-' : seconds;
 		}
 	},
 	{
@@ -58,11 +54,7 @@ export const columns = columnHelper.columns([
 				};
 			});
 
-			if (!isFinished) {
-				return renderSnippet(continueButtonSnippet);
-			}
-
-			return '';
+			return isFinished ? '' : renderSnippet(continueButtonSnippet);
 		}
 	}
 ]);

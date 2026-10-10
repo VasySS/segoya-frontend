@@ -1,34 +1,34 @@
 <script lang="ts">
-	import { asset } from '$app/paths';
 	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
+	import { asset } from '$app/paths';
 	import { onDestroy, onMount } from 'svelte';
 
 	interface Props {
 		/**
-		 * Time, from which countdown will start
-		 */
+		Time, from which countdown will start
+		*/
 		startTimestamp: string;
 		/**
-		 * Countdown seconds
-		 */
+		Countdown seconds
+		*/
 		duration: number;
 		/**
-		 * A callback that fires when time is up
-		 */
+		A callback that fires when time is up
+		*/
 		timerEndCallback?: () => void;
 		/**
-		 * Custom text to show besides the time
-		 */
+		Custom text to show besides the time
+		*/
 		timerText?: string;
 		/**
-		 * Start playing ticking sound 5 seconds before the end of a timer
-		 */
+		Start playing ticking sound 5 seconds before the end of a timer
+		*/
 		playSounds?: boolean;
 		/**
-		 * If duration of a timer is N seconds and startTimestamp is in the future,
-		 * with showTimeAboveDuration set to true, the timer will not have extra seconds added
-		 * @default true
-		 */
+		If duration of a timer is N seconds and startTimestamp is in the future,
+		with showTimeAboveDuration set to true, the timer will not have extra seconds added
+		@default true
+		*/
 		showTimeAboveDuration?: boolean;
 	}
 
@@ -59,7 +59,7 @@
 
 	onMount(() => {
 		interval = setInterval(() => {
-			if (timerDurationSeconds <= 5 && playSounds && $userSettings.sounds.enabled) {
+			if (playSounds && timerDurationSeconds <= 5 && $userSettings.sounds.enabled) {
 				tickingSound.play().catch(() => {
 					// eslint-disable-next-line no-console
 					console.error('Failed to play ticking sound');
@@ -68,12 +68,14 @@
 
 			timerDurationSeconds = getTimerDuration();
 
-			if (timerDurationSeconds <= 0) {
-				tickingSound.pause();
-				clearInterval(interval);
-
-				timerEndCallback?.();
+			if (!(timerDurationSeconds <= 0)) {
+				return;
 			}
+
+			tickingSound.pause();
+			clearInterval(interval);
+
+			timerEndCallback?.();
 		}, 1000);
 	});
 

@@ -1,5 +1,5 @@
-import { asset } from '$app/paths';
 import { m } from '#paraglide/messages.js';
+import { asset } from '$app/paths';
 import L from 'leaflet';
 
 import { mapSizeToggle } from './minimapSize';
@@ -27,10 +27,10 @@ function createCustomButtonControl(options: {
 }
 
 /**
- * Adds a toggle button to the map to enlarge or shrink the map.
- * @param map The Leaflet map instance to attach to.
- * @param toggleFunction Function to call when the toggle button is clicked.
- */
+Adds a toggle button to the map to enlarge or shrink the map.
+@param map The Leaflet map instance to attach to.
+@param toggleFunction Function to call when the toggle button is clicked.
+*/
 export function addMapSizeToggleButton(map: L.Map) {
 	const button = createCustomButtonControl({
 		iconUrl: asset('icons/minimap-size-toggle.svg'),

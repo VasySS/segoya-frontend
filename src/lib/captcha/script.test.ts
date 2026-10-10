@@ -28,19 +28,19 @@ describe('captcha SDK loading', () => {
 	it('shares an in-flight SDK load and reuses the ready SDK on navigation', async () => {
 		expect.hasAssertions();
 
-		let ready = false;
+		let isReady = false;
 		const src = 'https://example.com/shared-captcha.js';
-		const first = loadCaptchaScript(src, 'segoyaSmartCaptchaOnLoad', () => ready);
-		const second = loadCaptchaScript(src, 'segoyaSmartCaptchaOnLoad', () => ready);
+		const first = loadCaptchaScript(src, 'segoyaSmartCaptchaOnLoad', () => isReady);
+		const second = loadCaptchaScript(src, 'segoyaSmartCaptchaOnLoad', () => isReady);
 		const element = script(src);
 
 		expect(second).toBe(first);
 		expect(scriptsFor(src)).toHaveLength(1);
 
-		ready = true;
+		isReady = true;
 		window.segoyaSmartCaptchaOnLoad?.();
 		await first;
-		await loadCaptchaScript(src, 'segoyaSmartCaptchaOnLoad', () => ready);
+		await loadCaptchaScript(src, 'segoyaSmartCaptchaOnLoad', () => isReady);
 
 		expect(scriptsFor(src)).toStrictEqual([element]);
 	});
@@ -48,16 +48,18 @@ describe('captcha SDK loading', () => {
 	it('waits for SDK initialization even after the script load event', async () => {
 		expect.hasAssertions();
 
-		let ready = false;
+		let isReady = false;
 		const src = 'https://example.com/deferred-captcha.js';
 		const resolved = vi.fn<() => void>();
-		const pending = loadCaptchaScript(src, 'segoyaSmartCaptchaOnLoad', () => ready).then(resolved);
+		const pending = loadCaptchaScript(src, 'segoyaSmartCaptchaOnLoad', () => isReady).then(
+			resolved
+		);
 		script(src).dispatchEvent(new Event('load'));
 		await Promise.resolve();
 
 		expect(resolved).not.toHaveBeenCalled();
 
-		ready = true;
+		isReady = true;
 		window.segoyaSmartCaptchaOnLoad?.();
 		await pending;
 
@@ -67,9 +69,9 @@ describe('captcha SDK loading', () => {
 	it('removes failed scripts and allows a new load on retry', async () => {
 		expect.hasAssertions();
 
-		let ready = false;
+		let isReady = false;
 		const src = 'https://example.com/retry-captcha.js';
-		const pending = loadCaptchaScript(src, 'segoyaTurnstileOnLoad', () => ready);
+		const pending = loadCaptchaScript(src, 'segoyaTurnstileOnLoad', () => isReady);
 		const rejection = pending.catch((error: unknown) => error);
 		const firstScript = script(src);
 		firstScript.dispatchEvent(new Event('error'));
@@ -77,11 +79,11 @@ describe('captcha SDK loading', () => {
 		await expect(rejection).resolves.toMatchObject({ message: 'CAPTCHA SDK failed to load' });
 		expect(firstScript.isConnected).toBe(false);
 
-		const retry = loadCaptchaScript(src, 'segoyaTurnstileOnLoad', () => ready);
+		const retry = loadCaptchaScript(src, 'segoyaTurnstileOnLoad', () => isReady);
 
 		expect(script(src)).not.toBe(firstScript);
 
-		ready = true;
+		isReady = true;
 		window.segoyaTurnstileOnLoad?.();
 		await retry;
 	});

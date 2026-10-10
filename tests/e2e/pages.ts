@@ -35,17 +35,17 @@ export class LoginPage {
 		const usernameField = this.page.getByRole('textbox', { name: m.loginUsername() });
 		const passwordField = this.page.getByRole('textbox', { name: m.happy_witty_squirrel_care() });
 		const confirmField = this.page.getByRole('textbox', { name: m.royal_house_mare_dash() });
-		const createButton = this.page.getByRole('button', { name: m.registerCreate() });
+		const registrationButton = this.page.getByRole('button', { name: m.registerCreate() });
 
 		await expect(usernameField).toBeVisible();
 		await expect(passwordField).toBeVisible();
 		await expect(confirmField).toBeVisible();
-		await expect(createButton).toBeVisible();
+		await expect(registrationButton).toBeVisible();
 
 		await usernameField.fill(username);
 		await passwordField.fill(password);
 		await confirmField.fill(confirmPassword);
-		await createButton.click();
+		await registrationButton.click();
 	}
 
 	async expectFormElementsVisible() {
@@ -77,13 +77,13 @@ export class LobbyPage {
 		await this.page.goto('/lobbies/new');
 	}
 
-	async createLobby(rounds: number, timerEnabled = false, timerSeconds = 0) {
+	async createLobby(rounds: number, isTimerEnabled = false, timerSeconds = 0) {
 		const roundsInput = this.page.getByRole('spinbutton', { name: m.totalRounds() });
 		await expect(roundsInput).toBeVisible();
 		await roundsInput.fill(rounds.toString());
 		await expect(roundsInput).toHaveValue(rounds.toString());
 
-		if (timerEnabled) {
+		if (isTimerEnabled) {
 			const timerSwitch = this.page.getByRole('switch', { name: m.such_spicy_cow_lend() });
 			await expect(timerSwitch).toBeVisible();
 			await timerSwitch.check();
@@ -115,9 +115,9 @@ export class LobbyPage {
 			await this.page.waitForTimeout(100);
 		}
 
-		const createButton = this.page.getByRole('button', { name: m.createLobby() });
-		await expect(createButton).toBeVisible();
-		await createButton.click();
+		const lobbyCreationButton = this.page.getByRole('button', { name: m.createLobby() });
+		await expect(lobbyCreationButton).toBeVisible();
+		await lobbyCreationButton.click();
 	}
 
 	async expectRedirectToLobby() {
@@ -148,9 +148,9 @@ export class LobbyPage {
 		});
 	}
 
-	async expectStartButton(visible: boolean) {
+	async expectStartButton(isVisible: boolean) {
 		const startButton = this.page.getByRole('button', { name: m.play() });
-		await expect(startButton)[visible ? 'toBeVisible' : 'toBeHidden']({ timeout: 10_000 });
+		await expect(startButton)[isVisible ? 'toBeVisible' : 'toBeHidden']({ timeout: 10_000 });
 	}
 
 	async expectPlayerCount(expected: string) {

@@ -19,13 +19,13 @@
 	import * as Sidebar from '#components/shadcn/sidebar/index.js';
 	import { useSidebar } from '#components/shadcn/sidebar/index.js';
 
-	let settingsOpen = $state(false);
+	let isSettingsOpen = $state(false);
 
 	const jwtPayload = $derived(() => page.data.jwtPayload as JwtPayload | undefined);
 	const sidebar = useSidebar();
 </script>
 
-<Settings bind:settingsOpen />
+<Settings bind:settingsOpen={isSettingsOpen} />
 
 <Sidebar.Root collapsible="icon">
 	<Sidebar.Header class="bg-primary pl-1.5">
@@ -165,7 +165,7 @@
 						</a>
 
 						<DropdownMenu.Item
-							onclick={() => (settingsOpen = !settingsOpen)}
+							onclick={() => (isSettingsOpen = !isSettingsOpen)}
 							class="flex cursor-pointer flex-row items-center space-x-3"
 						>
 							<SettingsIcon />

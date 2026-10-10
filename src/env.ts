@@ -3,7 +3,7 @@ import { defineEnvVars } from '@sveltejs/kit/env';
 const publicStaticString = {
 	public: true,
 	static: true,
-	schema: (value: string | undefined) => value ?? ''
+	schema: (value = '') => value
 };
 
 export const variables = defineEnvVars({

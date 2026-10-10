@@ -19,7 +19,7 @@
 	let { gameType, sendGuess, setTileProvider }: Props = $props();
 
 	let panorama = $state<PanoramaContainer>();
-	let settingsOpen = $state(false);
+	let isSettingsOpen = $state(false);
 
 	const gameContext = getGameContext();
 	const game = gameContext.game;
@@ -41,7 +41,7 @@
 
 <!-- a dialog, opened with the settings button in-game -->
 <Settings
-	bind:settingsOpen
+	bind:isSettingsOpen
 	{setTileProvider}
 />
 
@@ -77,7 +77,7 @@
 
 	<Button
 		class="border-foreground size-12 border p-1"
-		onclick={() => (settingsOpen = !settingsOpen)}
+		onclick={() => (isSettingsOpen = !isSettingsOpen)}
 		title={m.singleSettings()}
 	>
 		<SettingsIcon size={24} />

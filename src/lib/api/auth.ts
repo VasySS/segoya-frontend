@@ -10,7 +10,6 @@ export const YANDEX_OAUTH_LOGIN_URL = `${BACKEND_BASE_URL}/v1/${authBaseURL}/yan
 
 export async function newYandexOAuth(jwt: string): Promise<Response> {
 	const response = await fetch(`${BACKEND_BASE_URL}/v1/${authBaseURL}/yandex/new`, {
-		method: 'GET',
 		redirect: 'manual',
 		headers: { Authorization: `Bearer ${jwt}` }
 	});
@@ -29,7 +28,6 @@ export async function newYandexOAuth(jwt: string): Promise<Response> {
 
 export async function newDiscordOAuth(jwt: string): Promise<Response> {
 	const response = await fetch(`${BACKEND_BASE_URL}/v1/${authBaseURL}/discord/new`, {
-		method: 'GET',
 		redirect: 'manual',
 		headers: { Authorization: `Bearer ${jwt}` }
 	});

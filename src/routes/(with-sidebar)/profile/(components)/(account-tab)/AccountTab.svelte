@@ -22,7 +22,7 @@
 	}
 	let { userInfo, userForm, avatarForm }: Props = $props();
 
-	let avatarUploadOpen = $state(false);
+	let isAvatarUploadOpen = $state(false);
 
 	// svelte-ignore state_referenced_locally
 	const form = superForm(userForm, {
@@ -52,7 +52,7 @@
 			<Button
 				class="absolute top-44 left-28 rounded-full border"
 				variant="outline"
-				onclick={() => (avatarUploadOpen = !avatarUploadOpen)}
+				onclick={() => (isAvatarUploadOpen = !isAvatarUploadOpen)}
 				title={m.dark_smart_sheep_seek()}
 			>
 				<Upload size={24} />
@@ -105,7 +105,7 @@
 
 {#if browser}
 	<AvatarUpload
-		bind:avatarUploadOpen
+		bind:isAvatarUploadOpen
 		{avatarForm}
 	/>
 {/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { captchaEnabled } from '#lib/captcha/config.js';
+	import { isCaptchaEnabled } from '#lib/captcha/config.js';
 	import { m } from '#paraglide/messages.js';
 	import { resolve } from '$app/paths';
 	import { superForm } from 'sveltekit-superforms';
@@ -134,7 +134,7 @@
 	<ButtonLoading
 		type="submit"
 		{delayed}
-		disabled={captchaEnabled && !$formData.captcha}
+		disabled={isCaptchaEnabled && !$formData.captcha}
 	>
 		{m.registerCreate()}
 	</ButtonLoading>

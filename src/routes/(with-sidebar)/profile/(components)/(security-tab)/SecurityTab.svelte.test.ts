@@ -78,9 +78,9 @@ describe('tests for SecurityTab component', () => {
 		vi.mocked(fetchBackend).mockResolvedValue({ success: true, data: {}, headers: {} });
 
 		const { user } = setupComponent(SecurityTab, { props: baseProps });
-		const deleteButton = screen.getByTitle(m.super_each_bison_find());
+		const deletionButton = screen.getByTitle(m.super_each_bison_find());
 
-		await user.click(deleteButton);
+		await user.click(deletionButton);
 
 		expect(fetchBackend).toHaveBeenCalledWith('test-token', 'delete', '/v1/auth/sessions/{id}', {
 			path: { id: 'other' }

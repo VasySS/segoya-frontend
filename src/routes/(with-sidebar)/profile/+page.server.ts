@@ -104,7 +104,7 @@ export const actions: Actions = {
 		const cookieToken = event.cookies.get(accessCookieName);
 		if (!cookieToken) return;
 
-		let redirectURL = resolve('/(with-sidebar)/profile') as string;
+		let redirectURL: string;
 
 		try {
 			const response = await newYandexOAuth(cookieToken);
@@ -126,7 +126,7 @@ export const actions: Actions = {
 		const cookieToken = event.cookies.get(accessCookieName);
 		if (!cookieToken) return;
 
-		let redirectURL = resolve('/(with-sidebar)/profile') as string;
+		let redirectURL: string;
 
 		try {
 			const response = await newDiscordOAuth(cookieToken);

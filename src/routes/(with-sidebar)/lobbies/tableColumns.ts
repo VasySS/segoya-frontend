@@ -49,11 +49,9 @@ export const columns = columnHelper.columns([
 		accessorKey: 'timerSeconds',
 		header: m.strong_wild_iguana_sway(),
 		cell: ({ row }) => {
-			if (row.original.timerSeconds === 0) {
-				return m.disabled();
-			}
-
-			return formatTimerTime(row.original.timerSeconds);
+			return row.original.timerSeconds === 0
+				? m.disabled()
+				: formatTimerTime(row.original.timerSeconds);
 		}
 	}
 ]);

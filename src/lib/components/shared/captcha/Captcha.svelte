@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { captchaConfig, captchaEnabled } from '#lib/captcha/config.js';
+	import { captchaConfig, isCaptchaEnabled } from '#lib/captcha/config.js';
 	import { captchaAdapters } from '#lib/captcha/providers.js';
 	import type { CaptchaWidget } from '#lib/captcha/types.js';
 	import { m } from '#paraglide/messages.js';
@@ -7,19 +7,20 @@
 	import { onMount } from 'svelte';
 	import { Button } from '#components/shadcn/button/index.js';
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-useless-assignment -- Parent bindings observe writes to this prop.
 	let { token = $bindable('') }: { token?: string } = $props();
 	let container = $state<HTMLDivElement>();
-	let failed = $state(false);
-	let loading = $state(true);
+	let isFailed = $state(false);
+	let isLoading = $state(true);
 	let widget: CaptchaWidget | undefined;
-	let mounted = false;
+	let isMounted = false;
 	let attempt = 0;
 	const adapter = captchaAdapters[captchaConfig.provider];
 
 	function showError() {
 		token = '';
-		failed = true;
-		loading = false;
+		isFailed = true;
+		isLoading = false;
 	}
 
 	async function initialize() {
@@ -27,27 +28,27 @@
 		widget?.destroy();
 		widget = undefined;
 		token = '';
-		failed = false;
-		loading = true;
+		isFailed = false;
+		isLoading = true;
 
 		try {
 			await adapter.load();
-			if (!mounted || !container || currentAttempt !== attempt) return;
+			if (!isMounted || !container || currentAttempt !== attempt) return;
 			widget = adapter.render(container, {
 				siteKey: captchaConfig.siteKey,
 				locale: getLocale(),
 				onToken: (value) => {
-					if (!mounted || currentAttempt !== attempt) return;
+					if (!isMounted || currentAttempt !== attempt) return;
 					token = value;
-					failed = false;
+					isFailed = false;
 				},
 				onError: () => {
-					if (mounted && currentAttempt === attempt) showError();
+					if (isMounted && currentAttempt === attempt) showError();
 				}
 			});
-			loading = false;
+			isLoading = false;
 		} catch {
-			if (mounted && currentAttempt === attempt) showError();
+			if (isMounted && currentAttempt === attempt) showError();
 		}
 	}
 
@@ -61,25 +62,25 @@
 	}
 
 	onMount(() => {
-		mounted = true;
-		if (captchaEnabled) void initialize();
+		isMounted = true;
+		if (isCaptchaEnabled) void initialize();
 		return () => {
-			mounted = false;
+			isMounted = false;
 			attempt++;
 			widget?.destroy();
 		};
 	});
 </script>
 
-{#if captchaEnabled}
+{#if isCaptchaEnabled}
 	<div>
 		<div
 			bind:this={container}
 			style:min-height="{adapter.height}px"
 			aria-label={m.captchaLabel()}
-			aria-busy={loading}
+			aria-busy={isLoading}
 		></div>
-		{#if failed}
+		{#if isFailed}
 			<p
 				role="alert"
 				class="text-destructive text-sm"

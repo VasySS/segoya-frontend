@@ -24,7 +24,7 @@
 	// svelte-ignore state_referenced_locally
 	const jwtPayload = data.jwtPayload;
 
-	let settingsOpen = $state(false);
+	let isSettingsOpen = $state(false);
 	// svelte-ignore state_referenced_locally
 	let lobbyInfo = $state<Lobby>(data.lobby);
 
@@ -86,7 +86,7 @@
 			</Button>
 
 			{#if lobbyInfo.creatorID === jwtPayload.userID}
-				<Button onclick={() => (settingsOpen = !settingsOpen)}><SettingsIcon /></Button>
+				<Button onclick={() => (isSettingsOpen = !isSettingsOpen)}><SettingsIcon /></Button>
 			{/if}
 		</Card.Description>
 	</Card.Header>
@@ -102,7 +102,7 @@
 			<div class="flex-1 space-y-4 md:pl-6">
 				<LobbySettings
 					bind:this={lobbySettings}
-					bind:settingsOpen
+					bind:isSettingsOpen
 					{lobbyWS}
 					{lobbyInfo}
 				/>

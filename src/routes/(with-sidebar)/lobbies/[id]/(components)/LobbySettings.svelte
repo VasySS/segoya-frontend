@@ -18,11 +18,11 @@
 
 	interface Props {
 		lobbyWS: LobbyWebSocket | undefined;
-		settingsOpen: boolean;
+		isSettingsOpen: boolean;
 		lobbyInfo: Lobby;
 	}
 	// eslint-disable-next-line @typescript-eslint/no-useless-default-assignment
-	let { lobbyWS, settingsOpen = $bindable(false), lobbyInfo }: Props = $props();
+	let { lobbyWS, isSettingsOpen = $bindable(false), lobbyInfo }: Props = $props();
 
 	const form = superForm(page.data.form, {
 		validators: zod4Client(formSchema),
@@ -53,7 +53,7 @@
 		} as LobbySettingsContent;
 
 		lobbyWS?.sendSettingsMessage(settings);
-		settingsOpen = false;
+		isSettingsOpen = false;
 	}
 
 	export function updateSettings(settings: LobbySettingsContent) {
@@ -108,7 +108,7 @@
 	</div>
 </div>
 
-<Dialog.Root bind:open={settingsOpen}>
+<Dialog.Root bind:open={isSettingsOpen}>
 	<Dialog.Content class="space-y-1">
 		<Dialog.Header>
 			<Dialog.Title>

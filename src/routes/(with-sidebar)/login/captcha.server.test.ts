@@ -7,7 +7,7 @@ import { actions as loginActions } from './+page.server.js';
 const config = vi.hoisted(() => ({ enabled: true }));
 vi.mock(import('#lib/captcha/config.js'), () => ({
 	captchaConfig: { provider: 'turnstile' as const, siteKey: 'key' },
-	get captchaEnabled() {
+	get isCaptchaEnabled() {
 		return config.enabled;
 	}
 }));
@@ -18,14 +18,14 @@ function event(
 	login = 'test-user'
 ): Parameters<NonNullable<typeof loginActions.default_auth>>[0] {
 	const data = new FormData();
-	for (const [key, value] of Object.entries({
+	const fields = {
 		captcha: token,
 		login,
 		password: 'password',
 		passwordAgain: 'password',
 		name: 'Test User'
-	}))
-		data.set(key, value);
+	};
+	for (const [key, value] of Object.entries(fields)) data.set(key, value);
 	return {
 		request: new Request('https://example.com/login', {
 			method: 'POST',

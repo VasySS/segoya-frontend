@@ -17,9 +17,9 @@
 
 	interface Props {
 		avatarForm: SuperValidated<{ userAvatar: File }>;
-		avatarUploadOpen?: boolean;
+		isAvatarUploadOpen?: boolean;
 	}
-	let { avatarForm, avatarUploadOpen = $bindable(false) }: Props = $props();
+	let { avatarForm, isAvatarUploadOpen = $bindable(false) }: Props = $props();
 
 	let imgPreview = $state<HTMLImageElement>();
 	let cropper = $state<Cropper>();
@@ -34,7 +34,7 @@
 				return;
 			}
 
-			avatarUploadOpen = false;
+			isAvatarUploadOpen = false;
 			cropper?.destroy();
 			cropper = undefined;
 		}
@@ -119,7 +119,7 @@
 	>
 		<Form.Control>
 			{#snippet children({ props })}
-				<Dialog.Root bind:open={avatarUploadOpen}>
+				<Dialog.Root bind:open={isAvatarUploadOpen}>
 					<Dialog.Content class="space-y-1">
 						<Dialog.Header>
 							<Dialog.Title>{m.avatarUpload()}</Dialog.Title>

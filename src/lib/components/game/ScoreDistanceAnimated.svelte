@@ -8,8 +8,8 @@
 		score: number;
 		maxScore?: number;
 		/**
-		 * Distance in meters
-		 */
+		Distance in meters
+		*/
 		distance: number;
 	}
 	let { score, maxScore = 5000, distance }: Props = $props();

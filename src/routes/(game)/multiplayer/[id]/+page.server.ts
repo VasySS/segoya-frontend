@@ -1,12 +1,13 @@
 import { error, redirect } from '@sveltejs/kit';
-import { resolve } from '$app/paths';
 import { fetchBackend } from '#lib/api/base.js';
 import { m } from '#paraglide/messages.js';
+import { resolve } from '$app/paths';
 import { uuidv7 } from 'zod';
 
 import type { PageServerLoad } from './$types';
 
 // SSR disabled for leaflet and panoramas to work correctly
+// eslint-disable-next-line unicorn/consistent-boolean-name -- SvelteKit requires this export name.
 export const ssr = false;
 
 export const load: PageServerLoad = async (event) => {

@@ -12,12 +12,16 @@ import { getHSLColor } from './leafletUtils';
 import { createRealPosIcon, createUserPosIcon } from './minimapIcons';
 import { expandMap } from './minimapSize';
 
-/** Creates and adds the real position marker */
+/**
+Creates and adds the real position marker
+*/
 function addRealMarker(map: L.Map, location: L.LatLngExpression, roundNum: number): L.Marker {
 	return L.marker(location, { icon: createRealPosIcon(roundNum) }).addTo(map);
 }
 
-/** Creates and adds the user position marker */
+/**
+Creates and adds the user position marker
+*/
 function addUserMarker(
 	map: L.Map,
 	location: L.LatLngExpression,
@@ -27,12 +31,10 @@ function addUserMarker(
 	return L.marker(location, { icon: createUserPosIcon(avatarHash, username) }).addTo(map);
 }
 
-/** Fits map bounds to a group of markers, adding padding */
-function fitMapToBounds(
-	map: L.Map,
-	markers: L.Marker[],
-	padding: L.PointExpression = [50, 50]
-): void {
+/**
+Fits map bounds to a group of markers, adding padding
+*/
+function fitMapToBounds(map: L.Map, markers: L.Marker[]): void {
 	if (markers.length === 0) return;
 
 	if (markers[0]) {
@@ -42,10 +44,12 @@ function fitMapToBounds(
 	}
 
 	const featureGroup = L.featureGroup(markers);
-	map.fitBounds(featureGroup.getBounds(), { padding: padding });
+	map.fitBounds(featureGroup.getBounds(), { padding: [50, 50] });
 }
 
-/** Adds the dashed polyline between two points with an outline */
+/**
+Adds the dashed polyline between two points with an outline
+*/
 function addGuessPolyline(
 	map: L.Map,
 	realPos: { lat: number; lng: number },
@@ -124,13 +128,13 @@ export async function placeSingleplayerGameEndMarkers(
 			}
 		);
 
-		if (userLocation.lat !== 0 && userLocation.lng !== 0) {
-			const userMarker = addUserMarker(map, userLocation, userAvatarHash, username);
-			allMarkers.push(userMarker);
+		if (userLocation.lat === 0 || userLocation.lng === 0) continue;
 
-			const lineColor = getHSLColor(guess.roundNum, guesses.length);
-			addGuessPolyline(map, realLocation, userLocation, lineColor);
-		}
+		const userMarker = addUserMarker(map, userLocation, userAvatarHash, username);
+		allMarkers.push(userMarker);
+
+		const lineColor = getHSLColor(guess.roundNum, guesses.length);
+		addGuessPolyline(map, realLocation, userLocation, lineColor);
 	}
 
 	fitMapToBounds(map, allMarkers);

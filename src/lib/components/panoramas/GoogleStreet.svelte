@@ -8,8 +8,8 @@
 
 	interface Props {
 		/**
-		 * A callback to update compass direction on panorama's camera movement.
-		 */
+		A callback to update compass direction on panorama's camera movement.
+		*/
 		updateCompass: ((pov: number) => void) | undefined;
 	}
 	let { updateCompass }: Props = $props();

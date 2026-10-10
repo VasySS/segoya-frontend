@@ -8,8 +8,8 @@
 
 	interface Props {
 		/**
-		 * A callback to update compass direction on panorama's camera movement.
-		 */
+		A callback to update compass direction on panorama's camera movement.
+		*/
 		updateCompass: ((pov: number) => void) | undefined;
 	}
 	let { updateCompass }: Props = $props();
@@ -38,7 +38,7 @@
 				layer: panoLayer
 			})
 			.then(function (panoramas) {
-				if (!panoramas[0] || !panoramaDiv) return;
+				if (!panoramaDiv || !panoramas[0]) return;
 
 				yandexStreetview = new ymaps.panorama.Player(panoramaDiv, panoramas[0], {
 					suppressMapOpenBlock: true,

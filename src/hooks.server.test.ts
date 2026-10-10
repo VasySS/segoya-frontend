@@ -22,7 +22,6 @@ const user: Omit<JwtPayload, 'exp'> = {
 };
 
 function createToken(expiresAt: number) {
-	// eslint-disable-next-line unicorn/prefer-uint8array-base64
 	const payload = btoa(JSON.stringify({ ...user, exp: expiresAt }));
 	return `header.${payload}.signature`;
 }

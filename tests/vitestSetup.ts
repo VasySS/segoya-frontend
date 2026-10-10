@@ -75,8 +75,8 @@ Object.defineProperty(HTMLInputElement.prototype, 'files', {
 export function setupComponent(
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	component: Component<any>,
-	options = {} as SvelteComponentOptions<Component>,
-	renderOptions = {} as RenderOptions
+	options = {} as SvelteComponentOptions<typeof component>,
+	renderOptions: RenderOptions = {}
 ) {
 	return {
 		user: userEvent.setup(),

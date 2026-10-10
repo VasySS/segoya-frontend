@@ -48,17 +48,20 @@
 		socket.addEventListener('close', (event) => {
 			onClose?.(event);
 
-			if (
-				event.code !== wsStatus.NORMAL_CLOSE &&
-				event.code !== wsStatus.GOING_AWAY &&
-				event.code !== wsStatus.NO_STATUS
-			) {
-				toast.error(m.dry_teary_macaw_hurl(), {
-					description: `${m.heroic_aware_shrike_scoop()} ${reconnectAttempts.toString()}/${maxReconnectAttempts.toString()}`
-				});
-
-				scheduleReconnect();
+			const expectedCloseCodes: number[] = [
+				wsStatus.NORMAL_CLOSE,
+				wsStatus.GOING_AWAY,
+				wsStatus.NO_STATUS
+			];
+			if (expectedCloseCodes.includes(event.code)) {
+				return;
 			}
+
+			toast.error(m.dry_teary_macaw_hurl(), {
+				description: `${m.heroic_aware_shrike_scoop()} ${reconnectAttempts.toString()}/${maxReconnectAttempts.toString()}`
+			});
+
+			scheduleReconnect();
 		});
 
 		socket.addEventListener('error', () => {

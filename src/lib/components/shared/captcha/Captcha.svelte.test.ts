@@ -40,7 +40,7 @@ const mocks = vi.hoisted(
 
 vi.mock(import('#lib/captcha/config.js'), () => ({
 	captchaConfig: mocks.config,
-	get captchaEnabled() {
+	get isCaptchaEnabled() {
 		return mocks.config.siteKey.length > 0;
 	}
 }));
@@ -141,16 +141,11 @@ describe('shared CAPTCHA component', () => {
 	it('does not render a detached widget when navigation interrupts SDK loading', async () => {
 		expect.hasAssertions();
 
-		let ready: (() => void) | undefined;
-		mocks.load.mockImplementationOnce(
-			() =>
-				new Promise((resolve) => {
-					ready = resolve;
-				})
-		);
+		const { promise, resolve } = Promise.withResolvers<undefined>();
+		mocks.load.mockReturnValueOnce(promise);
 		const { unmount } = render(Captcha);
 		unmount();
-		ready?.();
+		resolve(undefined);
 		await Promise.resolve();
 
 		expect(mocks.render).not.toHaveBeenCalled();

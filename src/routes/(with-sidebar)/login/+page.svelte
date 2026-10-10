@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { captchaEnabled } from '#lib/captcha/config.js';
+	import { isCaptchaEnabled } from '#lib/captcha/config.js';
 	import { m } from '#paraglide/messages.js';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
@@ -101,7 +101,7 @@
 	<ButtonLoading
 		type="submit"
 		{delayed}
-		disabled={captchaEnabled && !$formData.captcha}
+		disabled={isCaptchaEnabled && !$formData.captcha}
 	>
 		{m.loginLogin()}
 	</ButtonLoading>

@@ -1,6 +1,6 @@
 import js from '@eslint/js';
 import vitestPlugin from '@vitest/eslint-plugin';
-import importPlugin from 'eslint-plugin-import';
+import { importX } from 'eslint-plugin-import-x';
 import playwright from 'eslint-plugin-playwright';
 import svelte from 'eslint-plugin-svelte';
 import testingLibrary from 'eslint-plugin-testing-library';
@@ -43,26 +43,32 @@ export default defineConfig([
 
 	...svelte.configs.recommended,
 
-	importPlugin.flatConfigs.recommended,
-	importPlugin.flatConfigs.typescript,
-	unicorn.configs.recommended,
-
-	// global language options
+	importX.flatConfigs.recommended,
 	{
+		...importX.flatConfigs.typescript,
 		settings: {
-			'import/parsers': {
-				'@typescript-eslint/parser': ['.js', '.mjs', '.cjs', '.ts', '.tsx'],
-				'svelte-eslint-parser': ['.svelte']
-			},
-			'import/resolver': {
+			...importX.flatConfigs.typescript.settings,
+			// Replace the preset's TypeScript resolver before ESLint merges settings.
+			'import-x/resolver': {
 				node: {
 					extensions: ['.js', '.ts', '.json']
 				},
 				vite: {
 					viteConfig
 				}
+			}
+		}
+	},
+	unicorn.configs.recommended,
+
+	// global language options
+	{
+		settings: {
+			'import-x/parsers': {
+				'@typescript-eslint/parser': ['.js', '.mjs', '.cjs', '.ts', '.tsx'],
+				'svelte-eslint-parser': ['.svelte']
 			},
-			'import/external-module-folders': ['node_modules', '.pnpm']
+			'import-x/external-module-folders': ['node_modules', '.pnpm']
 		},
 		languageOptions: {
 			ecmaVersion: 'latest',
@@ -99,6 +105,13 @@ export default defineConfig([
 			'@typescript-eslint/no-unsafe-call': 'off',
 			'@typescript-eslint/no-unsafe-member-access': 'off',
 			'@typescript-eslint/no-unsafe-assignment': 'off'
+		}
+	},
+	{
+		files: ['**/*.svelte'],
+		rules: {
+			// Instance-script variables belong to each component, not the module.
+			'unicorn/no-top-level-assignment-in-function': 'off'
 		}
 	},
 	{
@@ -153,13 +166,13 @@ export default defineConfig([
 				}
 			],
 
-			'unicorn/prevent-abbreviations': 'off',
+			'unicorn/name-replacements': 'off',
 			'unicorn/filename-case': 'off',
-			'import/default': 'off',
-			'import/namespace': 'off',
-			'import/no-named-as-default': 'off',
-			'import/no-named-as-default-member': 'off',
-			'import/no-unresolved': 'off',
+			'import-x/default': 'off',
+			'import-x/namespace': 'off',
+			'import-x/no-named-as-default': 'off',
+			'import-x/no-named-as-default-member': 'off',
+			'import-x/no-unresolved': 'off',
 
 			'unicorn/no-incorrect-template-string-interpolation': 'off',
 			'unicorn/prefer-await': 'off'
