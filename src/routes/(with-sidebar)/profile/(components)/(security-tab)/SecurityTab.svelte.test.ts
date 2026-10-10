@@ -98,7 +98,7 @@ describe('tests for SecurityTab component', () => {
 		setupComponent(SecurityTab, { props });
 
 		expect(screen.getByText(m.flaky_merry_dog_nurture(), { exact: true })).toBeInTheDocument();
-		expect(screen.getByText(/^Discord$/)).toBeInTheDocument();
+		// expect(screen.getByText(/^Discord$/)).toBeInTheDocument();
 		expect(screen.getByText(`(${formatDate('2024-01-01')})`)).toBeInTheDocument();
 	});
 

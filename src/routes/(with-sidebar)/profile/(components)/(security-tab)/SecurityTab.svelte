@@ -18,7 +18,7 @@
 	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
 	import HiddenInput from '#components/shared/HiddenInput.svelte';
 
-	import DiscordProfileButton from './DiscordButton.svelte';
+	// import DiscordProfileButton from './DiscordButton.svelte';
 	import YandexProfileButton from './YandexButton.svelte';
 
 	interface Props {
@@ -307,10 +307,10 @@
 								{jwtToken}
 							/>
 
-							<DiscordProfileButton
+							<!-- <DiscordProfileButton
 								oauthCreatedAt={connectedOAuth.find((x) => x.provider === 'discord')?.createdAt}
 								{jwtToken}
-							/>
+							/> -->
 						</div>
 					</Accordion.Content>
 				</Accordion.Item>
