@@ -116,7 +116,7 @@
 	<hr class="mx-3 py-1" />
 
 	<div class="space-y-2 self-center">
-		<DiscordOAuth />
+		<!-- <DiscordOAuth /> -->
 		<YandexOAuth />
 	</div>
 </form>
