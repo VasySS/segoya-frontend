@@ -10,7 +10,7 @@ A frontend for [Segoya](https://segoya.vasys.su) - panorama guessing game.
 
 ### Prerequisites
 
-- **Node.js** >= 22 & **pnpm** installed
+- **Node.js** 22.17+ within Node 22, or Node 24+ & **pnpm** installed
 
 ### Installation
 
@@ -32,6 +32,15 @@ pnpm run dev
 
 If OpenAPI schema on backend was changed, frontend should be synced first:
 
+The generation script reads `../segoya-backend/api/openapi/bundled.yaml`, so keep
+the backend repository beside this repository and rebuild its bundle after changing
+the schema. The generator's HTTP resolver blocks localhost URLs, so generation uses
+the local file and does not require the backend server to be running.
+
+Generation uses `typed-openapi@4.1.0` with structure-only Zod validation and inferred
+runtime types. The API helper consumes its parameter and response schema maps;
+avatar uploads continue to use `updateUserAvatar` with `FormData`.
+
 ```sh
 pnpm run api-gen
 ```
@@ -41,7 +50,7 @@ pnpm run api-gen
 ### Core Technologies
 
 - **Svelte 5 + SvelteKit + Vite**
-- UI: **Tailwind** and **shadcn** (**bits-ui** + **lucide-svelte**)
+- UI: **Tailwind** and **shadcn** (**bits-ui** + **@lucide/svelte**)
 - Testing: **Vitest, Playwright, testing-library**
 - API: types are generated from OpenAPI schema on backend using **typed-openapi** with **zod**
 - i18: **paraglide**

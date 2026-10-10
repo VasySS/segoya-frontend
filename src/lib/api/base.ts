@@ -1,5 +1,5 @@
 import { VITE_BACKEND_BASE_URL as BACKEND_BASE_URL } from '$app/env/public';
-import { z, type ZodLiteral, type ZodNever, type ZodObject } from 'zod';
+import { z, type ZodLiteral, type ZodNever } from 'zod';
 
 import { BackendError, EndpointByMethod } from './openapi';
 
@@ -50,28 +50,32 @@ export async function fetchBackend<
 	Method extends keyof EndpointByMethod,
 	Path extends keyof EndpointByMethod[Method],
 	Endpoint extends EndpointByMethod[Method][Path],
-	ResponseData = Endpoint extends { responses: infer R }
-		? Exclude<z.infer<R>[keyof z.infer<R>], BackendError>
+	ResponseData = Endpoint extends { responses: infer R extends Record<string, z.ZodType> }
+		? Exclude<z.infer<R[keyof R]>, BackendError>
 		: never,
-	ResponseHeaders = Endpoint extends { responseHeaders: infer RH }
-		? Exclude<z.infer<RH>[keyof z.infer<RH>], BackendError>
+	ResponseHeaders = Endpoint extends { responseHeaders: infer RH extends Record<string, z.ZodType> }
+		? Exclude<z.infer<RH[keyof RH]>, BackendError>
 		: never
 >(
 	jwt: string,
 	method: Method,
 	path: Path,
-	params?: z.infer<Endpoint extends { parameters: infer P } ? P : never>
+	params?: Endpoint extends { parameters: infer P extends Record<string, z.ZodType> }
+		? z.infer<z.ZodObject<P>>
+		: never
 ): Promise<BackendResult<ResponseData, ResponseHeaders>> {
 	const endpoint = EndpointByMethod[method][path] as {
 		method: ZodLiteral<Method>;
 		path: ZodLiteral;
-		parameters: ZodObject | ZodNever;
-		responses: z.ZodObject<Record<string, z.ZodType>>;
-		responseHeaders?: z.ZodObject<Record<string, z.ZodType>>;
+		parameters: Record<string, z.ZodType> | ZodNever;
+		responses: Record<string, z.ZodType>;
+		responseHeaders?: Record<string, z.ZodObject<Record<string, z.ZodType>>>;
 	};
 
 	// make sure given params match expectations from backend
-	const validatedParams = params ? endpoint.parameters.parse(params) : undefined;
+	const parametersSchema =
+		endpoint.parameters instanceof z.ZodNever ? endpoint.parameters : z.object(endpoint.parameters);
+	const validatedParams = params ? parametersSchema.parse(params) : undefined;
 	// replace variables and add URL search params
 	const url = resolveUrl(path.toString(), validatedParams);
 
@@ -97,7 +101,7 @@ export async function fetchBackend<
 		});
 
 		const statusStr = response.status.toString();
-		const responseSchema = endpoint.responses.shape[statusStr];
+		const responseSchema = endpoint.responses[statusStr];
 		if (!responseSchema) {
 			throw new Error(`Unexpected status code: ${String(response.status)}`);
 		}
@@ -113,9 +117,9 @@ export async function fetchBackend<
 			};
 		}
 
-		const headersSchema = endpoint.responseHeaders?.shape[statusStr];
+		const headersSchema = endpoint.responseHeaders?.[statusStr];
 		const headers = headersSchema
-			? headersSchema.parse({
+			? z.object(headersSchema.shape).parse({
 					...Object.fromEntries(
 						response.headers.entries().map(([key, value]) => [capitalizeHeaderName(key), value])
 					),
