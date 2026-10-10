@@ -41,8 +41,8 @@ A component, that allows user to change settings (stored in local storage)
 -->
 
 <Dialog.Root bind:open={isSettingsOpen}>
-	<!-- z-50 so on mobile it is on top of sidebar -->
-	<Dialog.Content class="z-50 space-y-1">
+	<!-- z-60 so on mobile it is on top of sidebar -->
+	<Dialog.Content class="z-60 space-y-1">
 		<Dialog.Header>
 			<Dialog.Title>{m.profileTabSettings()}</Dialog.Title>
 			<Dialog.Description />
