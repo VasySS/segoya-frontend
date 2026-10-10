@@ -1,6 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 
+import type { SmartCaptcha } from '#lib/captcha/types.js';
 import type { JwtPayload } from '#lib/types/auth.js';
 import type {
 	ICreatePanoFromPositionOpts,
@@ -25,8 +26,12 @@ declare global {
 			apiKey: string
 		}): Promise<{ exists: boolean; info: PanoramaMeta }>;
 	}
-	// turnstile captcha
-	let turnstile: typeof import('@types/cloudflare-turnstile');
+	interface Window {
+		turnstile?: Turnstile.Turnstile;
+		smartCaptcha?: SmartCaptcha;
+		segoyaTurnstileOnLoad?: () => void;
+		segoyaSmartCaptchaOnLoad?: () => void;
+	}
 	// version from package.json
 	let __VER__: string;
 

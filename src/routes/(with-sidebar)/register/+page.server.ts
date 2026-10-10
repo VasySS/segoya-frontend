@@ -1,6 +1,6 @@
-import { redirect, type Actions } from '@sveltejs/kit';
-import { resolve } from '$app/paths';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { fetchBackend } from '#lib/api/base.js';
+import { resolve } from '$app/paths';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
@@ -20,6 +20,7 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	default: async (event) => {
 		const form = await superValidate(event, zod4(formSchema));
+		if (!form.valid) return fail(400, { form });
 
 		const response = await fetchBackend('', 'post', '/v1/auth/register', {
 			header: {

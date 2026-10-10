@@ -1,9 +1,10 @@
+import { captchaTokenSchema } from '#lib/captcha/schema.js';
 import { m } from '#paraglide/messages.js';
 import { z } from 'zod';
 
 export const formSchema = z
 	.object({
-		captcha: z.string(),
+		captcha: captchaTokenSchema,
 		login: z
 			.string()
 			.min(3, { error: `${m.lengthMustBeGreaterThan()} 2` })

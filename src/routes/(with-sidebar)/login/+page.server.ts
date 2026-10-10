@@ -1,7 +1,7 @@
-import { redirect } from '@sveltejs/kit';
-import { resolve } from '$app/paths';
+import { fail, redirect } from '@sveltejs/kit';
 import { fetchBackend } from '#lib/api/base.js';
 import { setAllCookiesFromHeader } from '#lib/utils/auth.js';
+import { resolve } from '$app/paths';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
@@ -21,6 +21,7 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
 	default_auth: async (event) => {
 		const form = await superValidate(event, zod4(formSchema));
+		if (!form.valid) return fail(400, { form });
 
 		const loginResponse = await fetchBackend('', 'post', '/v1/auth/login', {
 			header: {

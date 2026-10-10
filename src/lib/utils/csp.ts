@@ -19,6 +19,10 @@ export const directives = {
 		"'self'",
 		BACKEND_BASE_URL,
 		BACKEND_BASE_WS_URL,
+		// CAPTCHA SDK and verification requests
+		'https://challenges.cloudflare.com',
+		'https://smartcaptcha.cloud.yandex.ru',
+		'https://smartcaptcha.yandexcloud.net',
 		// OAuth
 		'https://oauth.yandex.ru',
 		// for yandex panoramas
@@ -67,6 +71,9 @@ export const directives = {
 		"'self'",
 		// for cloudflare captcha
 		'https://challenges.cloudflare.com',
+		// for yandex captcha
+		'https://smartcaptcha.cloud.yandex.ru',
+		'https://smartcaptcha.yandexcloud.net',
 		// for yandex panoramas
 		'https://api-maps.yandex.ru',
 		'https://enterprise.api-maps.yandex.ru'
@@ -88,6 +95,9 @@ export const directives = {
 		"'unsafe-inline'",
 		// for cloudflare captcha
 		'https://challenges.cloudflare.com',
+		// for yandex captcha
+		'https://smartcaptcha.cloud.yandex.ru',
+		'https://smartcaptcha.yandexcloud.net',
 		// for yandex panoramas
 		'https://api-maps.yandex.ru',
 		'https://enterprise.api-maps.yandex.ru',
