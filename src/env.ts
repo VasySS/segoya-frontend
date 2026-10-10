@@ -15,8 +15,7 @@ export const variables = defineEnvVars({
 	VITE_SEZNAM_PANO_API_KEY: publicStaticString,
 	VITE_AVATARS_BASE_URL: publicStaticString,
 	VITE_STATIC_BASE_URL: publicStaticString,
-	VITE_TURNSTILE_SITE_KEY: publicStaticString,
-	VITE_YANDEX_CAPTCHA_SITE_KEY: publicStaticString,
+	VITE_CAPTCHA_SITE_KEY: publicStaticString,
 	VITE_CAPTCHA_PROVIDER: {
 		public: true,
 		static: true,

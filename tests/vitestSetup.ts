@@ -17,8 +17,7 @@ vi.mock('$app/env/public', () => ({
 	VITE_SEZNAM_PANO_API_KEY: '',
 	VITE_AVATARS_BASE_URL: '',
 	VITE_STATIC_BASE_URL: '',
-	VITE_TURNSTILE_SITE_KEY: '',
-	VITE_YANDEX_CAPTCHA_SITE_KEY: '',
+	VITE_CAPTCHA_SITE_KEY: '',
 	VITE_CAPTCHA_PROVIDER: 'turnstile'
 }));
 
