@@ -72,7 +72,7 @@ A component, that allows user to change settings (stored in local storage)
 						{minimapProviders.find((p) => p.value === $userSettings.minimapProvider)?.label}
 					</Select.Trigger>
 
-					<Select.Content>
+					<Select.Content class="z-70">
 						{#each minimapProviders as provider (provider.value)}
 							<Select.Item
 								value={provider.value}
@@ -90,7 +90,7 @@ A component, that allows user to change settings (stored in local storage)
 							<CircleQuestionMark />
 						</Tooltip.Trigger>
 
-						<Tooltip.Content>
+						<Tooltip.Content class="z-70">
 							<p>{m.red_small_goldfish_read()}:</p>
 
 							<div class="flex flex-row space-x-2">
@@ -136,7 +136,7 @@ A component, that allows user to change settings (stored in local storage)
 						<Tooltip.Trigger>
 							<CircleQuestionMark />
 						</Tooltip.Trigger>
-						<Tooltip.Content>
+						<Tooltip.Content class="z-70">
 							<p>{m.game_short_jackdaw_peek()}</p>
 						</Tooltip.Content>
 					</Tooltip.Root>
