@@ -25,7 +25,7 @@
 	const sidebar = useSidebar();
 </script>
 
-<Settings bind:settingsOpen={isSettingsOpen} />
+<Settings bind:isSettingsOpen />
 
 <Sidebar.Root collapsible="icon">
 	<Sidebar.Header class="bg-primary pl-1.5">

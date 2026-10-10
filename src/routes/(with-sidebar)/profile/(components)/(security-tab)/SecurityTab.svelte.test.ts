@@ -107,6 +107,7 @@ describe('tests for SecurityTab component', () => {
 			expect.hasAssertions();
 
 			const { user } = setupComponent(SecurityTab, { props: baseProps });
+			await user.click(screen.getByRole('button', { name: 'API' }));
 
 			const inputField = screen.getByPlaceholderText('aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee');
 			await user.type(inputField, 'test-key');
@@ -151,6 +152,7 @@ describe('tests for SecurityTab component', () => {
 				.mockResolvedValueOnce(Response.json({}, { status: 200 }))
 				.mockResolvedValueOnce(new Response(undefined, { status: 200 }));
 			const { user } = setupComponent(SecurityTab, { props: baseProps });
+			await user.click(screen.getByRole('button', { name: 'API' }));
 
 			const inputField = screen.getByPlaceholderText('aBcdEf...');
 			await user.type(inputField, 'test-key');
@@ -187,6 +189,7 @@ describe('tests for SecurityTab component', () => {
 				.mockResolvedValueOnce(new Response(undefined, { status: 200 }));
 
 			const { user } = setupComponent(SecurityTab, { props: baseProps });
+			await user.click(screen.getByRole('button', { name: 'API' }));
 
 			const inputField = screen.getByPlaceholderText('AIza...');
 			await user.type(inputField, 'test-key');

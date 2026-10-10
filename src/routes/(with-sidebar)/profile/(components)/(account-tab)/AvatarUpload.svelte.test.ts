@@ -84,14 +84,14 @@ describe('avatar upload component', () => {
 			expect(screen.queryByText(m.avatarUpload())).toBeNull();
 		});
 
-		it('renders form and dialog content when avatarUploadOpen is true', async () => {
+		it('renders form and dialog content when isAvatarUploadOpen is true', async () => {
 			expect.hasAssertions();
 
 			const avatarForm = await createValidatedForm();
 			setupComponent(AvatarUpload, {
 				props: {
 					avatarForm,
-					avatarUploadOpen: true
+					isAvatarUploadOpen: true
 				}
 			});
 
@@ -108,7 +108,7 @@ describe('avatar upload component', () => {
 			const { user } = setupComponent(AvatarUpload, {
 				props: {
 					avatarForm,
-					avatarUploadOpen: true
+					isAvatarUploadOpen: true
 				}
 			});
 
@@ -127,7 +127,7 @@ describe('avatar upload component', () => {
 			const { user } = setupComponent(AvatarUpload, {
 				props: {
 					avatarForm,
-					avatarUploadOpen: true
+					isAvatarUploadOpen: true
 				}
 			});
 
@@ -146,7 +146,7 @@ describe('avatar upload component', () => {
 			const { user } = setupComponent(AvatarUpload, {
 				props: {
 					avatarForm,
-					avatarUploadOpen: true
+					isAvatarUploadOpen: true
 				}
 			});
 
@@ -165,7 +165,7 @@ describe('avatar upload component', () => {
 			setupComponent(AvatarUpload, {
 				props: {
 					avatarForm,
-					avatarUploadOpen: true
+					isAvatarUploadOpen: true
 				}
 			});
 
@@ -194,7 +194,7 @@ describe('avatar upload component', () => {
 			const spy = vi.spyOn(superforms, 'superForm');
 			const avatarForm = await createValidatedForm();
 			setupComponent(AvatarUpload, {
-				props: { avatarForm, avatarUploadOpen: true }
+				props: { avatarForm, isAvatarUploadOpen: true }
 			});
 			const onResult = spy.mock.calls[0]?.[1]?.onResult;
 			// eslint-disable-next-line vitest/no-conditional-in-test
@@ -228,7 +228,7 @@ describe('avatar upload component', () => {
 			setupComponent(AvatarUpload, {
 				props: {
 					avatarForm,
-					avatarUploadOpen: true
+					isAvatarUploadOpen: true
 				}
 			});
 
@@ -276,7 +276,7 @@ describe('avatar upload component', () => {
 			setupComponent(AvatarUpload, {
 				props: {
 					avatarForm,
-					avatarUploadOpen: true
+					isAvatarUploadOpen: true
 				}
 			});
 
@@ -301,7 +301,7 @@ describe('avatar upload component', () => {
 			setupComponent(AvatarUpload, {
 				props: {
 					avatarForm,
-					avatarUploadOpen: true
+					isAvatarUploadOpen: true
 				}
 			});
 
@@ -355,7 +355,7 @@ describe('avatar upload component', () => {
 			const { user } = setupComponent(AvatarUpload, {
 				props: {
 					avatarForm,
-					avatarUploadOpen: true
+					isAvatarUploadOpen: true
 				}
 			});
 
@@ -376,7 +376,7 @@ describe('avatar upload component', () => {
 			const { user } = setupComponent(AvatarUpload, {
 				props: {
 					avatarForm,
-					avatarUploadOpen: true
+					isAvatarUploadOpen: true
 				}
 			});
 
