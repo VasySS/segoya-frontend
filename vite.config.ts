@@ -4,11 +4,12 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, loadEnv } from 'vite';
 
+import packageJson from './package.json' with { type: 'json' };
+
 export default defineConfig(({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 
 	return {
-		define: { __VER__: JSON.stringify(env.npm_package_version) },
 		plugins: [
 			paraglideVitePlugin({
 				project: './src/lib/i18n/project.inlang',
@@ -18,6 +19,7 @@ export default defineConfig(({ mode }) => {
 			tailwindcss(),
 			sveltekit({
 				adapter: adapter(),
+				version: { name: packageJson.version },
 				...(env.ORIGIN && {
 					paths: {
 						origin: env.ORIGIN

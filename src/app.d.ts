@@ -32,9 +32,6 @@ declare global {
 		segoyaTurnstileOnLoad?: () => void;
 		segoyaSmartCaptchaOnLoad?: () => void;
 	}
-	// version from package.json
-	let __VER__: string;
-
 	namespace App {
 		// interface Error {}
 		interface Locals {

@@ -81,7 +81,6 @@ export default defineConfig([
 			globals: {
 				...globals.browser,
 				...globals.node,
-				__VER__: 'readonly',
 				google: 'readonly',
 				ymaps: 'readonly',
 				Panorama: 'readonly',

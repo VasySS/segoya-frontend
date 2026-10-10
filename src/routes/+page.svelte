@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { STATIC_BASE_URL } from '#lib/api/base.js';
 	import { m } from '#paraglide/messages.js';
+	import { version } from '$app/env';
 	import { asset, resolve } from '$app/paths';
 	import * as Accordion from '#components/shadcn/accordion/index.js';
 	import Button from '#components/shadcn/button/button.svelte';
 	import CharactersStaggered from '#components/shared/animation/CharactersStaggered.svelte';
 
-	// Vite injects this
-	const appVersion = `v${__VER__}`;
+	const appVersion = `v${version}`;
 	const githubLink = 'https://github.com/VasySS';
 	const telegramLink = 'https://t.me/vasyss';
 </script>
