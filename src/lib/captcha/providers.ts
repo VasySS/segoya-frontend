@@ -1,8 +1,10 @@
 /* eslint-disable unicorn/prefer-global-this -- SDKs are optional properties of the browser window. */
+import { capAdapter } from './cap.js';
 import { loadCaptchaScript } from './script.js';
 import type { CaptchaAdapter, CaptchaProvider } from './types.js';
 
 export const captchaAdapters: Record<CaptchaProvider, CaptchaAdapter> = {
+	cap: capAdapter,
 	turnstile: {
 		height: 80,
 		load: () =>

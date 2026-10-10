@@ -18,6 +18,7 @@ vi.mock('$app/env/public', () => ({
 	VITE_AVATARS_BASE_URL: '',
 	VITE_STATIC_BASE_URL: '',
 	VITE_CAPTCHA_SITE_KEY: '',
+	VITE_CAPTCHA_VERIFY_URL: 'https://captcha.example.com/',
 	VITE_CAPTCHA_PROVIDER: 'turnstile'
 }));
 

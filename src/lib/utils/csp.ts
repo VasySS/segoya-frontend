@@ -1,9 +1,19 @@
 import {
+	VITE_CAPTCHA_PROVIDER,
+	VITE_CAPTCHA_SITE_KEY,
+	VITE_CAPTCHA_VERIFY_URL
+} from '$app/env/public';
+
+import {
 	AVATARS_BASE_URL,
 	BACKEND_BASE_URL,
 	BACKEND_BASE_WS_URL,
 	STATIC_BASE_URL
 } from '../api/base';
+
+const isCapEnabled = VITE_CAPTCHA_PROVIDER === 'cap' && VITE_CAPTCHA_SITE_KEY.length > 0;
+const capOrigins =
+	isCapEnabled && VITE_CAPTCHA_VERIFY_URL ? [new URL(VITE_CAPTCHA_VERIFY_URL).origin] : [];
 
 // https://yandex.ru/dev/jsapi-v2-1/doc/ru/v2-1/dg/concepts/load#using-csp
 
@@ -19,6 +29,7 @@ export const directives = {
 		"'self'",
 		BACKEND_BASE_URL,
 		BACKEND_BASE_WS_URL,
+		...capOrigins,
 		// CAPTCHA SDK and verification requests
 		'https://challenges.cloudflare.com',
 		'https://smartcaptcha.cloud.yandex.ru',
@@ -93,6 +104,10 @@ export const directives = {
 	'script-src': [
 		"'self'",
 		"'unsafe-inline'",
+		// Optional Cap decompression fallback is served by the configured instance.
+		...capOrigins,
+		// Cap's server-generated instrumentation uses eval() and Function(), in addition to WASM.
+		...(isCapEnabled ? ["'wasm-unsafe-eval'", "'unsafe-eval'"] : []),
 		// for cloudflare captcha
 		'https://challenges.cloudflare.com',
 		// for yandex captcha
@@ -110,7 +125,7 @@ export const directives = {
 		// for google panoramas
 		'https://maps.googleapis.com'
 	],
-	'worker-src': ["'self'"]
+	'worker-src': ["'self'", ...(isCapEnabled ? ['blob:'] : [])]
 } as const;
 
 export const csp = Object.entries(directives)

@@ -98,6 +98,9 @@ importers:
       bowser:
         specifier: ^2.14.1
         version: 2.14.1
+      cap-widget:
+        specifier: 0.1.58
+        version: 0.1.58
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1799,6 +1802,9 @@ packages:
 
   caniuse-lite@1.0.30001815:
     resolution: {integrity: sha512-uDybUEyfgbyJJ93J1vikTylBX31AkdVYeVPeffMQpf8XN7hSfr0oZOn4VFOIMNvtU5+rHvC5Udg2TgtJKHm23Q==}
+
+  cap-widget@0.1.58:
+    resolution: {integrity: sha512-7iS/Q++AaiVvWR8xvMSxRwGWY+fV1ZADJNwPzLk4P1gibCmCbS5G6MGOtoUjsj9OxI9+0nkewW6gRsOGDCOZZA==}
 
   chai@6.2.2:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
@@ -5108,6 +5114,8 @@ snapshots:
   caniuse-lite@1.0.30001810: {}
 
   caniuse-lite@1.0.30001815: {}
+
+  cap-widget@0.1.58: {}
 
   chai@6.2.2: {}
 

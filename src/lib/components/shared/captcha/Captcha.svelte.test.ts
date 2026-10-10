@@ -47,7 +47,8 @@ vi.mock(import('#lib/captcha/config.js'), () => ({
 vi.mock(import('#lib/captcha/providers.js'), () => ({
 	captchaAdapters: {
 		turnstile: { height: 80, load: mocks.load, render: mocks.render },
-		yandex: { height: 100, load: mocks.load, render: mocks.render }
+		yandex: { height: 100, load: mocks.load, render: mocks.render },
+		cap: { height: 80, load: mocks.load, render: mocks.render }
 	}
 }));
 
@@ -70,7 +71,7 @@ describe('shared CAPTCHA component', () => {
 		mocks.render.mockReturnValue({ reset: mocks.reset, destroy: mocks.destroy });
 	});
 
-	it.each(['turnstile', 'yandex'] as const)(
+	it.each(['turnstile', 'yandex', 'cap'] as const)(
 		'binds and clears %s tokens on expiry/error',
 		async (provider) => {
 			expect.hasAssertions();
@@ -138,20 +139,24 @@ describe('shared CAPTCHA component', () => {
 		expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 	});
 
-	it('does not render a detached widget when navigation interrupts SDK loading', async () => {
-		expect.hasAssertions();
+	it.each(['turnstile', 'yandex', 'cap'] as const)(
+		'does not render a detached %s widget when navigation interrupts SDK loading',
+		async (provider) => {
+			expect.hasAssertions();
 
-		const { promise, resolve } = Promise.withResolvers<undefined>();
-		mocks.load.mockReturnValueOnce(promise);
-		const { unmount } = render(Captcha);
-		unmount();
-		resolve(undefined);
-		await Promise.resolve();
+			const { promise, resolve } = Promise.withResolvers<undefined>();
+			mocks.config.provider = provider;
+			mocks.load.mockReturnValueOnce(promise);
+			const { unmount } = render(Captcha);
+			unmount();
+			resolve(undefined);
+			await Promise.resolve();
 
-		expect(mocks.render).not.toHaveBeenCalled();
-	});
+			expect(mocks.render).not.toHaveBeenCalled();
+		}
+	);
 
-	it('supports unconfigured development without requesting either SDK', () => {
+	it('supports unconfigured development without requesting a CAPTCHA SDK', () => {
 		expect.hasAssertions();
 
 		mocks.config.siteKey = '';

@@ -16,13 +16,34 @@ export const variables = defineEnvVars({
 	VITE_AVATARS_BASE_URL: publicStaticString,
 	VITE_STATIC_BASE_URL: publicStaticString,
 	VITE_CAPTCHA_SITE_KEY: publicStaticString,
+	VITE_CAPTCHA_VERIFY_URL: {
+		public: true,
+		static: true,
+		schema: (value = '') => {
+			if (value === '') return '';
+			const url = new URL(value);
+			if (
+				!['https:', 'http:'].includes(url.protocol) ||
+				url.username ||
+				url.password ||
+				url.search ||
+				url.hash
+			) {
+				throw new Error(
+					'VITE_CAPTCHA_VERIFY_URL must be an HTTP(S) instance URL without credentials, query, or fragment'
+				);
+			}
+			url.pathname = url.pathname.replace(/\/$/, '') + '/';
+			return url.href;
+		}
+	},
 	VITE_CAPTCHA_PROVIDER: {
 		public: true,
 		static: true,
-		schema: (value = 'turnstile') => {
-			if (value === '') return 'turnstile';
-			if (value !== 'turnstile' && value !== 'yandex') {
-				throw new Error('VITE_CAPTCHA_PROVIDER must be turnstile or yandex');
+		schema: (value = 'cap') => {
+			if (value === '') return 'cap';
+			if (value !== 'turnstile' && value !== 'yandex' && value !== 'cap') {
+				throw new Error('VITE_CAPTCHA_PROVIDER must be turnstile, yandex, or cap');
 			}
 			return value;
 		}

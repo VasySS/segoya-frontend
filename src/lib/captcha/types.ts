@@ -1,6 +1,6 @@
 /// <reference types="cloudflare-turnstile" />
 
-export type CaptchaProvider = 'turnstile' | 'yandex';
+export type CaptchaProvider = 'turnstile' | 'yandex' | 'cap';
 
 export interface CaptchaOptions {
 	siteKey: string;
