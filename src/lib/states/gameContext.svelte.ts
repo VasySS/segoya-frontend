@@ -31,14 +31,17 @@ class GameContext {
 	}
 
 	canSubmitGuess(): boolean {
+		// eslint-disable-next-line unicorn/prefer-ternary
 		if (this.userGuessed || this.guessPending || this.round.finished || this.game.finished) {
 			return false;
 		}
 
-		return Temporal.Instant.compare(
-			Temporal.Now.instant(),
-			Temporal.Instant.from(this.round.startedAt)
-		) >= 0;
+		return (
+			Temporal.Instant.compare(
+				Temporal.Now.instant(),
+				Temporal.Instant.from(this.round.startedAt)
+			) >= 0
+		);
 	}
 
 	recordGuess() {

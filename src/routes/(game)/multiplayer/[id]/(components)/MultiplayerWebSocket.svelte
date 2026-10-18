@@ -4,8 +4,8 @@
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { m } from '#paraglide/messages.js';
 	import { page } from '$app/state';
-	import WebSocketClient from '#components/shared/websocket/WebSocketClient.svelte';
 	import { toast } from 'svelte-sonner';
+	import WebSocketClient from '#components/shared/websocket/WebSocketClient.svelte';
 
 	import MultiplayerOverlay from './MultiplayerOverlay.svelte';
 	import MultiplayerUsers from './MultiplayerUsers.svelte';
@@ -96,20 +96,21 @@
 	export function sendGuess(coords: LatLng | null) {
 		if (!isAdmitted) return false;
 
-		const wsMsg = {
+		const wsMsg: UserGuessMessage = {
 			type: 'userGuess',
 			payload: {
 				guess: coords
 			}
-		} as UserGuessMessage;
+		};
 
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return ws?.sendMessage(wsMsg) ?? false;
 	}
 
 	export function sendEndRound() {
-		const wsMsg = {
+		const wsMsg: RoundEndMessage = {
 			type: 'endRound'
-		} as RoundEndMessage;
+		};
 
 		ws?.sendMessage(wsMsg);
 	}

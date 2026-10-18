@@ -20,12 +20,12 @@ interface GuessPresence {
 function shouldShowGuess(
 	coordinates: LatLng,
 	score: number,
-	presence?: boolean,
+	hasGuess?: boolean,
 	distance = 0
 ): boolean {
 	// Flat history cannot distinguish a missing guess from a zero-score (0,0) guess.
 	// Prefer known presence; otherwise show coordinates confirmed by score or distance.
-	return presence ?? (coordinates.lat !== 0 || coordinates.lng !== 0 || score > 0 || distance > 0);
+	return hasGuess ?? (coordinates.lat !== 0 || coordinates.lng !== 0 || score > 0 || distance > 0);
 }
 
 /**

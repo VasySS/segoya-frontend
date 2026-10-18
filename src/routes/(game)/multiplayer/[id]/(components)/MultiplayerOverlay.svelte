@@ -10,11 +10,11 @@
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { m } from '#paraglide/messages.js';
 	import { page } from '$app/state';
+	import { toast } from 'svelte-sonner';
 	import BaseOverlay from '#components/game/BaseOverlay.svelte';
 	import Timer from '#components/game/Timer.svelte';
 	import Minimap from '#components/minimap/Minimap.svelte';
 	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
-	import { toast } from 'svelte-sonner';
 
 	import MultiplayerUsers from './MultiplayerUsers.svelte';
 	import MultiplayerWebSocket from './MultiplayerWebSocket.svelte';
@@ -49,10 +49,12 @@
 		}
 
 		gameContext.guessPending = true;
-		if (!gameWS?.sendGuess(gameContext.userGuess)) {
-			gameContext.guessPending = false;
-			toast.error(m.dry_teary_macaw_hurl());
+		if (gameWS?.sendGuess(gameContext.userGuess)) {
+			return;
 		}
+
+		gameContext.guessPending = false;
+		toast.error(m.dry_teary_macaw_hurl());
 	}
 
 	async function nextRound() {

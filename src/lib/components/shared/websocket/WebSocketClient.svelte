@@ -81,6 +81,7 @@
 		}, delay);
 	}
 
+	// eslint-disable-next-line unicorn/consistent-boolean-name
 	export function sendMessage(message: WebSocketOutputMessage): boolean {
 		if (socket?.readyState !== WebSocket.OPEN) return false;
 
