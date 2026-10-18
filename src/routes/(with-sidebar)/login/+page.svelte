@@ -11,7 +11,7 @@
 	import Captcha from '#components/shared/captcha/Captcha.svelte';
 	import PasswordInput from '#components/shared/HiddenInput.svelte';
 
-	import DiscordOAuth from './(components)/DiscordButton.svelte';
+	// import DiscordOAuth from './(components)/DiscordButton.svelte';
 	import YandexOAuth from './(components)/YandexButton.svelte';
 	import { formSchema } from './schema';
 

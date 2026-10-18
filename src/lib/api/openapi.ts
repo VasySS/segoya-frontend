@@ -93,7 +93,10 @@ export const NewLobby = z
     maxPlayers: z.number().int().min(2).max(10),
     rounds: z.number().int().min(1).max(10),
     provider: Provider,
-    timerSeconds: z.number().int().min(10).max(600).optional(),
+    timerSeconds: z
+      .unknown()
+      .refine((data) => !z.unknown().safeParse(data).success, { message: "not" })
+      .optional(),
     movementAllowed: z.boolean(),
     private: z.boolean(),
   })
@@ -124,7 +127,10 @@ export type NewSingleplayerGameRequest = z.infer<typeof NewSingleplayerGameReque
 export const NewSingleplayerGameRequest = z
   .object({
     rounds: z.number().int().min(1).max(10),
-    timerSeconds: z.number().int().min(10).max(600).optional(),
+    timerSeconds: z
+      .unknown()
+      .refine((data) => !z.unknown().safeParse(data).success, { message: "not" })
+      .optional(),
     movementAllowed: z.boolean(),
     provider: Provider,
   })
@@ -152,7 +158,7 @@ export const LatLng = z
   .catchall(z.unknown());
 
 export type SingleplayerRoundGuess = z.infer<typeof SingleplayerRoundGuess>;
-export const SingleplayerRoundGuess = z.object({ guess: LatLng }).catchall(z.unknown());
+export const SingleplayerRoundGuess = z.object({ guess: LatLng.nullable() }).catchall(z.unknown());
 
 export type EndSingleplayerRoundResponse = z.infer<typeof EndSingleplayerRoundResponse>;
 export const EndSingleplayerRoundResponse = z

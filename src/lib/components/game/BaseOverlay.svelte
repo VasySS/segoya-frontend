@@ -26,7 +26,7 @@
 	const round = gameContext.round;
 
 	async function handleSpacePress(e: KeyboardEvent) {
-		if (e.code !== 'Space') {
+		if (e.code !== 'Space' || e.repeat) {
 			return;
 		}
 
@@ -116,6 +116,7 @@
 	<ButtonLoading
 		class="fixed right-4 bottom-8 z-10 h-12 w-52 sm:w-72 sm:text-xl"
 		funcWithLoading={sendGuess}
+		disabled={gameContext.guessPending}
 	>
 		{m.overlayGuess()}
 	</ButtonLoading>

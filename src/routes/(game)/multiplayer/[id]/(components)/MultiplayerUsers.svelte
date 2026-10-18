@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { MultiplayerGuess, MultiplayerRound, UserPublicProfile } from '#lib/api/openapi.js';
+	import type { MultiplayerGuess, MultiplayerRound } from '#lib/api/openapi.js';
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
 	import type { MultiplayerGameInfo } from '#lib/types/game.js';
@@ -67,15 +67,6 @@
 		if (round.guessesCount === game.players) {
 			gameWS?.sendEndRound();
 		}
-	};
-
-	export const handleSendGuess = (user: UserPublicProfile) => {
-		game.usersInfo = game.usersInfo.map((u) => {
-			if (u.username === user.username) {
-				u.guessed = true;
-			}
-			return u;
-		});
 	};
 
 	export const handleEndRound = (guesses: MultiplayerGuess[]) => {

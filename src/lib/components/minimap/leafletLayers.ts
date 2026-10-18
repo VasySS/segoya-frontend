@@ -20,8 +20,6 @@ export const leafletLayers: Layers = {
 			noWrap: true,
 			attribution:
 				'Tiles &copy; <a href="https://www.esri.com/">Esri</a> &mdash; ' +
-				'Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, ' +
-				'Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, ' +
 				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
 				'and the GIS User Community',
 			minZoom: 0,

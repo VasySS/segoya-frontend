@@ -75,7 +75,7 @@
 	}
 
 	function placeUserMarker(e: { latlng: { lat: number; lng: number } }) {
-		if (gameContext.userGuessed) return;
+		if (gameContext.userGuessed || gameContext.guessPending) return;
 		if (userMarker) userMarker.remove();
 
 		const { lat, lng } = e.latlng;
@@ -99,7 +99,6 @@
 	}
 
 	export async function showSingleplayerRoundEndMarkers(roundInfo: SingleplayerRound) {
-		userMarker ??= L.marker([0, 0]);
 		gameContext.userGuessed = true;
 
 		await placeSingleplayerRoundEndMarkers(map, roundInfo, userMarker);
@@ -109,7 +108,24 @@
 		gameContext.userGuessed = true;
 
 		resetMap();
-		await placeSingleplayerGameEndMarkers(map, user.username, user.avatarHash, guesses);
+		await placeSingleplayerGameEndMarkers(
+			map,
+			user.username,
+			user.avatarHash,
+			guesses.map((guess) => ({
+				...guess,
+				hasGuess: gameContext.guessPresence.get(guess.roundNum)
+			}))
+		);
+	}
+
+	function withLocalGuessPresence(guesses: MultiplayerGuess[]) {
+		return guesses.map((guess) => ({
+			...guess,
+			hasGuess: guess.username === user.username
+				? gameContext.guessPresence.get(guess.roundNum)
+				: undefined
+		}));
 	}
 
 	export async function showMultiplayerRoundEndMarkers(
@@ -119,14 +135,18 @@
 		gameContext.userGuessed = true;
 
 		resetMap();
-		await placeMultiplayerRoundEndMarkers(map, guesses, roundInfo);
+		await placeMultiplayerRoundEndMarkers(
+			map,
+			withLocalGuessPresence(guesses),
+			roundInfo
+		);
 	}
 
 	export async function showMultiplayerGameEndMarkers(guesses: MultiplayerGuess[]) {
 		gameContext.userGuessed = true;
 
 		resetMap();
-		await placeMultiplayerGameEndMarkers(map, guesses);
+		await placeMultiplayerGameEndMarkers(map, withLocalGuessPresence(guesses));
 	}
 </script>
 

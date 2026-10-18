@@ -44,13 +44,15 @@
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	async function sendGuess() {
-		if (gameContext.userGuessed || round.finished || game.finished) {
+		if (!gameContext.canSubmitGuess()) {
 			return;
 		}
 
-		gameContext.userGuessed = true;
-		gameWS?.sendGuess(gameContext.userGuess);
-		gameUsers?.handleSendGuess(user);
+		gameContext.guessPending = true;
+		if (!gameWS?.sendGuess(gameContext.userGuess)) {
+			gameContext.guessPending = false;
+			toast.error(m.dry_teary_macaw_hurl());
+		}
 	}
 
 	async function nextRound() {
@@ -85,6 +87,7 @@
 
 	// called from MultiplayerWebSocket on message from backend
 	export const endRound = async (guesses: MultiplayerGuess[]) => {
+		gameContext.guessPending = false;
 		round.finished = true;
 
 		if (round.roundNum === game.rounds) {

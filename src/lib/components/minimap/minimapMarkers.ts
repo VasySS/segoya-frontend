@@ -1,4 +1,5 @@
 import type {
+	LatLng,
 	MultiplayerGuess,
 	MultiplayerRound,
 	SingleplayerGuess,
@@ -11,6 +12,21 @@ import L from 'leaflet';
 import { getHSLColor } from './leafletUtils';
 import { createRealPosIcon, createUserPosIcon } from './minimapIcons';
 import { expandMap } from './minimapSize';
+
+interface GuessPresence {
+	hasGuess?: boolean | undefined;
+}
+
+function shouldShowGuess(
+	coordinates: LatLng,
+	score: number,
+	presence?: boolean,
+	distance = 0
+): boolean {
+	// Flat history cannot distinguish a missing guess from a zero-score (0,0) guess.
+	// Prefer known presence; otherwise show coordinates confirmed by score or distance.
+	return presence ?? (coordinates.lat !== 0 || coordinates.lng !== 0 || score > 0 || distance > 0);
+}
 
 /**
 Creates and adds the real position marker
@@ -37,7 +53,7 @@ Fits map bounds to a group of markers, adding padding
 function fitMapToBounds(map: L.Map, markers: L.Marker[]): void {
 	if (markers.length === 0) return;
 
-	if (markers[0]) {
+	if (markers.length === 1 && markers[0]) {
 		// If only one marker, center on it with a reasonable zoom
 		map.setView(markers[0].getLatLng(), 8);
 		return;
@@ -82,17 +98,17 @@ function addGuessPolyline(
 export async function placeSingleplayerRoundEndMarkers(
 	map: L.Map,
 	round: SingleplayerRound,
-	userMarker: L.Marker
+	userMarker: L.Marker | undefined
 ): Promise<void> {
 	await expandMap(map);
 
 	const realLatLng = { lat: round.lat, lng: round.lng };
 	const realMarker = addRealMarker(map, realLatLng, round.roundNum);
 
-	const userLatLng = userMarker.getLatLng();
 	const markersToBound: L.Marker[] = [realMarker];
 
-	if (userLatLng.lat !== 0 && userLatLng.lng !== 0) {
+	if (userMarker) {
+		const userLatLng = userMarker.getLatLng();
 		markersToBound.push(userMarker);
 
 		const lineColor = getHSLColor(round.roundNum, 100);
@@ -106,7 +122,7 @@ export async function placeSingleplayerGameEndMarkers(
 	map: L.Map,
 	username: string,
 	userAvatarHash: string,
-	guesses: SingleplayerGuess[]
+	guesses: (SingleplayerGuess & GuessPresence)[]
 ) {
 	await expandMap(map);
 
@@ -128,7 +144,7 @@ export async function placeSingleplayerGameEndMarkers(
 			}
 		);
 
-		if (userLocation.lat === 0 || userLocation.lng === 0) continue;
+		if (!shouldShowGuess(userLocation, guess.score, guess.hasGuess, guess.missDistance)) continue;
 
 		const userMarker = addUserMarker(map, userLocation, userAvatarHash, username);
 		allMarkers.push(userMarker);
@@ -142,7 +158,7 @@ export async function placeSingleplayerGameEndMarkers(
 
 export async function placeMultiplayerRoundEndMarkers(
 	map: L.Map,
-	guesses: MultiplayerGuess[],
+	guesses: (MultiplayerGuess & GuessPresence)[],
 	roundInfo: MultiplayerRound
 ) {
 	await expandMap(map);
@@ -154,7 +170,7 @@ export async function placeMultiplayerRoundEndMarkers(
 	allMarkers.push(realMarker);
 
 	for (const [index, guess] of guesses.entries()) {
-		if (guess.lat === 0 && guess.lng === 0) continue;
+		if (!shouldShowGuess(guess, guess.score, guess.hasGuess)) continue;
 
 		const userGuessLocation = { lat: guess.lat, lng: guess.lng };
 		const userMarker = addUserMarker(map, userGuessLocation, guess.avatarHash, guess.username);
@@ -178,7 +194,10 @@ export async function placeMultiplayerRoundEndMarkers(
 	fitMapToBounds(map, allMarkers);
 }
 
-export async function placeMultiplayerGameEndMarkers(map: L.Map, guesses: MultiplayerGuess[]) {
+export async function placeMultiplayerGameEndMarkers(
+	map: L.Map,
+	guesses: (MultiplayerGuess & GuessPresence)[]
+) {
 	await expandMap(map);
 
 	const allMarkers: L.Marker[] = [];
@@ -228,8 +247,7 @@ export async function placeMultiplayerGameEndMarkers(map: L.Map, guesses: Multip
 			for (const marker of userMarkers) marker.closeTooltip();
 		});
 
-		// return early, if user did not send a guess for round - nothing else to add
-		if (guess.lat === 0 && guess.lng === 0) {
+		if (!shouldShowGuess(guess, guess.score, guess.hasGuess)) {
 			continue;
 		}
 

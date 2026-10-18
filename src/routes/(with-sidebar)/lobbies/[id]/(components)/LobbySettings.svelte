@@ -37,7 +37,7 @@
 		$formData.movementAllowed = lobbyInfo.movementAllowed;
 		$formData.rounds = lobbyInfo.rounds;
 		$formData.timerEnabled = lobbyInfo.timerSeconds > 0;
-		$formData.timerSeconds = lobbyInfo.timerSeconds;
+		$formData.timerSeconds = lobbyInfo.timerSeconds || 300;
 	});
 
 	async function handleSettingsSave() {

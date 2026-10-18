@@ -13,8 +13,12 @@ export const formSchema = z.object({
 	timerEnabled: z.boolean().default(true),
 	timerSeconds: z.coerce
 		.number()
+		.int()
 		.lte(600, { error: `${m.numberMustBeLowerThan()} 600` })
-		.gte(10, { error: `${m.numberMustBeHigherThan()} 10` })
+		.gte(0, { error: `${m.numberMustBeHigherThan()} 0` })
+		.refine((seconds) => seconds === 0 || seconds >= 10, {
+			error: `${m.numberMustBeHigherThan()} 10`
+		})
 		.default(300)
 });
 

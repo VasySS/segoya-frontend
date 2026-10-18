@@ -13,7 +13,7 @@
 	}
 	let { connURL, onMessage, onOpen, onClose }: Props = $props();
 
-	let socket: WebSocket;
+	let socket: WebSocket | undefined;
 
 	let reconnectAttempts = 1;
 	let maxReconnectAttempts = 3;
@@ -31,7 +31,7 @@
 
 	onDestroy(() => {
 		if (reconnectTimeout) clearTimeout(reconnectTimeout);
-		socket.close(1000, 'client closed the connection');
+		socket?.close(1000, 'client closed the connection');
 	});
 
 	function connect() {
@@ -81,9 +81,14 @@
 		}, delay);
 	}
 
-	export function sendMessage(message: WebSocketOutputMessage) {
-		if (socket.readyState === WebSocket.OPEN) {
+	export function sendMessage(message: WebSocketOutputMessage): boolean {
+		if (socket?.readyState !== WebSocket.OPEN) return false;
+
+		try {
 			socket.send(JSON.stringify(message));
+			return true;
+		} catch {
+			return false;
 		}
 	}
 </script>

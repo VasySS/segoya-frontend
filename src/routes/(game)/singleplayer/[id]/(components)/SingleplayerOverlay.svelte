@@ -28,33 +28,39 @@
 	const round = gameContext.round;
 
 	async function sendGuess() {
-		if (gameContext.userGuessed || round.finished || game.finished) {
+		if (!gameContext.canSubmitGuess()) {
 			return;
 		}
 
-		const endRoundResponse = await fetchBackend(jwt, 'post', '/v1/singleplayer/{id}/round/end', {
-			path: { id: game.id },
-			body: {
-				guess: gameContext.userGuess
+		gameContext.guessPending = true;
+		try {
+			const endRoundResponse = await fetchBackend(jwt, 'post', '/v1/singleplayer/{id}/round/end', {
+				path: { id: game.id },
+				body: {
+					guess: gameContext.userGuess
+				}
+			});
+
+			if (!endRoundResponse.success) {
+				toast.error(endRoundResponse.error.detail);
+				return;
 			}
-		});
 
-		if (!endRoundResponse.success) {
-			toast.error(endRoundResponse.error.detail);
-			return;
+			gameContext.recordGuess();
+			roundResult = endRoundResponse.data;
+
+			game.score += roundResult.score;
+			minimap?.showSingleplayerRoundEndMarkers(round);
+
+			// TODO - delete and move to backend? just leave a game.finished = true
+			if (round.roundNum === game.rounds) {
+				await endGame();
+			}
+
+			round.finished = true;
+		} finally {
+			gameContext.guessPending = false;
 		}
-
-		roundResult = endRoundResponse.data;
-
-		game.score += roundResult.score;
-		minimap?.showSingleplayerRoundEndMarkers(round);
-
-		// TODO - delete and move to backend? just leave a game.finished = true
-		if (round.roundNum === game.rounds) {
-			await endGame();
-		}
-
-		round.finished = true;
 	}
 
 	async function nextRound() {

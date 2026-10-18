@@ -63,7 +63,7 @@ export type MultiplayerInputMessage =
 export interface UserGuessMessage extends WebSocketOutputMessage {
 	type: 'userGuess';
 	payload: {
-		guess: LatLng;
+		guess: LatLng | null;
 	};
 }
 
