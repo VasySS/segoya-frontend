@@ -1,14 +1,6 @@
 {
-	"css.customData": [
-		".vscode/tailwind.json"
-	],
-	"eslint.validate": [
-		"html",
-		"css",
-		"javascript",
-		"typescript",
-		"svelte"
-	],
+	"css.customData": [".vscode/tailwind.json"],
+	"eslint.validate": ["html", "css", "javascript", "typescript", "svelte"],
 	"explorer.fileNesting.patterns": {
 		"package.json": "pnpm-lock.yaml, pnpm-workspace.yaml, yarn.lock, package-lock.json, .npmrc, .nvmrc, .node-version",
 		"tsconfig.json": "tsconfig..json",
@@ -16,6 +8,6 @@
 		".env": ".env.*",
 		"flake.nix": "flake.lock",
 		".gitignore": ".gitattributes, .prettierignore",
-		"vite.config.ts": "vitest.config.ts, playwright.config.ts",
+		"vite.config.ts": "vitest.config.ts, playwright.config.ts"
 	}
 }

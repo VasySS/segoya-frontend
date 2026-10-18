@@ -131,9 +131,9 @@ describe('captcha provider adapters', () => {
 		vi.stubGlobal('smartCaptcha', sdk);
 		const handlers = options();
 		captchaAdapters.yandex.render(document.createElement('div'), handlers);
-			sdk.subscribe.mock.calls.find((call) => call[1] === event)?.[2]();
+		sdk.subscribe.mock.calls.find((call) => call[1] === event)?.[2]();
 
-			expect(vi.mocked(handlers.onToken).mock.calls).toStrictEqual(tokens);
+		expect(vi.mocked(handlers.onToken).mock.calls).toStrictEqual(tokens);
 		expect(vi.mocked(handlers.onError).mock.calls).toStrictEqual(errors);
 	});
 

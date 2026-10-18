@@ -122,9 +122,8 @@
 	function withLocalGuessPresence(guesses: MultiplayerGuess[]) {
 		return guesses.map((guess) => ({
 			...guess,
-			hasGuess: guess.username === user.username
-				? gameContext.guessPresence.get(guess.roundNum)
-				: undefined
+			hasGuess:
+				guess.username === user.username ? gameContext.guessPresence.get(guess.roundNum) : undefined
 		}));
 	}
 
@@ -135,11 +134,7 @@
 		gameContext.userGuessed = true;
 
 		resetMap();
-		await placeMultiplayerRoundEndMarkers(
-			map,
-			withLocalGuessPresence(guesses),
-			roundInfo
-		);
+		await placeMultiplayerRoundEndMarkers(map, withLocalGuessPresence(guesses), roundInfo);
 	}
 
 	export async function showMultiplayerGameEndMarkers(guesses: MultiplayerGuess[]) {

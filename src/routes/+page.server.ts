@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
-import { resolve } from '$app/paths';
 import { accessCookieName } from '#lib/api/auth.js';
+import { resolve } from '$app/paths';
 
 import type { PageServerLoad } from './$types';
 
