@@ -26,7 +26,7 @@
 	const round = gameContext.round;
 
 	async function handleSpacePress(e: KeyboardEvent) {
-		if (e.code !== 'Space' || e.repeat) {
+		if (e.code !== 'Space' || e.repeat || !gameContext.userPlacedMarker) {
 			return;
 		}
 

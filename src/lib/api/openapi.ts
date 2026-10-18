@@ -95,7 +95,8 @@ export const NewLobby = z
     provider: Provider,
     timerSeconds: z
       .unknown()
-      .refine((data) => !z.unknown().safeParse(data).success, { message: "not" })
+      .refine((data) => !z.number().int().min(1).max(9).safeParse(data).success, { message: "not" })
+      .and(z.number().int().min(0).max(600))
       .optional(),
     movementAllowed: z.boolean(),
     private: z.boolean(),
@@ -129,7 +130,8 @@ export const NewSingleplayerGameRequest = z
     rounds: z.number().int().min(1).max(10),
     timerSeconds: z
       .unknown()
-      .refine((data) => !z.unknown().safeParse(data).success, { message: "not" })
+      .refine((data) => !z.number().int().min(1).max(9).safeParse(data).success, { message: "not" })
+      .and(z.number().int().min(0).max(600))
       .optional(),
     movementAllowed: z.boolean(),
     provider: Provider,
