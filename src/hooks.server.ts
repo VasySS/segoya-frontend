@@ -61,7 +61,7 @@ export const authHandle: Handle = async ({ event, resolve }) => {
 
 	const isPathProtected = !unprotectedRoutes.includes(event.url.pathname);
 	if (isPathProtected && !event.locals.jwtToken) {
-		redirect(302, getLoginRedirect(event.url.pathname));
+		redirect(302, getLoginRedirect(event.url.pathname + event.url.search));
 	}
 
 	// sveltekit doesn't preload fonts by default

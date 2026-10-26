@@ -5,6 +5,7 @@
 	import { panoURL } from '#lib/utils/panoURL.js';
 	import { m } from '#paraglide/messages.js';
 	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import Settings from '#components/game/Settings.svelte';
 	import PanoramaContainer from '#components/panoramas/PanoramaContainer.svelte';
 	import * as ButtonGroup from '#components/shadcn/button-group/index.js';
@@ -43,6 +44,9 @@
 <Settings
 	bind:isSettingsOpen
 	{setTileProvider}
+	area={game.playArea}
+	provider={game.provider}
+	jwt={page.data.jwtToken ?? ''}
 />
 
 <!-- TOP LEFT -->

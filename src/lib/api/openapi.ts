@@ -1,6 +1,90 @@
 import { z } from "zod";
 
 // <Schemas>
+export type Provider = z.infer<typeof Provider>;
+export const Provider = z.enum(["google", "yandex", "yandex_air", "seznam"]);
+
+export type PresetGeometry = z.infer<typeof PresetGeometry>;
+export const PresetGeometry = z
+  .object({ type: z.literal("MultiPolygon"), coordinates: z.array(z.array(z.array(z.array(z.number())))) })
+  .catchall(z.unknown());
+
+export type PlayAreaPreset = z.infer<typeof PlayAreaPreset>;
+export const PlayAreaPreset = z
+  .object({
+    id: z.uuid(),
+    name: z.string(),
+    kind: z.string(),
+    countryCode: z.string(),
+    version: z.string(),
+    source: z.string(),
+    license: z.string(),
+    attribution: z.string(),
+    providers: z.array(Provider),
+    bounds: z.array(z.number()),
+    polygon: PresetGeometry.optional(),
+    locationCount: z.number().int().optional(),
+  })
+  .catchall(z.unknown());
+
+export type BackendError = z.infer<typeof BackendError>;
+export const BackendError = z
+  .object({ title: z.string(), status: z.number().int().min(100).max(599), detail: z.string() })
+  .catchall(z.unknown());
+
+export type Polygon = z.infer<typeof Polygon>;
+export const Polygon = z.strictObject({
+  type: z.literal("Polygon"),
+  coordinates: z
+    .array(z.array(z.array(z.number()).min(2).max(2)).min(4).max(501))
+    .min(1)
+    .max(1),
+});
+
+export type PlayAreaSelection = z.infer<typeof PlayAreaSelection>;
+export const PlayAreaSelection = z.strictObject({
+  type: z.enum(["all", "presets", "polygon", "saved"]),
+  presetIDs: z.array(z.uuid()).min(1).max(300).optional(),
+  polygon: Polygon.optional(),
+  savedID: z.uuid().optional(),
+});
+
+export type CountPlayAreaRequest = z.infer<typeof CountPlayAreaRequest>;
+export const CountPlayAreaRequest = z.object({ provider: Provider, playArea: PlayAreaSelection }).catchall(z.unknown());
+
+export type PlayAreaCount = z.infer<typeof PlayAreaCount>;
+export const PlayAreaCount = z.object({ locationCount: z.number().int().min(0) }).catchall(z.unknown());
+
+export type SavedPlayArea = z.infer<typeof SavedPlayArea>;
+export const SavedPlayArea = z
+  .object({
+    id: z.uuid(),
+    ownerID: z.uuid(),
+    name: z.string(),
+    polygon: Polygon,
+    visibility: z.enum(["private", "unlisted"]),
+    createdAt: z.iso.datetime(),
+    updatedAt: z.iso.datetime(),
+  })
+  .catchall(z.unknown());
+
+export type SavedPlayAreas = z.infer<typeof SavedPlayAreas>;
+export const SavedPlayAreas = z
+  .object({ total: z.number().int(), areas: z.array(SavedPlayArea) })
+  .catchall(z.unknown());
+
+export type CreatePlayAreaRequest = z.infer<typeof CreatePlayAreaRequest>;
+export const CreatePlayAreaRequest = z.strictObject({
+  name: z.string().min(1).max(100),
+  polygon: Polygon,
+  visibility: z.enum(["private", "unlisted"]).default("private"),
+});
+
+export type UpdatePlayAreaRequest = z.infer<typeof UpdatePlayAreaRequest>;
+export const UpdatePlayAreaRequest = z
+  .strictObject({ name: z.string().min(1).max(100), polygon: Polygon, visibility: z.enum(["private", "unlisted"]) })
+  .partial();
+
 export type UserPrivateProfile = z.infer<typeof UserPrivateProfile>;
 export const UserPrivateProfile = z
   .object({
@@ -12,11 +96,6 @@ export const UserPrivateProfile = z
     yandexConnected: z.boolean(),
     discordConnected: z.boolean(),
   })
-  .catchall(z.unknown());
-
-export type BackendError = z.infer<typeof BackendError>;
-export const BackendError = z
-  .object({ title: z.string(), status: z.number().int().min(100).max(599), detail: z.string() })
   .catchall(z.unknown());
 
 export type UserUpdateRequest = z.infer<typeof UserUpdateRequest>;
@@ -64,9 +143,6 @@ export const UserSession = z
 export type AuthProvider = z.infer<typeof AuthProvider>;
 export const AuthProvider = z.object({ provider: z.string(), createdAt: z.iso.datetime() }).catchall(z.unknown());
 
-export type Provider = z.infer<typeof Provider>;
-export const Provider = z.enum(["google", "yandex", "yandex_air", "seznam"]);
-
 export type Lobby = z.infer<typeof Lobby>;
 export const Lobby = z
   .object({
@@ -74,6 +150,7 @@ export const Lobby = z
     creatorID: z.uuid(),
     createdAt: z.iso.datetime(),
     rounds: z.number().int(),
+    playArea: PlayAreaSelection.optional(),
     provider: Provider,
     movementAllowed: z.boolean(),
     timerSeconds: z.number().int(),
@@ -92,6 +169,7 @@ export const NewLobby = z
     creatorID: z.uuid(),
     maxPlayers: z.number().int().min(2).max(10),
     rounds: z.number().int().min(1).max(10),
+    playArea: PlayAreaSelection.optional(),
     provider: Provider,
     timerSeconds: z
       .unknown()
@@ -112,6 +190,7 @@ export const SingleplayerGame = z
     roundCurrent: z.number().int(),
     timerSeconds: z.number().int(),
     movementAllowed: z.boolean(),
+    playArea: PlayAreaSelection.optional(),
     provider: Provider,
     score: z.number().int(),
     finished: z.boolean(),
@@ -134,6 +213,7 @@ export const NewSingleplayerGameRequest = z
       .and(z.number().int().min(0).max(600))
       .optional(),
     movementAllowed: z.boolean(),
+    playArea: PlayAreaSelection.optional(),
     provider: Provider,
   })
   .catchall(z.unknown());
@@ -190,6 +270,7 @@ export const MultiplayerGame = z
     timerSeconds: z.number().int(),
     movementAllowed: z.boolean(),
     players: z.number().int(),
+    playArea: PlayAreaSelection.optional(),
     provider: Provider,
     finished: z.boolean(),
     createdAt: z.iso.datetime(),
@@ -230,6 +311,118 @@ export const MultiplayerRound = z
 // </Schemas>
 
 // <Endpoints>
+export type get_GetPlayAreaPresets = typeof get_GetPlayAreaPresets;
+export const get_GetPlayAreaPresets = {
+  method: z.literal("GET"),
+  path: z.literal("/v1/play-areas/presets"),
+  requestFormat: z.literal("json"),
+  responseFormat: z.literal("json"),
+  parameters: { query: z.strictObject({ provider: Provider }) },
+  responses: {
+    200: z.array(PlayAreaPreset),
+    400: BackendError,
+    401: BackendError,
+    404: BackendError,
+    500: BackendError,
+  },
+};
+
+export type get_GetPlayAreaPreset = typeof get_GetPlayAreaPreset;
+export const get_GetPlayAreaPreset = {
+  method: z.literal("GET"),
+  path: z.literal("/v1/play-areas/presets/{id}"),
+  requestFormat: z.literal("json"),
+  responseFormat: z.literal("json"),
+  parameters: { path: z.strictObject({ id: z.uuid() }) },
+  responses: { 200: PlayAreaPreset, 400: BackendError, 401: BackendError, 404: BackendError, 500: BackendError },
+};
+
+export type post_CountPlayArea = typeof post_CountPlayArea;
+export const post_CountPlayArea = {
+  method: z.literal("POST"),
+  path: z.literal("/v1/play-areas/count"),
+  requestFormat: z.literal("json"),
+  responseFormat: z.literal("json"),
+  parameters: { body: CountPlayAreaRequest },
+  responses: {
+    200: PlayAreaCount,
+    400: BackendError,
+    401: BackendError,
+    404: BackendError,
+    413: BackendError,
+    500: BackendError,
+  },
+};
+
+export type get_GetPlayAreas = typeof get_GetPlayAreas;
+export const get_GetPlayAreas = {
+  method: z.literal("GET"),
+  path: z.literal("/v1/play-areas"),
+  requestFormat: z.literal("json"),
+  responseFormat: z.literal("json"),
+  parameters: {
+    query: z.strictObject({
+      page: z.coerce.number().int().min(1),
+      "page-size": z.coerce.number().int().min(1).max(50),
+    }),
+  },
+  responses: { 200: SavedPlayAreas, 400: BackendError, 401: BackendError, 404: BackendError, 500: BackendError },
+};
+
+export type post_CreatePlayArea = typeof post_CreatePlayArea;
+export const post_CreatePlayArea = {
+  method: z.literal("POST"),
+  path: z.literal("/v1/play-areas"),
+  requestFormat: z.literal("json"),
+  responseFormat: z.literal("json"),
+  parameters: { body: CreatePlayAreaRequest },
+  responses: {
+    201: SavedPlayArea,
+    400: BackendError,
+    401: BackendError,
+    404: BackendError,
+    413: BackendError,
+    500: BackendError,
+  },
+};
+
+export type get_GetPlayArea = typeof get_GetPlayArea;
+export const get_GetPlayArea = {
+  method: z.literal("GET"),
+  path: z.literal("/v1/play-areas/{id}"),
+  requestFormat: z.literal("json"),
+  responseFormat: z.literal("json"),
+  parameters: { path: z.strictObject({ id: z.uuid() }) },
+  responses: { 200: SavedPlayArea, 400: BackendError, 401: BackendError, 404: BackendError, 500: BackendError },
+};
+
+export type patch_UpdatePlayArea = typeof patch_UpdatePlayArea;
+export const patch_UpdatePlayArea = {
+  method: z.literal("PATCH"),
+  path: z.literal("/v1/play-areas/{id}"),
+  requestFormat: z.literal("json"),
+  responseFormat: z.literal("json"),
+  parameters: { path: z.strictObject({ id: z.uuid() }), body: UpdatePlayAreaRequest },
+  responses: {
+    200: SavedPlayArea,
+    400: BackendError,
+    401: BackendError,
+    404: BackendError,
+    413: BackendError,
+    500: BackendError,
+  },
+};
+
+export type delete_DeletePlayArea = typeof delete_DeletePlayArea;
+export const delete_DeletePlayArea = {
+  method: z.literal("DELETE"),
+  path: z.literal("/v1/play-areas/{id}"),
+  requestFormat: z.literal("json"),
+  responseFormat: z.literal("json"),
+  parameters: { path: z.strictObject({ id: z.uuid() }) },
+  responses: { 204: z.unknown(), 400: BackendError, 401: BackendError, 404: BackendError, 500: BackendError },
+};
+
 export type get_GetRoot = typeof get_GetRoot;
 export const get_GetRoot = {
   method: z.literal("GET"),
@@ -505,7 +698,14 @@ export const post_NewLobby = {
   requestFormat: z.literal("json"),
   responseFormat: z.literal("json"),
   parameters: { body: NewLobby },
-  responses: { 201: z.object({ id: z.string() }).catchall(z.unknown()), 400: BackendError, 500: BackendError },
+  responses: {
+    201: z.object({ id: z.string() }).catchall(z.unknown()),
+    400: BackendError,
+    401: BackendError,
+    404: BackendError,
+    413: BackendError,
+    500: BackendError,
+  },
 };
 
 export type get_GetLobby = typeof get_GetLobby;
@@ -530,7 +730,7 @@ export const get_GetSingleplayerGames = {
       "page-size": z.coerce.number().int().min(1).max(50),
     }),
   },
-  responses: { 200: SingleplayerGames, 400: BackendError, 401: BackendError, 500: BackendError },
+  responses: { 200: SingleplayerGames, 400: BackendError, 401: BackendError, 404: BackendError, 500: BackendError },
 };
 
 export type post_NewSingleplayerGame = typeof post_NewSingleplayerGame;
@@ -544,6 +744,8 @@ export const post_NewSingleplayerGame = {
     201: z.object({ id: z.uuid() }).catchall(z.unknown()),
     400: BackendError,
     401: BackendError,
+    404: BackendError,
+    413: BackendError,
     500: BackendError,
   },
 };
@@ -688,6 +890,10 @@ export const post_NewMultiplayerRound = {
 // <EndpointByMethod>
 export const EndpointByMethod = {
   get: {
+    "/v1/play-areas/presets": get_GetPlayAreaPresets,
+    "/v1/play-areas/presets/{id}": get_GetPlayAreaPreset,
+    "/v1/play-areas": get_GetPlayAreas,
+    "/v1/play-areas/{id}": get_GetPlayArea,
     "/": get_GetRoot,
     "/health": get_GetHealth,
     "/v1/users/me": get_GetPrivateProfile,
@@ -712,13 +918,9 @@ export const EndpointByMethod = {
     "/v1/multiplayer/{id}/guesses": get_GetMultiplayerGameGuesses,
     "/v1/multiplayer/{id}/round": get_GetMultiplayerRound,
   },
-  patch: {
-    "/v1/users/me": patch_UpdateUser,
-  },
-  put: {
-    'use updateUserAvatar function in users.ts': put_UpdateUserAvatar,
-  },
   post: {
+    "/v1/play-areas/count": post_CountPlayArea,
+    "/v1/play-areas": post_CreatePlayArea,
     "/v1/auth/register": post_Register,
     "/v1/auth/login": post_Login,
     "/v1/auth/tokens/refresh": post_RefreshTokens,
@@ -729,10 +931,18 @@ export const EndpointByMethod = {
     "/v1/singleplayer/{id}/round/end": post_EndSingleplayerRound,
     "/v1/multiplayer/{id}/round": post_NewMultiplayerRound,
   },
+  patch: {
+    "/v1/play-areas/{id}": patch_UpdatePlayArea,
+    "/v1/users/me": patch_UpdateUser,
+  },
   delete: {
+    "/v1/play-areas/{id}": delete_DeletePlayArea,
     "/v1/auth/sessions/{id}": delete_DeleteUserSession,
     "/v1/auth/yandex": delete_DeleteYandex,
     "/v1/auth/discord": delete_DeleteDiscord,
+  },
+  put: {
+    'use updateUserAvatar function in users.ts': put_UpdateUserAvatar,
   },
 };
 export type EndpointByMethod = typeof EndpointByMethod;
@@ -740,8 +950,8 @@ export type EndpointByMethod = typeof EndpointByMethod;
 
 // <EndpointByMethod.Shorthands>
 export type GetEndpoints = EndpointByMethod["get"];
-export type PatchEndpoints = EndpointByMethod["patch"];
-export type PutEndpoints = EndpointByMethod["put"];
 export type PostEndpoints = EndpointByMethod["post"];
+export type PatchEndpoints = EndpointByMethod["patch"];
 export type DeleteEndpoints = EndpointByMethod["delete"];
+export type PutEndpoints = EndpointByMethod["put"];
 // </EndpointByMethod.Shorthands>

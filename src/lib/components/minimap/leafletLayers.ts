@@ -1,20 +1,18 @@
 import L from 'leaflet';
 
-export interface Layers {
-	[key: string]: L.TileLayer;
-	default: L.TileLayer;
-	esri: L.TileLayer;
-}
+const baseLayers = new WeakMap<L.Map, L.TileLayer>();
 
-export const leafletLayers: Layers = {
-	default: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		noWrap: true,
-		attribution:
-			'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-		minZoom: 0,
-		maxZoom: 20
-	}),
-	esri: L.tileLayer(
+export function createTileLayer(provider: string): L.TileLayer {
+	if (provider !== 'esri')
+		return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			noWrap: true,
+			attribution:
+				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+			minZoom: 0,
+			maxZoom: 20
+		});
+
+	return L.tileLayer(
 		'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
 		{
 			noWrap: true,
@@ -25,8 +23,8 @@ export const leafletLayers: Layers = {
 			minZoom: 0,
 			maxZoom: 20
 		}
-	)
-};
+	);
+}
 
 /**
 Sets the tile layer for the map based on the provided or stored tile provider.
@@ -34,10 +32,8 @@ Sets the tile layer for the map based on the provided or stored tile provider.
 @param tileProvider Optional specific tile provider to use, OSM by default.
 */
 export function setTileLayer(map: L.Map, tileProvider: string) {
-	map.eachLayer(function (layer) {
-		map.removeLayer(layer);
-	});
-
-	const layerToAdd = leafletLayers[tileProvider] ?? leafletLayers.default;
+	baseLayers.get(map)?.remove();
+	const layerToAdd = createTileLayer(tileProvider);
+	baseLayers.set(map, layerToAdd);
 	map.addLayer(layerToAdd);
 }

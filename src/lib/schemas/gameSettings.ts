@@ -1,9 +1,11 @@
 import { Provider } from '#lib/api/openapi.js';
+import { areaSelectionSchema } from '#lib/play-areas/geometry.js';
 import { m } from '#paraglide/messages.js';
 import { z } from 'zod';
 
 export const formSchema = z.object({
 	provider: Provider.default('google'),
+	playArea: areaSelectionSchema,
 	movementAllowed: z.boolean().default(true),
 	rounds: z.coerce
 		.number()

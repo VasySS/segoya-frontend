@@ -55,14 +55,15 @@ export async function fetchBackend<
 		: never,
 	ResponseHeaders = Endpoint extends { responseHeaders: infer RH extends Record<string, z.ZodType> }
 		? Exclude<z.infer<RH[keyof RH]>, BackendError>
-		: never
+		: undefined
 >(
 	jwt: string,
 	method: Method,
 	path: Path,
 	params?: Endpoint extends { parameters: infer P extends Record<string, z.ZodType> }
 		? z.infer<z.ZodObject<P>>
-		: never
+		: never,
+	options?: { signal?: AbortSignal | undefined }
 ): Promise<BackendResult<ResponseData, ResponseHeaders>> {
 	const endpoint = EndpointByMethod[method][path] as {
 		method: ZodLiteral<Method>;
@@ -97,12 +98,23 @@ export async function fetchBackend<
 				Authorization: `Bearer ${jwt}`,
 				...requestHeaders
 			},
-			body: requestPayload
+			body: requestPayload,
+			...(options?.signal && { signal: options.signal })
 		});
 
 		const statusStr = response.status.toString();
 		const responseSchema = endpoint.responses[statusStr];
 		if (!responseSchema) {
+			if (!response.ok) {
+				return {
+					success: false,
+					error: {
+						title: response.statusText,
+						status: response.status,
+						detail: response.statusText || 'Request failed'
+					}
+				};
+			}
 			throw new Error(`Unexpected status code: ${String(response.status)}`);
 		}
 
@@ -138,6 +150,7 @@ export async function fetchBackend<
 			headers: headers as ResponseHeaders
 		};
 	} catch (error) {
+		if (options?.signal?.aborted) throw error;
 		if (error instanceof z.ZodError) {
 			// handle the case when backend returns an error or default response, but it's not according to openapi schema
 			// should not happen if openapi schema is in sync with backend and input params are valid
@@ -163,7 +176,7 @@ export async function fetchBackend<
 			};
 		}
 
-		if (error instanceof Error && error.message == 'fetch failed') {
+		if (error instanceof TypeError) {
 			// handle the case when backend is down and fetch fails
 			return {
 				success: false,

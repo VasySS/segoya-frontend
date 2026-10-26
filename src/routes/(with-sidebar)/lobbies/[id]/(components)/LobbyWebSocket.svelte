@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fetchBackend } from '#lib/api/base.js';
 	import type { Lobby } from '#lib/api/openapi.js';
 	import { getLobbyWebSocketURL } from '#lib/api/websocket.js';
 	import { m } from '#paraglide/messages.js';
@@ -22,8 +23,16 @@
 		lobbyUsers: LobbyPlayers | undefined;
 		lobbyChat: LobbyChat | undefined;
 		lobbySettings: LobbySettings | undefined;
+		connected?: boolean;
+		onError?: () => void;
 	}
-	let { lobbyUsers, lobbyChat, lobbySettings }: Props = $props();
+	let {
+		lobbyUsers,
+		lobbyChat,
+		lobbySettings,
+		connected = $bindable(false),
+		onError
+	}: Props = $props();
 
 	let ws = $state<WebSocketClient>();
 
@@ -35,6 +44,8 @@
 
 		switch (data.type) {
 			case 'error': {
+				lobbySettings?.failPending(data.payload.message);
+				onError?.();
 				toast.error(m.dry_teary_macaw_hurl(), {
 					description: data.payload.message
 				});
@@ -75,12 +86,13 @@
 		}
 	}
 
+	// eslint-disable-next-line unicorn/consistent-boolean-name -- Transport API reports whether the send succeeded.
 	export function sendGameStartMessage() {
 		const wsMsg = {
 			type: 'gameStart'
 		} as GameStartMessage;
 
-		ws?.sendMessage(wsMsg);
+		return connected && Boolean(ws?.sendMessage(wsMsg));
 	}
 
 	export function sendChatMessage(username: string, message: string) {
@@ -97,6 +109,7 @@
 		ws?.sendMessage(wsMsg);
 	}
 
+	// eslint-disable-next-line unicorn/consistent-boolean-name -- Transport API reports whether the send succeeded.
 	export function sendSettingsMessage(settings: LobbySettingsContent) {
 		const wsMsg = {
 			type: 'settingsNew',
@@ -105,7 +118,22 @@
 			}
 		} as LobbyNewSettingsMessage;
 
-		ws?.sendMessage(wsMsg);
+		return connected && Boolean(ws?.sendMessage(wsMsg));
+	}
+
+	export async function syncSettings() {
+		connected = false;
+		try {
+			const response = await fetchBackend(jwt, 'get', '/v1/lobbies/{id}', {
+				path: { id: lobby.id }
+			});
+			if (response.success) {
+				lobbySettings?.updateSettings(response.data);
+				connected = true;
+			}
+		} catch {
+			connected = false;
+		}
 	}
 </script>
 
@@ -113,4 +141,12 @@
 	bind:this={ws}
 	connURL={getLobbyWebSocketURL(lobby.id, jwt)}
 	{onMessage}
+	onOpen={() => {
+		void syncSettings();
+	}}
+	onClose={() => {
+		connected = false;
+		lobbySettings?.failPending(m.areaDisconnected());
+		onError?.();
+	}}
 ></WebSocketClient>

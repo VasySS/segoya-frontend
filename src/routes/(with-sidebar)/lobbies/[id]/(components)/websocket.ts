@@ -1,4 +1,4 @@
-import type { Provider, UserPublicProfile } from '#lib/api/openapi.js';
+import type { PlayAreaSelection, Provider, UserPublicProfile } from '#lib/api/openapi.js';
 import type {
 	WebSocketInputMessage,
 	WebSocketOutputMessage,
@@ -47,6 +47,7 @@ export interface ChatMessageFromBackend extends WebSocketInputMessage {
 }
 
 export interface LobbySettingsContent {
+	playArea?: PlayAreaSelection | undefined;
 	provider: Provider;
 	movementAllowed: boolean;
 	rounds: number;

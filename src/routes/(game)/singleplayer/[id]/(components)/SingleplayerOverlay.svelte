@@ -156,6 +156,7 @@
 <Minimap
 	bind:this={minimap}
 	{user}
+	{jwt}
 />
 
 {#if !game.finished && roundResult}

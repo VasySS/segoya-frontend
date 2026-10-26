@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { CircleQuestionMark, Play } from '@lucide/svelte';
 	import { STATIC_BASE_URL } from '#lib/api/base.js';
+	import type { PlayAreaSelection, Provider } from '#lib/api/openapi.js';
 	import { minimapProviders } from '#lib/constants/minimapProviders.js';
 	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
 	import { m } from '#paraglide/messages.js';
 	import { asset } from '$app/paths';
 	import { onMount } from 'svelte';
+	import PlayAreaSummary from '#components/play-areas/PlayAreaSummary.svelte';
 	import { Button } from '#components/shadcn/button/index.js';
 	import * as Dialog from '#components/shadcn/dialog/index.js';
 	import Label from '#components/shadcn/label/label.svelte';
@@ -18,9 +20,18 @@
 		isSettingsOpen?: boolean;
 		// for refreshing map in-game without reloading
 		setTileProvider?: ((provider: string) => void) | undefined;
+		area?: PlayAreaSelection | undefined;
+		provider?: Provider;
+		jwt?: string;
 	}
 
-	let { isSettingsOpen = $bindable(false), setTileProvider }: Props = $props();
+	let {
+		isSettingsOpen = $bindable(false),
+		setTileProvider,
+		area,
+		provider,
+		jwt = ''
+	}: Props = $props();
 
 	const userSettings = UserSettingsStore;
 
@@ -47,6 +58,12 @@ A component, that allows user to change settings (stored in local storage)
 			<Dialog.Title>{m.profileTabSettings()}</Dialog.Title>
 			<Dialog.Description />
 		</Dialog.Header>
+		{#if provider}
+			<PlayAreaSummary
+				{jwt}
+				{provider}
+				selection={area}
+			/>{/if}
 
 		<div class="space-y-2">
 			<Label for="minimap-provider">{m.profileMinimapProvider()}</Label>

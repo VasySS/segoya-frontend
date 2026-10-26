@@ -3,23 +3,34 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
 	import MainSettings from '#components/game/creation-settings/MainSettings.svelte';
+	import PlayAreaSelect from '#components/game/creation-settings/PlayAreaSelect.svelte';
 	import ProviderSelect from '#components/game/creation-settings/ProviderSelect.svelte';
 	import * as Card from '#components/shadcn/card/index.js';
 	import * as Tabs from '#components/shadcn/tabs/index.js';
 	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
 
+	import type { PageProps } from './$types';
 	import { formSchema } from './schema';
 
-	let { data } = $props();
+	let { data }: PageProps = $props();
+	let isAreaEligible = $state(false);
+	let revision = $state(0);
 
 	// svelte-ignore state_referenced_locally
 	const form = superForm(data.form, {
 		validators: zod4Client(formSchema),
 		multipleSubmits: 'prevent',
-		dataType: 'json'
+		dataType: 'json',
+		onSubmit: ({ cancel }) => {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Updated through the child component binding.
+			if (!isAreaEligible) cancel();
+		},
+		onResult: () => {
+			revision++;
+		}
 	});
 
-	const { enhance, delayed } = form;
+	const { form: formData, enhance, delayed, message } = form;
 </script>
 
 <svelte:head>
@@ -53,6 +64,22 @@
 
 				<Card.Content class="space-y-2">
 					<ProviderSelect {form} />
+					<PlayAreaSelect
+						jwt={data.jwtToken ?? ''}
+						provider={$formData.provider}
+						rounds={$formData.rounds}
+						bind:selection={$formData.playArea}
+						bind:eligible={isAreaEligible}
+						{revision}
+					/>
+					{#if $message}
+						<p
+							role="alert"
+							class="text-destructive text-sm"
+						>
+							{$message}
+						</p>
+					{/if}
 				</Card.Content>
 
 				<Card.Footer>
@@ -60,6 +87,7 @@
 						type="submit"
 						class="w-36"
 						{delayed}
+						disabled={!isAreaEligible}
 					>
 						{m.play()}
 					</ButtonLoading>

@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const BASE_URL = 'http://localhost:5173';
+const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:5173';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -34,7 +34,10 @@ export default defineConfig({
 	projects: [
 		{
 			name: 'chrome',
-			use: { ...devices['Desktop Chrome'] }
+			use: {
+				...devices['Desktop Chrome'],
+				...(process.env.PLAYWRIGHT_CHANNEL && { channel: process.env.PLAYWRIGHT_CHANNEL })
+			}
 		},
 		{
 			name: 'firefox',

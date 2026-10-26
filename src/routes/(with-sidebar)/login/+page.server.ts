@@ -42,8 +42,13 @@ export const actions: Actions = {
 		setAllCookiesFromHeader(event, loginResponse.headers['Set-Cookie']);
 
 		const redirectTo = form.data.redirectTo;
-		if (redirectTo && redirectTo !== '/login') {
-			redirect(303, `/${redirectTo.slice(1)}`);
+		if (
+			redirectTo?.startsWith('/') &&
+			!redirectTo.startsWith('//') &&
+			!redirectTo.includes('\\') &&
+			!redirectTo.startsWith('/login')
+		) {
+			redirect(303, redirectTo);
 		}
 
 		redirect(303, resolve('/(with-sidebar)/profile'));

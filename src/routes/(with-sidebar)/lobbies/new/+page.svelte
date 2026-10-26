@@ -3,6 +3,7 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
 	import MainSettings from '#components/game/creation-settings/MainSettings.svelte';
+	import PlayAreaSelect from '#components/game/creation-settings/PlayAreaSelect.svelte';
 	import ProviderSelect from '#components/game/creation-settings/ProviderSelect.svelte';
 	import * as Card from '#components/shadcn/card/index.js';
 	import * as Form from '#components/shadcn/form/index.js';
@@ -10,17 +11,23 @@
 	import { Switch } from '#components/shadcn/switch/index.js';
 	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
 
+	import type { PageProps } from './$types';
 	import { formSchema } from './schema';
 
-	let { data } = $props();
+	let { data }: PageProps = $props();
+	let isAreaValid = $state(false);
 
 	// svelte-ignore state_referenced_locally
 	const form = superForm(data.form, {
 		validators: zod4Client(formSchema),
 		multipleSubmits: 'prevent',
-		dataType: 'json'
+		dataType: 'json',
+		onSubmit: ({ cancel }) => {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Updated through the child component binding.
+			if (!isAreaValid) cancel();
+		}
 	});
-	const { form: formData, enhance, delayed } = form;
+	const { form: formData, enhance, delayed, message } = form;
 </script>
 
 <svelte:head>
@@ -40,6 +47,24 @@
 
 		<Card.Content class="space-y-4">
 			<ProviderSelect {form} />
+			<PlayAreaSelect
+				jwt={data.jwtToken ?? ''}
+				provider={$formData.provider}
+				rounds={$formData.rounds}
+				bind:selection={$formData.playArea}
+				bind:valid={isAreaValid}
+			/>
+
+			<p class="text-muted-foreground text-sm">{m.areaSharedPrivacy()}</p>
+			{#if $message}
+				<p
+					role="alert"
+					class="text-destructive text-sm"
+				>
+					{$message}
+				</p>
+			{/if}
+
 			<MainSettings {form} />
 
 			<Form.Field
@@ -88,6 +113,7 @@
 				type="submit"
 				class="w-36"
 				{delayed}
+				disabled={!isAreaValid}
 			>
 				{m.createLobby()}
 			</ButtonLoading>

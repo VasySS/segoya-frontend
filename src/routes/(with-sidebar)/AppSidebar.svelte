@@ -3,6 +3,7 @@
 		ChevronsUpDownIcon,
 		CircleUserRoundIcon,
 		HouseIcon,
+		MapIcon,
 		PlayIcon,
 		SettingsIcon,
 		SunIcon,
@@ -117,6 +118,22 @@
 								>
 									<UsersIcon />
 									<p class="text-xl">{m.sidebarMultiplayer()}</p>
+								</a>
+							{/snippet}
+						</Sidebar.MenuButton>
+					</Sidebar.MenuItem>
+					<Sidebar.MenuItem>
+						<Sidebar.MenuButton
+							size="lg"
+							class="h-10"
+						>
+							{#snippet child({ props })}
+								<a
+									href={resolve('/(with-sidebar)/play-areas')}
+									{...props}
+								>
+									<MapIcon />
+									<p class="text-xl">{m.areaLibrary()}</p>
 								</a>
 							{/snippet}
 						</Sidebar.MenuButton>

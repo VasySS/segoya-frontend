@@ -4,7 +4,9 @@
 	import type { Lobby } from '#lib/api/openapi.js';
 	import { m } from '#paraglide/messages.js';
 	import { browser } from '$app/env';
+	import { onDestroy } from 'svelte';
 	import { toast } from 'svelte-sonner';
+	import AreaCount from '#components/play-areas/AreaCount.svelte';
 	import { Badge } from '#components/shadcn/badge/index.js';
 	import Button from '#components/shadcn/button/button.svelte';
 	import * as Card from '#components/shadcn/card/index.js';
@@ -32,6 +34,28 @@
 	let lobbyUsers = $state<LobbyUsers>();
 	let lobbyChat = $state<LobbyChat>();
 	let lobbySettings = $state<LobbySettings>();
+	let isConnected = $state(false);
+	let isSettingsPending = $state(false);
+	let isAreaEligible = $state(false);
+	let revision = $state(0);
+	let isStarting = $state(false);
+	let startTimeout: ReturnType<typeof setTimeout> | undefined;
+
+	onDestroy(() => {
+		clearTimeout(startTimeout);
+	});
+
+	function startGame() {
+		const socket = lobbyWS;
+		if (!socket?.sendGameStartMessage()) return;
+
+		isStarting = true;
+		startTimeout = setTimeout(() => {
+			isStarting = false;
+			revision++;
+			void socket.syncSettings();
+		}, 8000);
+	}
 </script>
 
 <svelte:head><title>Segoya — {m.lobby()} {lobbyInfo.id}</title></svelte:head>
@@ -57,6 +81,12 @@
 		{lobbyChat}
 		{lobbyUsers}
 		{lobbySettings}
+		bind:connected={isConnected}
+		onError={() => {
+			isStarting = false;
+			clearTimeout(startTimeout);
+			revision++;
+		}}
 	/>
 {/if}
 
@@ -86,7 +116,13 @@
 			</Button>
 
 			{#if lobbyInfo.creatorID === jwtPayload.userID}
-				<Button onclick={() => (isSettingsOpen = !isSettingsOpen)}><SettingsIcon /></Button>
+				<Button
+					aria-label={m.lobbySettings()}
+					data-testid="lobby-settings"
+					onclick={() => (isSettingsOpen = !isSettingsOpen)}
+				>
+					<SettingsIcon />
+				</Button>
 			{/if}
 		</Card.Description>
 	</Card.Header>
@@ -104,29 +140,53 @@
 					bind:this={lobbySettings}
 					bind:isSettingsOpen
 					{lobbyWS}
-					{lobbyInfo}
+					bind:lobbyInfo
+					connected={isConnected}
+					bind:pending={isSettingsPending}
 				/>
 			</div>
 		</div>
 	</Card.Content>
 
 	<Card.Footer>
-		{#if lobbyInfo.creatorID === jwtPayload.userID && lobbyUsers?.getUsersCount() >= 2}
-			<Button
-				onclick={lobbyWS?.sendGameStartMessage}
-				class="mt-8 w-32"
-			>
-				{m.play()}
-			</Button>
-		{:else if lobbyInfo.creatorID === jwtPayload.userID}
-			<p class="text-muted-foreground text-center text-sm">
-				{m.polite_pretty_robin_roam()}
-			</p>
-		{:else}
-			<p class="text-muted-foreground text-center text-sm">
-				{m.gray_arable_elk_twist()}
-			</p>
-		{/if}
+		<div class="w-full space-y-3">
+			<AreaCount
+				jwt={data.jwtToken}
+				provider={lobbyInfo.provider}
+				selection={lobbyInfo.playArea ?? { type: 'all' }}
+				rounds={lobbyInfo.rounds}
+				bind:eligible={isAreaEligible}
+				{revision}
+			/>
+			{#if !isConnected}<p class="text-sm">{m.areaDisconnected()}</p>
+				<Button
+					type="button"
+					variant="outline"
+					onclick={() => {
+						void lobbyWS?.syncSettings();
+					}}
+				>
+					{m.areaRetry()}
+				</Button>
+			{/if}
+			{#if lobbyInfo.creatorID === jwtPayload.userID && lobbyUsers?.getUsersCount() >= 2}
+				<Button
+					onclick={startGame}
+					disabled={!isConnected || isSettingsPending || !isAreaEligible || isStarting}
+					class="mt-8 w-32"
+				>
+					{m.play()}
+				</Button>
+			{:else if lobbyInfo.creatorID === jwtPayload.userID}
+				<p class="text-muted-foreground text-center text-sm">
+					{m.polite_pretty_robin_roam()}
+				</p>
+			{:else}
+				<p class="text-muted-foreground text-center text-sm">
+					{m.gray_arable_elk_twist()}
+				</p>
+			{/if}
+		</div>
 	</Card.Footer>
 </Card.Root>
 
