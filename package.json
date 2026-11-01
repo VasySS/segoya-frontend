@@ -38,7 +38,7 @@
 		"@ianvs/prettier-plugin-sort-imports": "^4.7.1",
 		"@inlang/paraglide-js": "^2.29.0",
 		"@internationalized/date": "^3.12.4",
-		"@lucide/svelte": "^1.61.0",
+		"@lucide/svelte": "^1.64.0",
 		"@playwright/test": "^1.64.0",
 		"@sveltejs/adapter-node": "^6.0.0",
 		"@sveltejs/kit": "^3.1.0",
