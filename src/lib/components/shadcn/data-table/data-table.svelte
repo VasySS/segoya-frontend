@@ -7,8 +7,7 @@
 		createTable,
 		type ColumnDef,
 		type PaginationState,
-		type RowData,
-		type SortingState
+		type RowData
 	} from '@tanstack/svelte-table';
 	import { m } from '#paraglide/messages.js';
 	import { FlexRender } from '#components/shadcn/data-table/index.js';
@@ -26,9 +25,6 @@
 		getPageData: (page: number, pageSize: number) => Promise<{ data: TData[]; total: number }>;
 	};
 	let { data, dataTotal, columns, pageSize = 10, getPageData }: DataTableProps<TData> = $props();
-
-	let sortingState = $state<SortingState>([]);
-	let globalFilter = $state<string>('');
 
 	// svelte-ignore state_referenced_locally
 	let paginationState = $state<PaginationState>({ pageIndex: 0, pageSize: pageSize });
@@ -66,33 +62,16 @@
 				paginationLoading = false;
 			});
 		},
-		// filtering
-		onGlobalFilterChange: (updater) => {
-			if (typeof updater === 'function') {
-				globalFilter = updater(globalFilter);
-			} else {
-				globalFilter = updater;
-			}
-		},
 		state: {
 			get pagination() {
 				return paginationState;
-			},
-			get sorting() {
-				return sortingState;
-			},
-			get globalFilter() {
-				return globalFilter;
 			}
 		}
 	});
 </script>
 
 <div>
-	<Toolbar
-		bind:globalFilter
-		{toolbarRefreshCallback}
-	></Toolbar>
+	<Toolbar {toolbarRefreshCallback}></Toolbar>
 
 	<div class="mt-2 rounded-sm border">
 		<Table.Root class="h-188">
@@ -134,7 +113,7 @@
 					</tr>
 				{:else}
 					{#each table.getRowModel().rows as row (row.id)}
-						<Table.Row data-state={row.getIsSelected() && 'selected'}>
+						<Table.Row>
 							{#each row.getAllCells() as cell (cell.id)}
 								<Table.Cell>
 									<FlexRender
@@ -149,9 +128,9 @@
 					<!-- Add empty rows to handle table shifts -->
 					{@const rowsLength = table.getRowModel().rows.length}
 					{#if rowsLength < pageSize}
-						{#each Array(pageSize - rowsLength).fill(0) as _, i}
+						{#each Array(pageSize - rowsLength).fill(0) as _, i (i)}
 							<Table.Row>
-								{#each columns}
+								{#each columns as _, columnIndex (columnIndex)}
 									<Table.Cell>&zwnj;</Table.Cell>
 								{/each}
 							</Table.Row>

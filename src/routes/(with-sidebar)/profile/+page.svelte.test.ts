@@ -52,7 +52,7 @@ describe('refreshed profile data', () => {
 	// eslint-disable-next-line vitest/no-hooks
 	afterEach(() => vi.clearAllMocks());
 
-	it('updates account, sessions and OAuth props when server data changes', async () => {
+	it('updates account, sessions and OAuth props when server data changes', { timeout: 15_000 }, async () => {
 		expect.hasAssertions();
 
 		const data = await createData();
@@ -69,13 +69,14 @@ describe('refreshed profile data', () => {
 		expect(screen.getByPlaceholderText('Refreshed Name')).toBeInTheDocument();
 
 		await user.click(screen.getByRole('tab', { name: m.such_every_lion_adapt() }));
-		await user.click(screen.getByRole('button', { name: 'OAuth' }));
+		await vi.dynamicImportSettled();
+		await user.click(await screen.findByRole('button', { name: 'OAuth' }));
 
 		expect(screen.queryByTestId('current-session-tooltip')).not.toBeInTheDocument();
 		expect(screen.getByRole('form', { name: 'yandex-add' })).toBeInTheDocument();
 	});
 
-	it('uses the refreshed token when loading statistics', async () => {
+	it('uses the refreshed token when loading statistics', { timeout: 15_000 }, async () => {
 		expect.hasAssertions();
 
 		const data = await createData();
@@ -87,8 +88,34 @@ describe('refreshed profile data', () => {
 		const { user, rerender } = setupComponent(ProfilePage, { props: { data } });
 		await rerender({ data: { ...data, jwtToken: 'refreshed-token' } });
 		await user.click(screen.getByRole('tab', { name: m.profileTabStats() }));
+		await vi.dynamicImportSettled();
+		await screen.findByText(m.playedGames());
 
 		expect(fetchBackend).toHaveBeenCalledWith('refreshed-token', 'get', '/v1/singleplayer', {
+			query: { page: 1, 'page-size': 10 }
+		});
+	});
+
+	it('loads statistics when its tab is selected with the keyboard', { timeout: 15_000 }, async () => {
+		expect.hasAssertions();
+
+		const data = await createData();
+		vi.mocked(fetchBackend).mockResolvedValue({
+			success: true,
+			data: { total: 0, games: [] },
+			headers: undefined
+		});
+		const { user } = setupComponent(ProfilePage, { props: { data } });
+
+		expect(fetchBackend).not.toHaveBeenCalled();
+		expect(screen.queryByText(m.playedGames())).not.toBeInTheDocument();
+
+		screen.getByRole('tab', { name: m.profileTabAccount() }).focus();
+		await user.keyboard('{End}');
+		await vi.dynamicImportSettled();
+		await screen.findByText(m.playedGames());
+
+		expect(fetchBackend).toHaveBeenCalledWith('initial-token', 'get', '/v1/singleplayer', {
 			query: { page: 1, 'page-size': 10 }
 		});
 	});

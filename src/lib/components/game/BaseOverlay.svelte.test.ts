@@ -1,9 +1,10 @@
 /* eslint-disable unicorn/prefer-global-this -- Keyboard events target the browser window. */
-import { fireEvent, render } from '@testing-library/svelte';
+import { fireEvent, render, screen, waitFor } from '@testing-library/svelte';
 import { GameType } from '#lib/constants/enums.js';
 import type { getGameContext } from '#lib/states/gameContext.svelte.js';
+import { m } from '#paraglide/messages.js';
 import { describe, expect, it, vi } from 'vitest';
-import type Settings from '#components/game/Settings.svelte';
+import Settings from '#components/game/Settings.svelte';
 import type PanoramaContainer from '#components/panoramas/PanoramaContainer.svelte';
 
 import BaseOverlay from './BaseOverlay.svelte';
@@ -27,6 +28,26 @@ vi.mock(import('#components/panoramas/PanoramaContainer.svelte'), () => ({
 }));
 
 describe.each([GameType.SINGLEPLAYER, GameType.MULTIPLAYER])('space shortcut in %s', (gameType) => {
+	it('loads Settings on demand and forwards the map provider callback', async () => {
+		expect.hasAssertions();
+
+		vi.mocked(Settings).mockClear();
+		const setTileProvider = vi.fn<(provider: string) => void>();
+		render(BaseOverlay, { gameType, sendGuess: vi.fn<() => Promise<void>>(), setTileProvider });
+
+		expect(Settings).not.toHaveBeenCalled();
+
+		await fireEvent.click(screen.getByTitle(m.singleSettings()));
+		await waitFor(() => {
+			expect(Settings).toHaveBeenCalledTimes(1);
+		});
+
+		expect(vi.mocked(Settings).mock.calls[0]?.[1]).toMatchObject({
+			isSettingsOpen: true,
+			setTileProvider
+		});
+	});
+
 	it('requires a minimap selection in each round', async () => {
 		expect.hasAssertions();
 

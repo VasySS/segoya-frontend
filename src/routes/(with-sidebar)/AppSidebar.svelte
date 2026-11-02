@@ -14,18 +14,39 @@
 	import { asset, resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { toggleMode } from 'mode-watcher';
-	import Settings from '#components/game/Settings.svelte';
+	import { toast } from 'svelte-sonner';
+	import type SettingsComponent from '#components/game/Settings.svelte';
 	import * as DropdownMenu from '#components/shadcn/dropdown-menu/index.js';
 	import * as Sidebar from '#components/shadcn/sidebar/index.js';
 	import { useSidebar } from '#components/shadcn/sidebar/index.js';
 
 	let isSettingsOpen = $state(false);
+	let isSettingsLoading = $state(false);
+	let Settings = $state<typeof SettingsComponent>();
 
 	const jwtPayload = $derived(() => page.data.jwtPayload as JwtPayload | undefined);
 	const sidebar = useSidebar();
+
+	async function openSettings() {
+		if (isSettingsLoading) return;
+		isSettingsLoading = true;
+		try {
+			if (!Settings) {
+				const { default: component } = await import('#components/game/Settings.svelte');
+				Settings = component;
+			}
+			isSettingsOpen = true;
+		} catch {
+			toast.error(m.errorGetting());
+		} finally {
+			isSettingsLoading = false;
+		}
+	}
 </script>
 
-<Settings bind:isSettingsOpen />
+{#if Settings}
+	<Settings bind:isSettingsOpen />
+{/if}
 
 <Sidebar.Root collapsible="icon">
 	<Sidebar.Header class="bg-primary pl-1.5">
@@ -165,7 +186,8 @@
 						</a>
 
 						<DropdownMenu.Item
-							onclick={() => (isSettingsOpen = !isSettingsOpen)}
+							onclick={openSettings}
+							disabled={isSettingsLoading}
 							class="flex cursor-pointer flex-row items-center space-x-3"
 						>
 							<SettingsIcon />

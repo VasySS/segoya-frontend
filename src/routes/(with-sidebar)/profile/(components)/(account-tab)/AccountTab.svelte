@@ -4,6 +4,7 @@
 	import { getAvatarSource } from '#lib/utils/helpers.js';
 	import { m } from '#paraglide/messages.js';
 	import { browser } from '$app/env';
+	import { toast } from 'svelte-sonner';
 	import { superForm, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
 	import * as Avatar from '#components/shadcn/avatar/index.js';
@@ -12,7 +13,7 @@
 	import * as Form from '#components/shadcn/form/index.js';
 	import { Input } from '#components/shadcn/input/index.js';
 
-	import AvatarUpload from './AvatarUpload.svelte';
+	import type AvatarUploadComponent from './AvatarUpload.svelte';
 	import { formSchema } from './schema';
 
 	interface Props {
@@ -23,6 +24,8 @@
 	let { userInfo, userForm, avatarForm }: Props = $props();
 
 	let isAvatarUploadOpen = $state(false);
+	let isAvatarLoading = $state(false);
+	let AvatarUpload = $state<typeof AvatarUploadComponent>();
 
 	// svelte-ignore state_referenced_locally
 	const form = superForm(userForm, {
@@ -31,6 +34,22 @@
 		multipleSubmits: 'prevent'
 	});
 	const { form: formData, enhance } = form;
+
+	async function openAvatarUpload() {
+		if (isAvatarLoading) return;
+		isAvatarLoading = true;
+		try {
+			if (!AvatarUpload) {
+				const { default: component } = await import('./AvatarUpload.svelte');
+				AvatarUpload = component;
+			}
+			isAvatarUploadOpen = true;
+		} catch {
+			toast.error(m.errorGetting());
+		} finally {
+			isAvatarLoading = false;
+		}
+	}
 </script>
 
 <Card.Root>
@@ -52,7 +71,8 @@
 			<Button
 				class="absolute top-44 left-28 rounded-full border"
 				variant="outline"
-				onclick={() => (isAvatarUploadOpen = !isAvatarUploadOpen)}
+				onclick={openAvatarUpload}
+				disabled={isAvatarLoading}
 				title={m.dark_smart_sheep_seek()}
 			>
 				<Upload size={24} />
@@ -103,7 +123,7 @@
 	</Card.Footer>
 </Card.Root>
 
-{#if browser}
+{#if browser && AvatarUpload}
 	<AvatarUpload
 		bind:isAvatarUploadOpen
 		{avatarForm}

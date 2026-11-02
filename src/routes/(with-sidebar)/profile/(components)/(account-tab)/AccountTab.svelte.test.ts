@@ -4,7 +4,7 @@ import { m } from '#paraglide/messages.js';
 import { setupComponent } from '#tests/vitestSetup.js';
 import { superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import AccountTab from './AccountTab.svelte';
 import { avatarSchema, formSchema } from './schema';
@@ -161,7 +161,7 @@ describe('component AccountTab', () => {
 	});
 
 	describe('interactions', () => {
-		it('should open avatar upload dialog when clicking upload button', async () => {
+		it('should open avatar upload dialog when clicking upload button', { timeout: 15_000 }, async () => {
 			expect.hasAssertions();
 
 			const { userForm, avatarForm } = await createValidatedForms();
@@ -175,6 +175,7 @@ describe('component AccountTab', () => {
 
 			const avatarUploadButton = screen.getByTitle(m.dark_smart_sheep_seek());
 			await user.click(avatarUploadButton);
+			await vi.dynamicImportSettled();
 
 			await waitFor(() => {
 				expect(screen.getByLabelText(m.funny_simple_fireant_loop())).toBeVisible();

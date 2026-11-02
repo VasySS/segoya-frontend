@@ -5,7 +5,8 @@
 	import { panoURL } from '#lib/utils/panoURL.js';
 	import { m } from '#paraglide/messages.js';
 	import { resolve } from '$app/paths';
-	import Settings from '#components/game/Settings.svelte';
+	import { toast } from 'svelte-sonner';
+	import type SettingsComponent from '#components/game/Settings.svelte';
 	import PanoramaContainer from '#components/panoramas/PanoramaContainer.svelte';
 	import * as ButtonGroup from '#components/shadcn/button-group/index.js';
 	import { Button } from '#components/shadcn/button/index.js';
@@ -20,10 +21,28 @@
 
 	let panorama = $state<PanoramaContainer>();
 	let isSettingsOpen = $state(false);
+	let isSettingsLoading = $state(false);
+	let Settings = $state<typeof SettingsComponent>();
 
 	const gameContext = getGameContext();
 	const game = gameContext.game;
 	const round = gameContext.round;
+
+	async function openSettings() {
+		if (isSettingsLoading) return;
+		isSettingsLoading = true;
+		try {
+			if (!Settings) {
+				const { default: component } = await import('#components/game/Settings.svelte');
+				Settings = component;
+			}
+			isSettingsOpen = true;
+		} catch {
+			toast.error(m.errorGetting());
+		} finally {
+			isSettingsLoading = false;
+		}
+	}
 
 	async function handleSpacePress(e: KeyboardEvent) {
 		if (e.code !== 'Space' || e.repeat || !gameContext.userPlacedMarker) {
@@ -40,10 +59,12 @@
 <PanoramaContainer bind:this={panorama} />
 
 <!-- a dialog, opened with the settings button in-game -->
-<Settings
-	bind:isSettingsOpen
-	{setTileProvider}
-/>
+{#if Settings}
+	<Settings
+		bind:isSettingsOpen
+		{setTileProvider}
+	/>
+{/if}
 
 <!-- TOP LEFT -->
 <a
@@ -77,7 +98,8 @@
 
 	<Button
 		class="border-foreground size-12 border p-1"
-		onclick={() => (isSettingsOpen = !isSettingsOpen)}
+		onclick={openSettings}
+		disabled={isSettingsLoading}
 		title={m.singleSettings()}
 	>
 		<SettingsIcon size={24} />

@@ -4,7 +4,10 @@ A component for animating the appearance of text by characters or words.
 -->
 <script lang="ts">
 	import { cn } from '#lib/utils/shadcn.js';
-	import { animate, stagger } from 'motion';
+	import { stagger } from 'motion';
+	import { animate } from 'motion/mini';
+
+	const instanceId = $props.id();
 
 	interface Props {
 		/**
@@ -46,7 +49,7 @@ A component for animating the appearance of text by characters or words.
 		direction?: keyof typeof animationDirection;
 	}
 	let {
-		id = `staggered-text-${Math.random().toString(36).slice(2, 12)}`,
+		id = instanceId,
 		text,
 		className = '',
 		separator = '',
@@ -56,19 +59,22 @@ A component for animating the appearance of text by characters or words.
 	}: Props = $props();
 
 	const animationDirection = {
-		RIGHT: { opacity: 1, x: [-20, 0], y: [0, 0] },
-		UP: { opacity: 1, y: [15, 0] },
-		DOWN: { opacity: 1, y: [-15, 0] }
+		RIGHT: { opacity: 1, transform: ['translateX(-20px)', 'translateX(0px)'] },
+		UP: { opacity: 1, transform: ['translateY(15px)', 'translateY(0px)'] },
+		DOWN: { opacity: 1, transform: ['translateY(-15px)', 'translateY(0px)'] }
 	};
 
 	// svelte-ignore state_referenced_locally
 	let textSplit = text.split(separator);
 
 	$effect(() => {
-		animate(`#${id} span`, animationDirection[direction], {
+		const animation = animate(`#${id} span`, animationDirection[direction], {
 			delay: stagger(delay),
 			duration: duration
 		});
+		return () => {
+			animation.stop();
+		};
 	});
 </script>
 

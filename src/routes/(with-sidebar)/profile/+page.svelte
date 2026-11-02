@@ -6,8 +6,6 @@
 	import * as Tabs from '#components/shadcn/tabs/index.js';
 
 	import AccountTab from './(components)/(account-tab)/AccountTab.svelte';
-	import SecurityTab from './(components)/(security-tab)/SecurityTab.svelte';
-	import StatisticsTab from './(components)/(statistics-tab)/StatisticsTab.svelte';
 	import type { PageData } from './$types';
 
 	interface Props {
@@ -16,6 +14,19 @@
 	let { data }: Props = $props();
 
 	let singleplayerGames = $state<SingleplayerGames>();
+	let activeTab = $state('account');
+
+	async function loadStatistics() {
+		const gamesResponse = await fetchBackend(data.jwtToken, 'get', '/v1/singleplayer', {
+			query: { page: 1, 'page-size': 10 }
+		});
+		if (!gamesResponse.success) {
+			singleplayerGames = undefined;
+			toast.error(gamesResponse.error.detail);
+			return;
+		}
+		singleplayerGames = gamesResponse.data;
+	}
 </script>
 
 <svelte:head>
@@ -24,7 +35,12 @@
 
 <h1 class="mb-12 text-center">{m.profileHeader()}</h1>
 
-<Tabs.Root value="account">
+<Tabs.Root
+	bind:value={activeTab}
+	onValueChange={(value) => {
+		if (value === 'statistics') void loadStatistics();
+	}}
+>
 	<Tabs.List class="grid h-32 w-full sm:h-10 sm:grid-cols-3">
 		<Tabs.Trigger
 			class="w-80 sm:w-full"
@@ -37,26 +53,7 @@
 			{m.such_every_lion_adapt()}
 		</Tabs.Trigger>
 
-		<Tabs.Trigger
-			value="statistics"
-			onclick={async () => {
-				const gamesResponse = await fetchBackend(data.jwtToken, 'get', '/v1/singleplayer', {
-					query: {
-						page: 1,
-						'page-size': 10
-					}
-				});
-
-				if (!gamesResponse.success) {
-					singleplayerGames = undefined;
-					toast.error(gamesResponse.error.detail);
-
-					return;
-				}
-
-				singleplayerGames = gamesResponse.data;
-			}}
-		>
+		<Tabs.Trigger value="statistics">
 			{m.profileTabStats()}
 		</Tabs.Trigger>
 	</Tabs.List>
@@ -70,20 +67,36 @@
 	</Tabs.Content>
 
 	<Tabs.Content value="security">
-		<SecurityTab
-			connectedOAuth={data.connectedOAuth}
-			jwtPayload={data.jwtPayload}
-			jwtToken={data.jwtToken}
-			sessions={data.sessions}
-			apiKeys={data.apiKeys}
-		></SecurityTab>
+		{#if activeTab === 'security'}
+			{#await import('./(components)/(security-tab)/SecurityTab.svelte')}
+				<p role="status">{m.loading()}</p>
+			{:then { default: SecurityTab }}
+				<SecurityTab
+					connectedOAuth={data.connectedOAuth}
+					jwtPayload={data.jwtPayload}
+					jwtToken={data.jwtToken}
+					sessions={data.sessions}
+					apiKeys={data.apiKeys}
+				/>
+			{:catch}
+				<p role="alert">{m.errorGetting()}</p>
+			{/await}
+		{/if}
 	</Tabs.Content>
 
 	<Tabs.Content value="statistics">
-		<StatisticsTab
-			jwtToken={data.jwtToken}
-			gamesResponse={singleplayerGames}
-		></StatisticsTab>
+		{#if activeTab === 'statistics'}
+			{#await import('./(components)/(statistics-tab)/StatisticsTab.svelte')}
+				<p role="status">{m.loading()}</p>
+			{:then { default: StatisticsTab }}
+				<StatisticsTab
+					jwtToken={data.jwtToken}
+					gamesResponse={singleplayerGames}
+				/>
+			{:catch}
+				<p role="alert">{m.errorGetting()}</p>
+			{/await}
+		{/if}
 	</Tabs.Content>
 </Tabs.Root>
 
