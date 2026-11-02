@@ -4,9 +4,10 @@ import { fetchBackend } from '#lib/api/base.js';
 import { getErrorFromResponse } from '#lib/api/errorHandling.js';
 import { updateUserAvatar } from '#lib/api/users.js';
 import { APIKeys } from '#lib/constants/enums.js';
-import type { UserAPIKeys } from '#lib/types/user.js';
+import type { DisplayUserSession, UserAPIKeys } from '#lib/types/user.js';
 import { clearAuthCookies, setAllCookiesFromHeader } from '#lib/utils/auth.js';
 import { resolve } from '$app/paths';
+import Bowser from 'bowser';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 
@@ -48,7 +49,14 @@ export const load: PageServerLoad = async (event) => {
 		jwtPayload,
 		apiKeys,
 		profileInfo: profileResponse.data,
-		sessions: sessionsResponse.data,
+		sessions: sessionsResponse.data.map((session): DisplayUserSession => {
+			const parser = Bowser.getParser(session.ua);
+			const browser = [parser.getBrowserName(), parser.getBrowserVersion()]
+				.filter(Boolean)
+				.join(' ');
+			const os = [parser.getOSName(), parser.getOS().version].filter(Boolean).join(' ');
+			return { ...session, browserLabel: [browser, os].filter(Boolean).join(', ') || session.ua };
+		}),
 		connectedOAuth: oauthProvidersResponse.data,
 		form: await superValidate(zod4(formSchema)),
 		avatarForm: await superValidate(zod4(avatarSchema))

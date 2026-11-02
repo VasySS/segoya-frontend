@@ -1,4 +1,6 @@
-import type { UserPublicProfile } from '#lib/api/openapi.js';
+import type { UserPublicProfile, UserSession } from '#lib/api/openapi.js';
+
+export type DisplayUserSession = UserSession & { browserLabel: string };
 
 export interface MultiplayerUser extends UserPublicProfile {
 	guessed: boolean;

@@ -4,5 +4,6 @@ export const unprotectedRoutes: readonly string[] = [
 	'/health',
 	'/about',
 	'/login',
-	'/register'
+	'/register',
+	'/api/avatars/fallback.svg'
 ];

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { m } from '#paraglide/messages.js';
-	import Cropper from 'cropperjs';
 	import { onDestroy } from 'svelte';
+	import Cropper, { type CropArea } from 'svelte-easy-crop';
 	import { toast } from 'svelte-sonner';
 	import { superForm, type SuperValidated } from 'sveltekit-superforms';
 	import { zod4Client } from 'sveltekit-superforms/adapters';
@@ -11,9 +11,8 @@
 	import { Label } from '#components/shadcn/label/index.js';
 	import ButtonLoading from '#components/shared/button-loading/button-loading.svelte';
 
+	import { createCroppedAvatar, loadAvatarImage } from './cropAvatar';
 	import { avatarSchema } from './schema';
-
-	import 'cropperjs/dist/cropper.css';
 
 	interface Props {
 		avatarForm: SuperValidated<{ userAvatar: File }>;
@@ -21,8 +20,12 @@
 	}
 	let { avatarForm, isAvatarUploadOpen = $bindable(false) }: Props = $props();
 
-	let imgPreview = $state<HTMLImageElement>();
-	let cropper = $state<Cropper>();
+	let image = $state.raw<HTMLImageElement>();
+	let crop = $state({ x: 0, y: 0 });
+	let zoom = $state(1);
+	let cropArea = $state<CropArea>();
+	let isCropping = $state(false);
+	let uploadVersion = 0;
 
 	// svelte-ignore state_referenced_locally
 	const form = superForm(avatarForm, {
@@ -35,17 +38,28 @@
 			}
 
 			isAvatarUploadOpen = false;
-			cropper?.destroy();
-			cropper = undefined;
+			resetImage();
 		}
 	});
 	const { enhance: avatarEnhance, delayed, form: formData } = form;
 
-	onDestroy(() => {
-		cropper?.destroy();
+	$effect(() => {
+		if (!isAvatarUploadOpen) resetImage();
 	});
 
-	function handleFileUpload(event: Event) {
+	onDestroy(() => {
+		uploadVersion++;
+	});
+
+	function resetImage() {
+		uploadVersion++;
+		image = undefined;
+		cropArea = undefined;
+		crop = { x: 0, y: 0 };
+		zoom = 1;
+	}
+
+	async function handleFileUpload(event: Event) {
 		const input = event.currentTarget as HTMLInputElement;
 		const file = input.files?.[0];
 		if (!file) return;
@@ -56,53 +70,36 @@
 			return;
 		}
 
-		const reader = new FileReader();
-		reader.addEventListener('load', (e) => {
-			const result = e.target?.result;
-			if (!result || !imgPreview) return;
-
-			imgPreview.src = result as string;
-			try {
-				initCropper();
-			} catch {
+		resetImage();
+		const version = uploadVersion;
+		try {
+			const nextImage = await loadAvatarImage(file);
+			if (version === uploadVersion) image = nextImage;
+		} catch {
+			if (version === uploadVersion) {
 				toast.error(m.heroic_plain_reindeer_tickle(), {
 					description: 'Failed to initialize image cropper'
 				});
 			}
-		});
-
-		reader.readAsDataURL(file);
+		}
 	}
 
-	function initCropper() {
-		if (!imgPreview) return;
-		if (cropper) cropper.destroy();
-
-		cropper = new Cropper(imgPreview, {
-			aspectRatio: 1 / 1,
-			viewMode: 3,
-			dragMode: 'move',
-			center: true
-		});
-	}
-
-	function submitAvatarForm() {
-		cropper?.getCroppedCanvas().toBlob(
-			(blob) => {
-				if (!blob) return;
-
-				$formData.userAvatar = new File([blob], 'avatar', { type: blob.type });
-				try {
-					form.submit();
-				} catch {
-					toast.error(m.heroic_plain_reindeer_tickle(), {
-						description: 'Failed to submit avatar'
-					});
-				}
-			},
-			'image/webp',
-			0.7
-		);
+	async function submitAvatarForm() {
+		if (!image || !cropArea || isCropping) return;
+		const version = uploadVersion;
+		isCropping = true;
+		try {
+			const file = await createCroppedAvatar(image, cropArea);
+			if (version !== uploadVersion) return;
+			$formData.userAvatar = file;
+			form.submit();
+		} catch {
+			toast.error(m.heroic_plain_reindeer_tickle(), {
+				description: 'Failed to submit avatar'
+			});
+		} finally {
+			isCropping = false;
+		}
 	}
 </script>
 
@@ -127,12 +124,20 @@
 						</Dialog.Header>
 
 						<div class="flex flex-col items-center space-y-3">
-							<img
-								{...props}
-								bind:this={imgPreview}
-								alt=""
-								class="size-72 sm:size-80 md:size-96"
-							/>
+							<div class="bg-muted relative size-72 max-w-full sm:size-80 md:size-96">
+								{#if image}
+									<Cropper
+										image={image.src}
+										bind:crop
+										bind:zoom
+										aspect={1}
+										tabindex={0}
+										oncropcomplete={({ pixels }) => {
+											cropArea = pixels.width > 0 && pixels.height > 0 ? pixels : undefined;
+										}}
+									/>
+								{/if}
+							</div>
 
 							<Label for="avatar-upload">{m.funny_simple_fireant_loop()}</Label>
 
@@ -150,9 +155,8 @@
 
 						<Dialog.Footer>
 							<ButtonLoading
-								onclick={() => {
-									submitAvatarForm();
-								}}
+								onclick={submitAvatarForm}
+								disabled={!cropArea || isCropping}
 								{delayed}
 							>
 								{m.save()}

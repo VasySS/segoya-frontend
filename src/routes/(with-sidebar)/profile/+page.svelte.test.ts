@@ -38,6 +38,7 @@ async function createData(): Promise<PageData> {
 				sessionID: 'current',
 				refreshToken: '',
 				ua: 'Mozilla/5.0 Chrome/120.0',
+				browserLabel: 'Chrome 120.0',
 				lastActive: '2024-01-01T00:00:00Z'
 			}
 		],

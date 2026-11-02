@@ -18,12 +18,14 @@ const mockSessions = [
 		userID: 1,
 		sessionID: 'current',
 		ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0',
+		browserLabel: 'Chrome 120.0, Windows NT 10.0',
 		lastActive: '2024-01-01T00:00:00Z'
 	},
 	{
 		userID: 1,
 		sessionID: 'other',
 		ua: 'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 Mobile Safari/537.36',
+		browserLabel: 'Safari, Android 13',
 		lastActive: '2024-01-02T00:00:00Z'
 	}
 ];

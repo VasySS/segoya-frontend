@@ -6,7 +6,7 @@
 >
 	import type { WithElementRef } from '#lib/utils/shadcn.js';
 	import type { HTMLAnchorAttributes, HTMLButtonAttributes } from 'svelte/elements';
-	import { tv, type VariantProps } from 'tailwind-variants';
+	import { tv, type VariantProps } from 'tailwind-variants/lite';
 
 	export const buttonVariants = tv({
 		base: 'active:scale-95 ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm text-base font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none',

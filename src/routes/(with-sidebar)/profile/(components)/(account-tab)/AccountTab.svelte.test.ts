@@ -64,7 +64,7 @@ describe('component AccountTab', () => {
 
 			const avatarImage = screen.getByAltText('avatar');
 
-			expect((avatarImage as HTMLImageElement).src).toBe(
+			expect(avatarImage.getAttribute('src')).toBe(
 				getAvatarSource(BASE_USER_INFO.avatarHash, BASE_USER_INFO.username)
 			);
 		});
@@ -258,9 +258,7 @@ describe('component AccountTab', () => {
 
 			const avatarImage = screen.getByAltText('avatar');
 
-			expect((avatarImage as HTMLImageElement).src).toBe(
-				getAvatarSource('', BASE_USER_INFO.username)
-			);
+			expect(avatarImage.getAttribute('src')).toBe(getAvatarSource('', BASE_USER_INFO.username));
 		});
 	});
 });

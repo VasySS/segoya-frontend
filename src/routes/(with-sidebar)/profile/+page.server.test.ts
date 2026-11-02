@@ -8,7 +8,7 @@ import { zod4 } from 'sveltekit-superforms/adapters';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { avatarSchema, formSchema } from './(components)/(account-tab)/schema';
-import { actions } from './+page.server';
+import { actions, load } from './+page.server';
 
 vi.mock(import('#lib/api/auth.js'));
 vi.mock(import('#lib/api/base.js'));
@@ -21,6 +21,33 @@ vi.mock(import('sveltekit-superforms'), async (importOriginal) => {
 			actual.superValidate
 		) as unknown as typeof actual.superValidate
 	};
+});
+
+describe('profile session labels', () => {
+	it('parses session browser and OS labels in the server load', async () => {
+		expect.hasAssertions();
+
+		const session = {
+			sessionID: 'current',
+			userID: 'user',
+			refreshToken: '',
+			ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0',
+			lastActive: '2024-01-01T00:00:00Z'
+		};
+		vi.mocked(fetchBackend)
+			.mockResolvedValueOnce({ success: true, data: {}, headers: undefined })
+			.mockResolvedValueOnce({ success: true, data: [session], headers: undefined })
+			.mockResolvedValueOnce({ success: true, data: [], headers: undefined });
+		const event = {
+			locals: { jwtToken: 'token', jwtPayload: { userID: 'user' } },
+			cookies: { get: () => '' }
+		} as unknown as Parameters<typeof load>[0];
+		const data = await load(event);
+
+		expect(data).toMatchObject({
+			sessions: [{ ...session, browserLabel: 'Chrome 120.0, Windows NT 10.0' }]
+		});
+	});
 });
 
 describe('profile updates', () => {

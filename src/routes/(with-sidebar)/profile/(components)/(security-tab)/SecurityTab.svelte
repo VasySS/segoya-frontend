@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { CircleSmallIcon, Save, Trash } from '@lucide/svelte';
 	import { fetchBackend } from '#lib/api/base.js';
-	import type { AuthProvider, UserSession } from '#lib/api/openapi.js';
+	import type { AuthProvider } from '#lib/api/openapi.js';
 	import { APIKeys } from '#lib/constants/enums.js';
 	import type { JwtPayload } from '#lib/types/auth.js';
-	import type { UserAPIKeys } from '#lib/types/user.js';
+	import type { DisplayUserSession, UserAPIKeys } from '#lib/types/user.js';
 	import { formatDateTime } from '#lib/utils/temporal.js';
 	import { m } from '#paraglide/messages.js';
 	import type { CookieOptions } from '#routes/api/cookies/[name]/+server.js';
-	import Bowser from 'bowser';
 	import { toast } from 'svelte-sonner';
 	import * as Accordion from '#components/shadcn/accordion/index.js';
 	import { Button } from '#components/shadcn/button/index.js';
@@ -22,7 +21,7 @@
 	import YandexProfileButton from './YandexButton.svelte';
 
 	interface Props {
-		sessions: UserSession[];
+		sessions: DisplayUserSession[];
 		connectedOAuth: AuthProvider[];
 		jwtToken: string;
 		jwtPayload: JwtPayload;
@@ -229,8 +228,6 @@
 							<p class="text-sm">{m.calm_next_stork_scoop()}</p>
 
 							{#each sessions as session (session.sessionID)}
-								{@const bowserParser = Bowser.getParser(session.ua)}
-
 								<div class="rounded-sm border-2 p-3">
 									<div class="flex items-center">
 										<div class="w-10">
@@ -281,9 +278,7 @@
 
 										<div class="ml-10">
 											<p class="text-sm font-bold md:text-base">
-												{bowserParser.getBrowserName()}
-												{bowserParser.getBrowserVersion()}, {bowserParser.getOSName()}
-												{bowserParser.getOS().version}
+												{session.browserLabel}
 											</p>
 											<p>{formatDateTime(session.lastActive)}</p>
 										</div>

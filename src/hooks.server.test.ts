@@ -85,6 +85,16 @@ function expectAuthCookiesCleared(deleteCookie: ReturnType<typeof vi.fn>) {
 }
 
 describe('authentication hook', () => {
+	it('serves fallback avatar images without authentication', async () => {
+		expect.hasAssertions();
+
+		const { cookies } = createCookieJar();
+		const { input, resolve } = createHandleInput('/api/avatars/fallback.svg?seed=player', cookies);
+
+		await expect(authHandle(input)).resolves.toMatchObject({ status: 200 });
+		expect(resolve).toHaveBeenCalledTimes(1);
+	});
+
 	it('renders login and clears cookies when refresh is rejected', async () => {
 		expect.hasAssertions();
 
