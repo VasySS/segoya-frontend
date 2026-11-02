@@ -7,6 +7,7 @@
 	import { getAvatarSource } from '#lib/utils/helpers.js';
 	import { m } from '#paraglide/messages.js';
 	import { asset } from '$app/paths';
+	import { onMount } from 'svelte';
 	import * as Avatar from '#components/shadcn/avatar/index.js';
 
 	import MultiplayerWebSocket from './MultiplayerWebSocket.svelte';
@@ -21,8 +22,14 @@
 	const game = gameContext.game as MultiplayerGameInfo;
 	const round = gameContext.round as MultiplayerRound;
 
-	const guessSound = new Audio(asset('sounds/alert1.mp3'));
-	guessSound.volume = $userSettings.sounds.volume;
+	let guessSound: HTMLAudioElement | undefined;
+	onMount(() => {
+		guessSound = new Audio(asset('sounds/alert1.mp3'));
+		guessSound.volume = $userSettings.sounds.volume;
+		return () => {
+			guessSound?.pause();
+		};
+	});
 
 	export const handleUsersConnected = (users: MultiplayerUser[]) => {
 		game.usersInfo = users.toSorted((u1, u2) => {
@@ -57,7 +64,7 @@
 		}
 
 		if ($userSettings.sounds.enabled) {
-			await guessSound.play();
+			await guessSound?.play();
 		}
 
 		round.guessesCount++;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
 	import { asset } from '$app/paths';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		/**
@@ -51,14 +51,12 @@
 
 	const userSettings = UserSettingsStore;
 
-	const tickingSound = new Audio(asset('sounds/ticking.mp3'));
-	tickingSound.volume = $userSettings.sounds.volume;
-
 	let timerDurationSeconds: number = $state(getTimerDuration());
-	let interval: ReturnType<typeof setInterval>;
 
 	onMount(() => {
-		interval = setInterval(() => {
+		const tickingSound = new Audio(asset('sounds/ticking.mp3'));
+		tickingSound.volume = $userSettings.sounds.volume;
+		const interval = setInterval(() => {
 			if (playSounds && timerDurationSeconds <= 5 && $userSettings.sounds.enabled) {
 				tickingSound.play().catch(() => {
 					// eslint-disable-next-line no-console
@@ -77,11 +75,11 @@
 
 			timerEndCallback?.();
 		}, 1000);
-	});
 
-	onDestroy(() => {
-		tickingSound.pause();
-		clearInterval(interval);
+		return () => {
+			tickingSound.pause();
+			clearInterval(interval);
+		};
 	});
 
 	function formatTime(seconds: number): string {

@@ -3,7 +3,7 @@
 	import { APIKeys } from '#lib/constants/enums.js';
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { getCookiesFromString } from '#lib/utils/auth.js';
-	import { onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 	import type { panorama } from 'yandex-maps';
 
 	interface Props {
@@ -17,8 +17,8 @@
 	let yandexStreetview: panorama.Player | undefined;
 	let panoramaDiv = $state<HTMLElement>();
 
-	const cookies = getCookiesFromString(document.cookie);
-	const yandexKeyAPI = cookies[APIKeys.YANDEX] ?? YANDEX_API_KEY;
+	let yandexKeyAPI = $state<string>();
+	let isDestroyed = false;
 
 	const gameContext = getGameContext();
 	const game = gameContext.game;
@@ -26,11 +26,21 @@
 
 	const panoLayer = game.provider === 'yandex_air' ? 'yandex#airPanorama' : 'yandex#panorama';
 
-	onDestroy(() => {
-		yandexStreetview?.destroy();
+	onMount(() => {
+		const cookies = getCookiesFromString(document.cookie);
+		yandexKeyAPI = cookies[APIKeys.YANDEX] ?? YANDEX_API_KEY;
+
+		return disposePanorama;
 	});
 
+	function disposePanorama() {
+		isDestroyed = true;
+		yandexStreetview?.destroy();
+	}
+
 	function initYmaps() {
+		if (isDestroyed || !panoramaDiv) return;
+		const container = panoramaDiv;
 		yandexStreetview?.destroy();
 
 		ymaps.panorama
@@ -38,9 +48,9 @@
 				layer: panoLayer
 			})
 			.then(function (panoramas) {
-				if (!panoramaDiv || !panoramas[0]) return;
+				if (isDestroyed || !panoramas[0]) return;
 
-				yandexStreetview = new ymaps.panorama.Player(panoramaDiv, panoramas[0], {
+				yandexStreetview = new ymaps.panorama.Player(container, panoramas[0], {
 					suppressMapOpenBlock: true,
 					direction: [0, 0],
 					controls: [],
@@ -49,8 +59,9 @@
 				});
 
 				// yandex broke the suppressMapOpenBlock option, so the button has to be hidden manually
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/no-explicit-any
-				const el = document.querySelector('.ymaps-2-1-79-panorama-gotoymaps-container') as any;
+				const el = document.querySelector<HTMLElement>(
+					'.ymaps-2-1-79-panorama-gotoymaps-container'
+				);
 				if (el) {
 					el.style.display = 'none';
 				}
@@ -86,19 +97,21 @@
 </script>
 
 <svelte:head>
-	<link
-		href="https://api-maps.yandex.ru/2.1.79/?apikey={yandexKeyAPI}&lang=ru_RU&csp=true"
-		rel="preload"
-		as="script"
-	/>
+	{#if yandexKeyAPI !== undefined}
+		<link
+			href="https://api-maps.yandex.ru/2.1.79/?apikey={yandexKeyAPI}&lang=ru_RU&csp=true"
+			rel="preload"
+			as="script"
+		/>
 
-	<script
-		src="https://api-maps.yandex.ru/2.1.79/?apikey={yandexKeyAPI}&lang=ru_RU&csp=true"
-		type="text/javascript"
-		onload={async () => {
-			await ymaps.ready(initYmaps);
-		}}
-	></script>
+		<script
+			src="https://api-maps.yandex.ru/2.1.79/?apikey={yandexKeyAPI}&lang=ru_RU&csp=true"
+			type="text/javascript"
+			onload={async () => {
+				await ymaps.ready(initYmaps);
+			}}
+		></script>
+	{/if}
 </svelte:head>
 
 <div

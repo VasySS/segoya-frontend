@@ -4,7 +4,7 @@
 	import { APIKeys } from '#lib/constants/enums.js';
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { getCookiesFromString } from '#lib/utils/auth.js';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		/**
@@ -17,25 +17,23 @@
 	let googleStreetView: google.maps.StreetViewPanorama | undefined;
 	let panoramaDiv = $state<HTMLDivElement>();
 
-	const cookies = getCookiesFromString(document.cookie);
-	const googleKeyAPI = cookies[APIKeys.GOOGLE] ?? GOOGLE_API_KEY;
-
 	const gameContext = getGameContext();
 	const game = gameContext.game;
 	const round = gameContext.round;
 
-	setOptions({
-		key: googleKeyAPI,
-		libraries: ['core']
-	});
+	onMount(() => {
+		let isDestroyed = false;
+		const cookies = getCookiesFromString(document.cookie);
+		setOptions({ key: cookies[APIKeys.GOOGLE] ?? GOOGLE_API_KEY, libraries: ['core'] });
 
-	onMount(async () => {
-		await importLibrary('streetView');
-		initGmaps();
-	});
+		void importLibrary('streetView').then(() => {
+			if (!isDestroyed) initGmaps();
+		});
 
-	onDestroy(() => {
-		googleStreetView = undefined;
+		return () => {
+			isDestroyed = true;
+			googleStreetView = undefined;
+		};
 	});
 
 	function initGmaps() {

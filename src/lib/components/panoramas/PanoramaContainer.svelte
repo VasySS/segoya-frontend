@@ -2,6 +2,7 @@
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
 	import { m } from '#paraglide/messages.js';
+	import { onMount } from 'svelte';
 	import Compass from '#components/game/Compass.svelte';
 	import Timer from '#components/game/Timer.svelte';
 
@@ -19,9 +20,16 @@
 	const game = gameContext.game;
 	const round = gameContext.round;
 
-	const timeNow = Temporal.Now.instant();
+	let isMounted = $state(false);
+	let timeNow = $state(Temporal.Now.instant());
 	const timeStart = Temporal.Instant.from(round.startedAt);
-	let shouldShowTimer = $state(Temporal.Instant.compare(timeStart, timeNow) > 0);
+	let shouldShowTimer = $state(false);
+
+	onMount(() => {
+		isMounted = true;
+		timeNow = Temporal.Now.instant();
+		shouldShowTimer = Temporal.Instant.compare(timeStart, timeNow) > 0;
+	});
 
 	export function returnToStart() {
 		if (googleStreetView) {
@@ -54,7 +62,7 @@
 	}
 </script>
 
-{#if $userSettings.compassEnabled}
+{#if isMounted && $userSettings.compassEnabled}
 	<Compass bind:this={compass}></Compass>
 {/if}
 

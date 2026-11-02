@@ -9,7 +9,7 @@
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
 	import { AttributionControl, LeafletMap, Marker, type LeafletPointerEvent } from 'leaflet';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 
 	import 'leaflet/dist/leaflet.css';
 
@@ -32,29 +32,35 @@
 
 	let map: LeafletMap;
 	let mapContainer: HTMLDivElement;
-	let resizeObserver: ResizeObserver;
 	let userMarker = $state<Marker>();
 
 	const userSettings = UserSettingsStore;
 	const gameContext = getGameContext();
 	const game = gameContext.game;
 
-	onMount(async () => {
-		await resetSizeStores();
-		mapInit();
+	onMount(() => {
+		let isDestroyed = false;
+		let disposeMap: (() => void) | undefined;
 
-		resizeObserver = new ResizeObserver(() => {
-			map.invalidateSize();
+		void resetSizeStores().then(() => {
+			if (isDestroyed) return;
+			mapInit();
+
+			const resizeObserver = new ResizeObserver(() => {
+				map.invalidateSize();
+			});
+			resizeObserver.observe(mapContainer);
+			disposeMap = () => {
+				resizeObserver.disconnect();
+				map.off();
+				map.remove();
+			};
 		});
 
-		resizeObserver.observe(mapContainer);
-	});
-
-	onDestroy(() => {
-		map.off();
-		map.remove();
-
-		resizeObserver.disconnect();
+		return () => {
+			isDestroyed = true;
+			disposeMap?.();
+		};
 	});
 
 	function mapInit() {

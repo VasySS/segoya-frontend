@@ -5,6 +5,7 @@
 	import type { ICreatePanoFromPositionOutput } from '#lib/types/seznam.js';
 	import { getCookiesFromString } from '#lib/utils/auth.js';
 	import { getLocale } from '#paraglide/runtime.js';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		/**
@@ -17,8 +18,20 @@
 	let seznamStreetview = $state<ICreatePanoFromPositionOutput>();
 	let panoramaDiv = $state<HTMLDivElement>();
 
-	const cookies = getCookiesFromString(document.cookie);
-	const seznamKeyAPI = cookies[APIKeys.SEZNAM] ?? SEZNAM_API_KEY;
+	let seznamKeyAPI = $state<string>();
+	let isDestroyed = false;
+
+	onMount(() => {
+		const cookies = getCookiesFromString(document.cookie);
+		seznamKeyAPI = cookies[APIKeys.SEZNAM] ?? SEZNAM_API_KEY;
+
+		return disposePanorama;
+	});
+
+	function disposePanorama() {
+		isDestroyed = true;
+		seznamStreetview?.destroy();
+	}
 
 	const gameContext = getGameContext();
 	const game = gameContext.game;
@@ -26,9 +39,9 @@
 
 	export async function returnToStart() {
 		seznamStreetview?.destroy();
-		if (!panoramaDiv) return;
+		if (!panoramaDiv || seznamKeyAPI === undefined) return;
 
-		seznamStreetview = await Panorama.panoramaFromPosition({
+		const panorama = await Panorama.panoramaFromPosition({
 			parent: panoramaDiv,
 			// WGS84 lon/lat
 			lon: round.lng,
@@ -39,6 +52,11 @@
 			showNavigation: game.movementAllowed,
 			lang: getLocale()
 		});
+		if (isDestroyed) {
+			panorama.destroy();
+			return;
+		}
+		seznamStreetview = panorama;
 
 		seznamStreetview.addListener('pano-view', (viewData) => {
 			updateCompass?.(viewData.angle);
@@ -69,19 +87,21 @@
 </script>
 
 <svelte:head>
-	<link
-		href="https://api.mapy.cz/js/panorama/v1/panorama.js"
-		rel="preload"
-		as="script"
-	/>
+	{#if seznamKeyAPI !== undefined}
+		<link
+			href="https://api.mapy.cz/js/panorama/v1/panorama.js"
+			rel="preload"
+			as="script"
+		/>
 
-	<script
-		src="https://api.mapy.cz/js/panorama/v1/panorama.js"
-		type="text/javascript"
-		onload={async () => {
-			await returnToStart();
-		}}
-	></script>
+		<script
+			src="https://api.mapy.cz/js/panorama/v1/panorama.js"
+			type="text/javascript"
+			onload={async () => {
+				await returnToStart();
+			}}
+		></script>
+	{/if}
 </svelte:head>
 
 <div

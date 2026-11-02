@@ -6,10 +6,6 @@ import { uuidv7 } from 'zod';
 
 import type { PageServerLoad } from './$types';
 
-// SSR disabled for leaflet and panoramas to work correctly
-// eslint-disable-next-line unicorn/consistent-boolean-name -- SvelteKit requires this export name.
-export const ssr = false;
-
 export const load: PageServerLoad = async (event) => {
 	const jwtToken = event.locals.jwtToken;
 	const jwtPayload = event.locals.jwtPayload;
