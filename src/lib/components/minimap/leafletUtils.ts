@@ -1,6 +1,11 @@
 import type { Provider } from '#lib/api/openapi.js';
+import type { LeafletMap, LeafletPointerEvent } from 'leaflet';
 
-export function positionMap(map: L.Map, provider: Provider) {
+export function isMousePointerEvent(event: LeafletPointerEvent): boolean {
+	return 'pointerType' in event.originalEvent && event.originalEvent.pointerType === 'mouse';
+}
+
+export function positionMap(map: LeafletMap, provider: Provider) {
 	switch (provider) {
 		case 'yandex': {
 			map.setView([61.055, 93.595], 3);

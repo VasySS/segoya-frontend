@@ -1,10 +1,108 @@
 /* eslint-disable playwright/expect-expect */
 import { expect } from '@playwright/test';
+import { m } from '#paraglide/messages.js';
 
 import { test } from './fixtures.js';
 import { GamePage } from './pages.js';
 
 test.describe('Game Interactions', () => {
+	test('minimap controls and mouse hover do not place a guess', async ({
+		authenticatedPage: page
+	}) => {
+		await new GamePage(page).createQuickGame();
+		const minimap = page.locator('#minimap');
+		await expect(minimap.locator('.leaflet-control-zoom')).toBeVisible();
+		await page.mouse.move(0, 0);
+		await expect(minimap).toHaveAttribute('style', /width: 20%/);
+		await minimap.dispatchEvent('pointerover', { pointerType: 'touch', bubbles: true });
+		await expect(minimap).toHaveAttribute('style', /width: 20%/);
+		await minimap.hover();
+		await expect(minimap).toHaveAttribute('style', /width: 35%/);
+		await page.mouse.move(0, 0);
+		await expect(minimap).toHaveAttribute('style', /width: 20%/);
+
+		await minimap.getByRole('button', { name: 'Zoom in', exact: true }).click();
+		await minimap.getByRole('button', { name: 'Zoom out', exact: true }).click();
+		await minimap.getByTitle(m.minimapChangeSize()).click();
+		await expect(minimap).toHaveAttribute('style', /width: 50%/);
+		await page.mouse.move(0, 0);
+		await expect(minimap).toHaveAttribute('style', /width: 50%/);
+		await minimap.getByTitle(m.minimapChangeSize()).click();
+		await expect(minimap).toHaveAttribute('style', /width: 20%/);
+		await expect(minimap.locator('.leaflet-marker-icon')).toHaveCount(0);
+		await expect(page.getByRole('button', { name: m.clickOnMinimap() })).toBeVisible();
+	});
+
+	test('minimap replaces a guess and freezes it during submission and round results', async ({
+		authenticatedPage: page
+	}) => {
+		const gamePage = new GamePage(page);
+		await gamePage.createQuickGame();
+		const minimap = page.locator('#minimap');
+		await minimap.getByTitle(m.minimapChangeSize()).click();
+		await expect(minimap).toHaveAttribute('style', /width: 50%/);
+		await minimap.click({ position: { x: 100, y: 100 } });
+		const marker = minimap.locator('.leaflet-marker-icon');
+		await expect(marker).toHaveCount(1);
+		const firstPosition = await marker.getAttribute('style');
+		await minimap.click({ position: { x: 200, y: 150 } });
+		await expect(marker).toHaveCount(1);
+		await expect(marker).not.toHaveAttribute('style', firstPosition ?? '');
+		const submittedPosition = await marker.getAttribute('style');
+
+		const { promise: pending, resolve: resumeRequest } = Promise.withResolvers<undefined>();
+		await page.route('**/v1/singleplayer/*/round/end', async (route) => {
+			await pending;
+			await route.continue();
+		});
+		const request = page.waitForRequest('**/v1/singleplayer/*/round/end');
+		await page.getByRole('button', { name: m.overlayGuess(), exact: true }).click();
+		await request;
+		try {
+			await minimap.click({ position: { x: 300, y: 200 } });
+			await expect(marker).toHaveCount(1);
+			await expect(marker).toHaveAttribute('style', submittedPosition ?? '');
+		} finally {
+			resumeRequest(undefined);
+		}
+		await gamePage.expectRoundResultsVisible();
+		await expect(marker).toHaveCount(2);
+		await expect(minimap.locator('path[stroke-dasharray]')).toHaveCount(2);
+		await minimap.click({ position: { x: 100, y: 100 } });
+		await expect(marker).toHaveCount(2);
+	});
+
+	test('minimap switches providers and initializes cleanly after returning to the game', async ({
+		authenticatedPage: page
+	}) => {
+		await new GamePage(page).createQuickGame();
+		const gameURL = page.url();
+		const minimap = page.locator('#minimap');
+		await page.getByTitle(m.singleSettings(), { exact: true }).click();
+		await page.getByRole('combobox', { name: m.profileMinimapProvider() }).click();
+		await page.getByRole('option', { name: 'ESRI', exact: true }).click();
+		await page.keyboard.press('Escape');
+		await expect(minimap.locator('.leaflet-control-attribution')).toContainText('Esri');
+		await expect(minimap.locator('img.leaflet-tile').first()).toHaveAttribute(
+			'src',
+			/server\.arcgisonline\.com/
+		);
+		await page.goto('/quick-game');
+		await page.goto(gameURL);
+		await expect(minimap.locator('.leaflet-control-zoom')).toHaveCount(1);
+		await expect(minimap.locator('.leaflet-control-attribution')).toHaveCount(1);
+		await expect(minimap.locator('.leaflet-control-attribution')).toContainText('Esri');
+		await page.getByTitle(m.singleSettings(), { exact: true }).click();
+		await page.getByRole('combobox', { name: m.profileMinimapProvider() }).click();
+		await page.getByRole('option', { name: 'OpenStreetMap', exact: true }).click();
+		await page.keyboard.press('Escape');
+		await expect(minimap.locator('.leaflet-control-attribution')).not.toContainText('Esri');
+		await expect(minimap.locator('img.leaflet-tile').first()).toHaveAttribute(
+			'src',
+			/\.tile\.openstreetmap\.org/
+		);
+	});
+
 	test('singleplayer game is created and loaded', async ({ authenticatedPage: page }) => {
 		const gamePage = new GamePage(page);
 		await gamePage.createQuickGame(7);

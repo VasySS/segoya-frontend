@@ -112,7 +112,6 @@ test.describe('Multiplayer Game', () => {
 		await page2Context.close();
 	});
 
-	// eslint-disable-next-line playwright/expect-expect
 	test('game completes all rounds and shows final results', async ({
 		authenticatedPage: page1,
 		context
@@ -179,6 +178,20 @@ test.describe('Multiplayer Game', () => {
 			// Verify markers are shown on map (location + 2 guesses)
 			await gamePage1.expectMarkersCount(3);
 			await gamePage2.expectMarkersCount(3);
+		});
+
+		await test.step('Final-result tooltips respond to mouse hover and ignore touch hover', async () => {
+			const minimap = page1.locator('#minimap');
+			const realMarker = minimap.getByRole('button', { name: '1', exact: true });
+			await page1.mouse.move(0, 0);
+			await realMarker.dispatchEvent('pointerover', { pointerType: 'touch', bubbles: true });
+			await expect(minimap.locator('.leaflet-tooltip')).toHaveCount(0);
+			await realMarker.hover();
+			await expect(minimap.locator('.leaflet-tooltip')).toHaveCount(2);
+			await expect(minimap.locator('path[stroke-dasharray]')).toHaveCount(4);
+			await page1.mouse.move(0, 0);
+			await expect(minimap.locator('.leaflet-tooltip')).toHaveCount(0);
+			await gamePage1.expectMarkersCount(3);
 		});
 
 		await page2Context.close();

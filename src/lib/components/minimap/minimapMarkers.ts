@@ -7,9 +7,16 @@ import type {
 } from '#lib/api/openapi.js';
 import { formatDistance } from '#lib/utils/formatters.js';
 import { m } from '#paraglide/messages.js';
-import L from 'leaflet';
+import {
+	FeatureGroup,
+	LayerGroup,
+	Marker,
+	Polyline,
+	type LatLngExpression,
+	type LeafletMap
+} from 'leaflet';
 
-import { getHSLColor } from './leafletUtils';
+import { getHSLColor, isMousePointerEvent } from './leafletUtils';
 import { createRealPosIcon, createUserPosIcon } from './minimapIcons';
 import { expandMap } from './minimapSize';
 
@@ -31,26 +38,26 @@ function shouldShowGuess(
 /**
 Creates and adds the real position marker
 */
-function addRealMarker(map: L.Map, location: L.LatLngExpression, roundNum: number): L.Marker {
-	return L.marker(location, { icon: createRealPosIcon(roundNum) }).addTo(map);
+function addRealMarker(map: LeafletMap, location: LatLngExpression, roundNum: number): Marker {
+	return new Marker(location, { icon: createRealPosIcon(roundNum) }).addTo(map);
 }
 
 /**
 Creates and adds the user position marker
 */
 function addUserMarker(
-	map: L.Map,
-	location: L.LatLngExpression,
+	map: LeafletMap,
+	location: LatLngExpression,
 	avatarHash: string,
 	username: string
-): L.Marker {
-	return L.marker(location, { icon: createUserPosIcon(avatarHash, username) }).addTo(map);
+): Marker {
+	return new Marker(location, { icon: createUserPosIcon(avatarHash, username) }).addTo(map);
 }
 
 /**
 Fits map bounds to a group of markers, adding padding
 */
-function fitMapToBounds(map: L.Map, markers: L.Marker[]): void {
+function fitMapToBounds(map: LeafletMap, markers: Marker[]): void {
 	if (markers.length === 0) return;
 
 	if (markers.length === 1 && markers[0]) {
@@ -59,7 +66,7 @@ function fitMapToBounds(map: L.Map, markers: L.Marker[]): void {
 		return;
 	}
 
-	const featureGroup = L.featureGroup(markers);
+	const featureGroup = new FeatureGroup(markers);
 	map.fitBounds(featureGroup.getBounds(), { padding: [50, 50] });
 }
 
@@ -67,15 +74,15 @@ function fitMapToBounds(map: L.Map, markers: L.Marker[]): void {
 Adds the dashed polyline between two points with an outline
 */
 function addGuessPolyline(
-	map: L.Map,
+	map: LeafletMap,
 	realPos: { lat: number; lng: number },
 	userPos: { lat: number; lng: number },
 	lineColor: string
-): [L.Polyline, L.Polyline] {
+): [Polyline, Polyline] {
 	const lineWeight = 6;
 	const outlineWeight = 7;
 
-	const outline = L.polyline([realPos, userPos], {
+	const outline = new Polyline([realPos, userPos], {
 		color: 'black',
 		weight: outlineWeight,
 		opacity: 0.9,
@@ -83,7 +90,7 @@ function addGuessPolyline(
 		dashArray: '10, 10'
 	}).addTo(map);
 
-	const line = L.polyline([realPos, userPos], {
+	const line = new Polyline([realPos, userPos], {
 		color: lineColor,
 		weight: lineWeight,
 		lineCap: 'square',
@@ -96,16 +103,16 @@ function addGuessPolyline(
 }
 
 export async function placeSingleplayerRoundEndMarkers(
-	map: L.Map,
+	map: LeafletMap,
 	round: SingleplayerRound,
-	userMarker: L.Marker | undefined
+	userMarker: Marker | undefined
 ): Promise<void> {
 	await expandMap(map);
 
 	const realLatLng = { lat: round.lat, lng: round.lng };
 	const realMarker = addRealMarker(map, realLatLng, round.roundNum);
 
-	const markersToBound: L.Marker[] = [realMarker];
+	const markersToBound: Marker[] = [realMarker];
 
 	if (userMarker) {
 		const userLatLng = userMarker.getLatLng();
@@ -119,14 +126,14 @@ export async function placeSingleplayerRoundEndMarkers(
 }
 
 export async function placeSingleplayerGameEndMarkers(
-	map: L.Map,
+	map: LeafletMap,
 	username: string,
 	userAvatarHash: string,
 	guesses: (SingleplayerGuess & GuessPresence)[]
 ) {
 	await expandMap(map);
 
-	const allMarkers = [] as L.Marker[];
+	const allMarkers = [] as Marker[];
 
 	for (const guess of guesses) {
 		const realLocation = { lat: guess.roundLat, lng: guess.roundLng };
@@ -157,13 +164,13 @@ export async function placeSingleplayerGameEndMarkers(
 }
 
 export async function placeMultiplayerRoundEndMarkers(
-	map: L.Map,
+	map: LeafletMap,
 	guesses: (MultiplayerGuess & GuessPresence)[],
 	roundInfo: MultiplayerRound
 ) {
 	await expandMap(map);
 
-	const allMarkers = [] as L.Marker[];
+	const allMarkers = [] as Marker[];
 
 	const realLocation = { lat: roundInfo.lat, lng: roundInfo.lng };
 	const realMarker = addRealMarker(map, realLocation, roundInfo.roundNum);
@@ -195,20 +202,20 @@ export async function placeMultiplayerRoundEndMarkers(
 }
 
 export async function placeMultiplayerGameEndMarkers(
-	map: L.Map,
+	map: LeafletMap,
 	guesses: (MultiplayerGuess & GuessPresence)[]
 ) {
 	await expandMap(map);
 
-	const allMarkers: L.Marker[] = [];
+	const allMarkers: Marker[] = [];
 
-	const roundLayers = new Map<number, L.LayerGroup>();
-	const realMarkersMap = new Map<number, L.Marker>();
-	const userMarkersMap = new Map<number, L.Marker[]>();
+	const roundLayers = new Map<number, LayerGroup>();
+	const realMarkersMap = new Map<number, Marker>();
+	const userMarkersMap = new Map<number, Marker[]>();
 
 	for (const guess of guesses) {
 		if (!roundLayers.has(guess.roundNum)) {
-			roundLayers.set(guess.roundNum, new L.LayerGroup());
+			roundLayers.set(guess.roundNum, new LayerGroup());
 		}
 
 		const roundLayerGroup = roundLayers.get(guess.roundNum);
@@ -225,7 +232,9 @@ export async function placeMultiplayerGameEndMarkers(
 
 		roundLayerGroup.addLayer(realMarker);
 
-		realMarker.on('mouseover', () => {
+		realMarker.on('pointerover', (event) => {
+			if (!isMousePointerEvent(event)) return;
+
 			// Hide all other round layers, show this one
 			for (const [rn, lg] of roundLayers) {
 				if (rn !== guess.roundNum && map.hasLayer(lg)) map.removeLayer(lg);
@@ -237,7 +246,9 @@ export async function placeMultiplayerGameEndMarkers(
 			for (const marker of userMarkers) marker.openTooltip();
 		});
 
-		realMarker.on('mouseout', () => {
+		realMarker.on('pointerout', (event) => {
+			if (!isMousePointerEvent(event)) return;
+
 			// Show all round layers again
 			for (const [_, lg] of roundLayers) {
 				if (!map.hasLayer(lg)) map.addLayer(lg);

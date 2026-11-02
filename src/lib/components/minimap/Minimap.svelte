@@ -8,7 +8,7 @@
 	} from '#lib/api/openapi.js';
 	import { getGameContext } from '#lib/states/gameContext.svelte.js';
 	import { UserSettingsStore } from '#lib/states/localStorage.svelte.js';
-	import L from 'leaflet';
+	import { AttributionControl, LeafletMap, Marker, type LeafletPointerEvent } from 'leaflet';
 	import { onDestroy, onMount } from 'svelte';
 
 	import 'leaflet/dist/leaflet.css';
@@ -30,10 +30,10 @@
 	}
 	let { user }: Props = $props();
 
-	let map: L.Map;
+	let map: LeafletMap;
 	let mapContainer: HTMLDivElement;
 	let resizeObserver: ResizeObserver;
-	let userMarker = $state<L.Marker>();
+	let userMarker = $state<Marker>();
 
 	const userSettings = UserSettingsStore;
 	const gameContext = getGameContext();
@@ -58,9 +58,9 @@
 	});
 
 	function mapInit() {
-		map = L.map(mapContainer, { zoomControl: false, attributionControl: false });
+		map = new LeafletMap(mapContainer, { zoomControl: false, attributionControl: false });
 
-		const attrControl = L.control.attribution().addTo(map);
+		const attrControl = new AttributionControl().addTo(map);
 		attrControl.setPrefix('<a href="https://leafletjs.com/">Leaflet</a>');
 
 		setTileProvider($userSettings.minimapProvider);
@@ -74,16 +74,16 @@
 		enableHoverListeners(map);
 	}
 
-	function placeUserMarker(e: { latlng: { lat: number; lng: number } }) {
+	function placeUserMarker(e: LeafletPointerEvent) {
 		if (gameContext.userGuessed || gameContext.guessPending) return;
 		if (userMarker) userMarker.remove();
 
 		const { lat, lng } = e.latlng;
-		userMarker = L.marker([lat, lng], {
+		userMarker = new Marker([lat, lng], {
 			icon: createUserPosIcon(user.avatarHash, user.username)
 		}).addTo(map);
 
-		gameContext.userGuess = e.latlng;
+		gameContext.userGuess = { lat, lng };
 		gameContext.userPlacedMarker = true;
 	}
 
