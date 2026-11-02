@@ -161,26 +161,30 @@ describe('component AccountTab', () => {
 	});
 
 	describe('interactions', () => {
-		it('should open avatar upload dialog when clicking upload button', { timeout: 15_000 }, async () => {
-			expect.hasAssertions();
+		it(
+			'should open avatar upload dialog when clicking upload button',
+			{ timeout: 15_000 },
+			async () => {
+				expect.hasAssertions();
 
-			const { userForm, avatarForm } = await createValidatedForms();
-			const { user } = setupComponent(AccountTab, {
-				props: {
-					avatarForm,
-					userForm,
-					userInfo: BASE_USER_INFO
-				}
-			});
+				const { userForm, avatarForm } = await createValidatedForms();
+				const { user } = setupComponent(AccountTab, {
+					props: {
+						avatarForm,
+						userForm,
+						userInfo: BASE_USER_INFO
+					}
+				});
 
-			const avatarUploadButton = screen.getByTitle(m.dark_smart_sheep_seek());
-			await user.click(avatarUploadButton);
-			await vi.dynamicImportSettled();
+				const avatarUploadButton = screen.getByTitle(m.dark_smart_sheep_seek());
+				await user.click(avatarUploadButton);
+				await vi.dynamicImportSettled();
 
-			await waitFor(() => {
-				expect(screen.getByLabelText(m.funny_simple_fireant_loop())).toBeVisible();
-			});
-		});
+				await waitFor(() => {
+					expect(screen.getByLabelText(m.funny_simple_fireant_loop())).toBeVisible();
+				});
+			}
+		);
 	});
 
 	describe('form initialization', () => {
