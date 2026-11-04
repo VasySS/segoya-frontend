@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
 			paraglideVitePlugin({
 				project: './src/lib/i18n/project.inlang',
 				outdir: './src/lib/i18n/paraglide',
+				emitTsDeclarations: true,
 				strategy: ['cookie', 'globalVariable', 'preferredLanguage', 'baseLocale']
 			}),
 			tailwindcss(),

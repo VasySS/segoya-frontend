@@ -7,9 +7,6 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
 
-minimumReleaseAgeExclude:
-  - leaflet@2.0.0-beta.1
-
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
